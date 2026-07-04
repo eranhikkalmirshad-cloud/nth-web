@@ -2,6 +2,8 @@ import { getProducts } from "@/lib/api/products";
 import ProductCard from "@/components/ui/ProductCard";
 import FadeInView from "@/components/ui/FadeInView";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: 'Dining Room Collection - MAGNAT Furniture',
   description: 'Explore our premium dining room furniture collection.',

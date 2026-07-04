@@ -2,6 +2,8 @@ import { getProducts } from "@/lib/api/products";
 import ProductCard from "@/components/ui/ProductCard";
 import FadeInView from "@/components/ui/FadeInView";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: 'Sitout Collection - MAGNAT Furniture',
   description: 'Explore our premium sitout furniture collection.',
