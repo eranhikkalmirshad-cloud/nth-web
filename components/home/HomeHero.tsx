@@ -276,11 +276,12 @@ export default function HomeHero({
                       </p>
 
                       <div className="flex flex-row items-center md:gap-4 gap-2">
-                        <Button className="text-[10px] md:text-[15px]">
-                          Explores
+                        <Button href="/products" className="text-[10px] md:text-[15px]">
+                          Explore
                         </Button>
                         <Button
                           variant="outline"
+                          href="/contact"
                           className="!border-[#FCFCFC] !text-[#FCFCFC] hover:!bg-[#FCFCFC] hover:!text-[#111] md:px-10 text-nowrap text-[10px] md:text-[15px]"
                         >
                           Contact Us
