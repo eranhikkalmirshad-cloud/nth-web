@@ -1,10 +1,7 @@
-import { createBrowserClient } from "@supabase/ssr";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-nilambur.supabase.co";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
+import { createClient as createBrowserSupabaseClient } from "@/utils/supabase/client";
 
 export function createClient() {
-  return createBrowserClient(supabaseUrl, supabaseAnonKey);
+  return createBrowserSupabaseClient();
 }
 
 export const supabase = createClient();
