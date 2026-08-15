@@ -10,10 +10,10 @@ export const SITE_CONFIG = {
     "Experience the unmatched quality of 100% genuine Nilambur teak wood furniture. Government certified teak, handcrafted by master artisans with pan-India delivery and custom order capabilities.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://nilamburteakheritage.com",
   ogImage: "/og-image.jpg",
-  logo: "/images/logo.png",
-  logoHeader: "/images/logo.png",
-  logoFooter: "/images/logo.png",
-  favicon: "/images/logo.png",
+  logo: "/images/logo-proper.png",
+  logoHeader: "/images/logo-proper.png",
+  logoFooter: "/images/logo-proper.png",
+  favicon: "/images/logo-proper.png",
 
   // Business Contact (Placeholder values configurable via .env or client input)
   contact: {

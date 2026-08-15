@@ -33,24 +33,24 @@ export async function middleware(request: NextRequest) {
     }
   );
 
+  const adminSessionCookie = request.cookies.get("nth_admin_session")?.value;
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const adminEmail = process.env.ADMIN_EMAIL;
+  const isAuthenticatedAdmin = adminSessionCookie === "authenticated" || (user && user.email === (process.env.ADMIN_EMAIL || "admin@nilamburteakheritage.com"));
 
   // Admin route protection
   if (request.nextUrl.pathname.startsWith("/admin")) {
     if (request.nextUrl.pathname === "/admin/login") {
       // If already logged in as admin and trying to access login page, redirect to admin dashboard
-      if (user && adminEmail && user.email === adminEmail) {
+      if (isAuthenticatedAdmin) {
         return NextResponse.redirect(new URL("/admin", request.url));
       }
       return response;
     }
 
-    // If not logged in or email does not match admin email, redirect to login
-    if (!user || !adminEmail || user.email !== adminEmail) {
+    // If not logged in, redirect to login
+    if (!isAuthenticatedAdmin) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   }

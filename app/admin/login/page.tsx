@@ -20,13 +20,13 @@ export default function AdminLoginPage() {
       >
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#C9922A] bg-[#2C1810] shadow-md p-1 mb-3">
-            <img src={SITE_CONFIG.logo} alt="Logo" className="w-full h-full object-contain" />
+          <div className="w-20 h-20 relative mb-3 drop-shadow-md flex items-center justify-center">
+            <img src="/images/logo-proper.png" alt="Nilambur Teak Heritage" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-[#2C1810] text-xl font-bold font-cinzel tracking-wider uppercase text-center">
-            {SITE_CONFIG.shortName}
+            Nilambur Teak Heritage
           </h1>
-          <p className="text-[#C9922A] text-[10px] font-bold tracking-[0.25em] uppercase mt-1">
+          <p className="text-[#8A572A] text-[10px] font-bold tracking-[0.25em] uppercase mt-1">
             Admin Management Portal
           </p>
         </div>
