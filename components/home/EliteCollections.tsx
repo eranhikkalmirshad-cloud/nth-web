@@ -49,21 +49,21 @@ export default function EliteCollections() {
   };
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-16 sm:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Centered Header with Warm Teak Brand Color */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
+        {/* Top Centered Header with Exact Reference Typography */}
+        <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#8A572A] block mb-3 font-sans">
             SHOP BY CATEGORY
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-sans font-bold text-slate-900 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-sans font-extrabold text-[#111111] tracking-tight">
             Elite Home{" "}
             <span className="text-[#8A572A] italic font-serif font-normal">
               Collections
             </span>
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 font-normal mt-3.5 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-500 font-normal mt-3 max-w-xl mx-auto leading-relaxed">
             Explore our signature collections tailored for every corner of your home, from architectural sofas to serene bedroom suites.
           </p>
         </div>
