@@ -1,6 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://eoscwzkfidgotdjwlokw.supabase.co";
+const supabaseKey =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "sb_publishable_VM44jGsb7yku4C4wVFNqyQ_dXYWNsUb";
+
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -8,48 +15,51 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-nilambur.supabase.co",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key",
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value)
-          );
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          );
-        },
+  const supabase = createServerClient(supabaseUrl, supabaseKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
       },
-    }
-  );
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+        response = NextResponse.next({
+          request,
+        });
+        cookiesToSet.forEach(({ name, value, options }) =>
+          response.cookies.set(name, value, options)
+        );
+      },
+    },
+  });
 
+  // Admin authentication check
   const adminSessionCookie = request.cookies.get("nth_admin_session")?.value;
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const isAuthenticatedAdmin = adminSessionCookie === "authenticated" || (user && user.email === (process.env.ADMIN_EMAIL || "admin@nilamburteakheritage.com"));
+  let isUserAuthenticated = false;
+
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const adminEmail = (process.env.ADMIN_EMAIL || "admin@nilamburteakheritage.com").toLowerCase();
+    if (user && user.email?.toLowerCase() === adminEmail) {
+      isUserAuthenticated = true;
+    }
+  } catch {
+    // Graceful catch if Supabase is initializing
+  }
+
+  const isAuthenticatedAdmin = adminSessionCookie === "authenticated" || isUserAuthenticated;
 
   // Admin route protection
   if (request.nextUrl.pathname.startsWith("/admin")) {
     if (request.nextUrl.pathname === "/admin/login") {
-      // If already logged in as admin and trying to access login page, redirect to admin dashboard
       if (isAuthenticatedAdmin) {
         return NextResponse.redirect(new URL("/admin", request.url));
       }
       return response;
     }
 
-    // If not logged in, redirect to login
     if (!isAuthenticatedAdmin) {
       return NextResponse.redirect(new URL("/admin/login", request.url));
     }
@@ -60,13 +70,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|mp4)$).*)",
   ],
 };
