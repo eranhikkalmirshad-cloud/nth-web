@@ -2,7 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, Eye, MessageSquare, Users, ImageIcon, ArrowUpRight, ArrowDownRight, ChevronRight, ShieldCheck, Copy } from "lucide-react";
+import {
+  ShoppingBag,
+  Eye,
+  MessageSquare,
+  Users,
+  ImageIcon,
+  ArrowUpRight,
+  ChevronRight,
+  ShieldCheck,
+  Copy,
+  PlusCircle,
+  FolderTree,
+  Sparkles,
+  Layers,
+} from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -18,168 +32,253 @@ const IconMap: Record<string, any> = {
   Users,
 };
 
-export default function AdminDashboardClient({ stats, recentInquiries }: AdminDashboardClientProps) {
+export default function AdminDashboardClient({
+  stats,
+  recentInquiries,
+}: AdminDashboardClientProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-  return (
-    <div className="font-inter space-y-10">
 
-      {/* ── STATS GRID ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  return (
+    <div className="space-y-8">
+      {/* ── STATS CARDS ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {stats.map((stat, i) => {
           const Icon = IconMap[stat.icon] || ShoppingBag;
           return (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, ease: "easeOut" }}
-              className="bg-white p-7 border border-[#eeeeee] relative overflow-hidden group hover:border-[#111] transition-colors"
+              transition={{ delay: i * 0.08, ease: "easeOut" }}
+              className="bg-white p-6 rounded-xl border border-[#EAE8E2] shadow-xs hover:shadow-md transition-all relative overflow-hidden group hover:border-[#8A572A]"
             >
-              {/* Subtle accent line */}
-              <div className="absolute top-0 left-0 w-full h-[2px] bg-[#111] scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100" />
-
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 flex items-center justify-center bg-[#F7F4F0] text-[#111]">
-                    <Icon size={18} strokeWidth={1.5} />
-                  </div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F7F4F0] text-[#8A572A] group-hover:bg-[#8A572A] group-hover:text-white transition-colors">
+                  <Icon size={20} strokeWidth={1.75} />
                 </div>
-                <div className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest ${stat.isPositive ? 'text-green-600' : 'text-red-500'}`}>
-                  {stat.isPositive ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                  <ArrowUpRight size={12} />
                   <span>{stat.change}</span>
-                </div>
+                </span>
               </div>
-              <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-[#666] mb-2">{stat.label}</span>
-              <span className="text-4xl tracking-tight font-black text-[#111]">{stat.value}</span>
+              <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#7A6E65] mb-1">
+                {stat.label}
+              </p>
+              <h3 className="text-3xl font-black tracking-tight text-[#1C130D]">
+                {stat.value}
+              </h3>
             </motion.div>
           );
         })}
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
-
-        {/* ── RECENT INQUIRIES ── */}
-        <div className="xl:col-span-2 space-y-6">
-          <div className="flex items-center justify-between border-b border-[#eeeeee] pb-4">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[#111]">Recent Lead Inquiries</h3>
-            <Link href="/admin/inquiries" className="text-[10px] font-bold uppercase tracking-widest text-[#C0001A] hover:text-[#111] transition-colors flex items-center gap-1 group">
-              View All <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* ── LEFT: RECENT INQUIRIES ── */}
+        <div className="lg:col-span-8 space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-[#EAE8E2]">
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[#1C130D]">
+                Recent Customer Inquiries
+              </h3>
+              <p className="text-xs text-[#7A6E65]">Incoming product inquiries and quote requests</p>
+            </div>
+            <Link
+              href="/admin/inquiries"
+              className="text-xs font-bold uppercase tracking-wider text-[#8A572A] hover:text-[#1C130D] transition-colors flex items-center gap-1 group"
+            >
+              <span>View All</span>
+              <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          <div className="bg-white border border-[#eeeeee]">
+          <div className="bg-white rounded-xl border border-[#EAE8E2] shadow-xs overflow-hidden">
             {recentInquiries.length > 0 ? (
-              <div className="divide-y divide-[#eeeeee]">
+              <div className="divide-y divide-[#F0EDE6]">
                 {recentInquiries.map((inquiry, i) => (
                   <motion.div
                     key={inquiry.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 + (i * 0.1) }}
-                    className="p-5 flex items-center justify-between hover:bg-[#F9F9F9] transition-colors group"
+                    transition={{ delay: 0.2 + i * 0.06 }}
+                    className="p-5 flex items-center justify-between hover:bg-[#FAF9F6] transition-colors"
                   >
-                    <div className="flex items-center gap-5">
-                      <div className="h-10 w-10 bg-[#111] text-white flex items-center justify-center text-xs font-bold uppercase">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className="w-10 h-10 rounded-full bg-[#1C130D] text-[#E0AB76] flex items-center justify-center text-xs font-bold uppercase shrink-0">
                         {inquiry.full_name?.charAt(0) || "U"}
                       </div>
-                      <div>
-                        <h4 className="text-[13px] font-bold text-[#111] group-hover:text-[#C0001A] transition-colors line-clamp-1">{inquiry.full_name}</h4>
-                        <p className="text-[11px] text-[#666] mt-1">{inquiry.subject || inquiry.email}</p>
+                      <div className="min-w-0">
+                        <h4 className="text-sm font-bold text-[#1C130D] truncate">
+                          {inquiry.full_name}
+                        </h4>
+                        <p className="text-xs text-[#7A6E65] truncate mt-0.5">
+                          {inquiry.subject || inquiry.email || "Teak Furniture Inquiry"}
+                        </p>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <span className={`px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest ${inquiry.status === "new" ? "bg-[#C0001A] text-white" :
-                          inquiry.status === "contacted" ? "bg-[#111] text-white" : "bg-[#F7F4F0] text-[#111]"
-                        }`}>
+
+                    <div className="flex items-center gap-4 shrink-0">
+                      <span
+                        className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full ${
+                          inquiry.status === "new"
+                            ? "bg-amber-100 text-amber-900 border border-amber-300"
+                            : inquiry.status === "contacted"
+                            ? "bg-blue-100 text-blue-900 border border-blue-300"
+                            : "bg-[#F4F1EA] text-[#4A3B32]"
+                        }`}
+                      >
                         {inquiry.status || "New"}
                       </span>
-                      <span className="text-[10px] text-[#666] uppercase tracking-widest">
-                        {mounted ? new Date(inquiry.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : ""}
+                      <span className="text-xs text-[#999999] hidden sm:inline">
+                        {mounted
+                          ? new Date(inquiry.created_at).toLocaleDateString(undefined, {
+                              month: "short",
+                              day: "numeric",
+                            })
+                          : ""}
                       </span>
                     </div>
                   </motion.div>
                 ))}
               </div>
             ) : (
-              <div className="p-12 text-center text-[#666] text-xs uppercase tracking-widest">
-                No recent inquiries found.
+              <div className="p-12 text-center">
+                <div className="w-12 h-12 rounded-full bg-[#F4F1EA] text-[#8A572A] mx-auto flex items-center justify-center mb-3">
+                  <MessageSquare size={22} />
+                </div>
+                <h4 className="text-sm font-bold text-[#1C130D] mb-1">No Recent Inquiries Yet</h4>
+                <p className="text-xs text-[#7A6E65] max-w-sm mx-auto">
+                  When potential clients submit product inquiries or custom quote requests, they will appear here.
+                </p>
               </div>
             )}
           </div>
         </div>
 
-        {/* ── QUICK ACTIONS ── */}
-        <div className="space-y-6">
-          <div className="border-b border-[#eeeeee] pb-4">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[#111]">Quick Actions</h3>
+        {/* ── RIGHT: QUICK ACTIONS & SHOWROOM LINK ── */}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="pb-2 border-b border-[#EAE8E2]">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-[#1C130D]">
+              Quick Management
+            </h3>
+            <p className="text-xs text-[#7A6E65]">Catalog & showcase shortcuts</p>
           </div>
 
-          <div className="grid gap-3">
-            <Link href="/admin/products/new" className="flex items-center p-5 bg-[#111] text-white group hover:bg-[#C0001A] transition-colors">
-              <div className="bg-white/10 p-2 mr-4">
-                <ShoppingBag size={18} strokeWidth={1.5} />
+          <div className="space-y-3">
+            <Link
+              href="/admin/products/new"
+              className="flex items-center justify-between p-4 bg-[#1C130D] hover:bg-[#8A572A] text-white rounded-xl transition-all shadow-xs group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center">
+                  <ShoppingBag size={18} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider">Add New Product</h4>
+                  <p className="text-[10px] text-white/70">Create piece with specs & photos</p>
+                </div>
               </div>
-              <span className="text-[11px] font-bold uppercase tracking-widest">New Product</span>
+              <ChevronRight size={16} className="text-white/60 group-hover:translate-x-1 transition-transform" />
             </Link>
 
-            <Link href="/admin/media" className="flex items-center p-5 bg-white border border-[#eeeeee] text-[#111] group hover:border-[#111] transition-colors">
-              <div className="bg-[#F7F4F0] p-2 mr-4">
-                <ImageIcon size={18} strokeWidth={1.5} />
+            <Link
+              href="/admin/home"
+              className="flex items-center justify-between p-4 bg-white hover:border-[#8A572A] border border-[#EAE8E2] rounded-xl transition-all shadow-xs group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#F7F4F0] text-[#8A572A] flex items-center justify-center">
+                  <Layers size={18} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#1C130D]">
+                    Home Video & Showcase
+                  </h4>
+                  <p className="text-[10px] text-[#7A6E65]">Hero video, stats, & highlights</p>
+                </div>
               </div>
-              <span className="text-[11px] font-bold uppercase tracking-widest">Upload Media</span>
+              <ChevronRight size={16} className="text-[#999999] group-hover:translate-x-1 transition-transform" />
             </Link>
 
-            <Link href="/admin/testimonials" className="flex items-center p-5 bg-white border border-[#eeeeee] text-[#111] group hover:border-[#111] transition-colors">
-              <div className="bg-[#F7F4F0] p-2 mr-4">
-                <Users size={18} strokeWidth={1.5} />
+            <Link
+              href="/admin/categories"
+              className="flex items-center justify-between p-4 bg-white hover:border-[#8A572A] border border-[#EAE8E2] rounded-xl transition-all shadow-xs group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#F7F4F0] text-[#8A572A] flex items-center justify-center">
+                  <FolderTree size={18} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#1C130D]">
+                    Manage Categories
+                  </h4>
+                  <p className="text-[10px] text-[#7A6E65]">19 official teak categories</p>
+                </div>
               </div>
-              <span className="text-[11px] font-bold uppercase tracking-widest">Manage Testimonials</span>
+              <ChevronRight size={16} className="text-[#999999] group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              href="/admin/media"
+              className="flex items-center justify-between p-4 bg-white hover:border-[#8A572A] border border-[#EAE8E2] rounded-xl transition-all shadow-xs group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-[#F7F4F0] text-[#8A572A] flex items-center justify-center">
+                  <ImageIcon size={18} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#1C130D]">
+                    Cloudinary Media
+                  </h4>
+                  <p className="text-[10px] text-[#7A6E65]">Upload and manage assets</p>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-[#999999] group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          {/* ── EXCLUSIVE SHOWROOM QUICK SHARE ── */}
-          <div className="pt-6">
-            <div className="border-b border-[#eeeeee] pb-4 mb-6">
-              <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[#111]">Exclusive Showroom</h3>
+          {/* ── EXCLUSIVE SHOWROOM CARD ── */}
+          <div className="bg-gradient-to-br from-[#1C130D] to-[#2D1E15] p-6 rounded-xl text-white border border-[#3D2A1D] shadow-md relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-15">
+              <ShieldCheck size={70} className="text-[#E0AB76]" />
             </div>
-            
-            <div className="bg-[#111] p-6 border border-[#eeeeee] relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <ShieldCheck size={40} className="text-white" />
+
+            <div className="relative z-10 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#E0AB76] bg-[#8A572A]/40 px-2 py-0.5 rounded-full">
+                  VIP Access Link
+                </span>
               </div>
-              <p className="text-[9px] uppercase tracking-widest text-[#C0001A] mb-2 font-bold">
-                Private Gallery Access
+              <h4 className="font-cinzel text-base font-bold text-white">
+                Exclusive Teak Showroom
+              </h4>
+              <p className="text-xs text-white/70 leading-relaxed">
+                Share the private collection catalog with VIP clients via a direct link.
               </p>
-              <p className="text-[11px] text-[#999] leading-relaxed mb-6">
-                Share the entire private collection with VIP clients via a single secure link.
-              </p>
-              
-              <div className="flex flex-col gap-3">
-                <button 
+
+              <div className="pt-2 flex flex-col gap-2">
+                <button
                   onClick={() => {
                     const link = `${window.location.origin}/exclusive`;
                     navigator.clipboard.writeText(link);
-                    toast.success("Showroom link copied!");
+                    toast.success("Exclusive Showroom link copied to clipboard!");
                   }}
-                  className="w-full flex items-center justify-center gap-2 bg-white text-[#111] py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-[#C0001A] hover:text-white transition-all"
+                  className="w-full flex items-center justify-center gap-2 bg-[#E0AB76] hover:bg-white text-[#1C130D] py-2.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all cursor-pointer shadow-xs"
                 >
-                  <Copy size={12} /> Copy Showroom Link
+                  <Copy size={13} /> Copy VIP Link
                 </button>
-                <Link 
+                <Link
                   href="/admin/exclusive"
-                  className="w-full flex items-center justify-center gap-2 border border-white/20 text-white py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all"
+                  className="w-full flex items-center justify-center gap-2 border border-white/20 hover:bg-white/10 text-white py-2 rounded-md text-xs font-bold uppercase tracking-wider transition-all"
                 >
-                  Go to Exclusive Section
+                  Manage Private Items
                 </Link>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

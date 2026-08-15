@@ -16,7 +16,14 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    toast.warning(`Delete testimonial?`, {
+    if (!testimonial.id || testimonial.id.length < 5) {
+      toast.info("Default System Review", {
+        description: "Add a database review in the Supabase table or admin form to customize.",
+      });
+      return;
+    }
+
+    toast.warning(`Delete review?`, {
       description: `From ${testimonial.client_name}`,
       action: {
         label: "Delete",
@@ -27,71 +34,83 @@ export default function TestimonialCard({ testimonial }: TestimonialCardProps) {
             toast.error("Error", { description: result.error });
             setIsDeleting(false);
           } else {
-            toast.success("Deleted");
+            toast.success("Testimonial deleted");
           }
         },
       },
       cancel: {
         label: "Cancel",
         onClick: () => {},
-      }
+      },
     });
   };
 
   if (isDeleting) return null;
 
   return (
-    <motion.div 
+    <motion.div
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white border border-[#eeeeee] rounded-none p-10 hover:border-[#C0001A] transition-all group relative flex flex-col h-full"
+      className="bg-white border border-[#EAE8E2] rounded-xl p-6 hover:border-[#8A572A] hover:shadow-md transition-all group relative flex flex-col h-full shadow-xs"
     >
-      <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
-        <Quote size={80} />
+      <div className="absolute top-4 right-4 p-2 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity">
+        <Quote size={60} />
       </div>
 
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex items-start justify-between mb-4">
         <div className="flex gap-1">
           {[...Array(5)].map((_, i) => (
-            <Star 
-              key={i} 
-              size={12} 
-              className={i < (testimonial.rating || 5) ? "fill-[#C0001A] text-[#C0001A]" : "text-[#eeeeee]"} 
+            <Star
+              key={i}
+              size={13}
+              className={
+                i < (testimonial.rating || 5)
+                  ? "fill-[#8A572A] text-[#8A572A]"
+                  : "text-[#EAE8E2]"
+              }
             />
           ))}
         </div>
-        <div className="flex items-center gap-3">
-          <Link 
+        <div className="flex items-center gap-1">
+          <Link
             href={`/admin/testimonials/${testimonial.id}`}
-            className="p-2 text-[#111111]/20 hover:text-[#C0001A] hover:bg-[#F7F4F0] transition-all"
+            className="p-1.5 text-[#7A6E65] hover:text-[#1C130D] hover:bg-[#F7F4F0] rounded-md transition-all"
+            title="Edit review"
           >
-            <Edit2 size={16} />
+            <Edit2 size={14} />
           </Link>
-          <button 
+          <button
             onClick={handleDelete}
-            className="p-2 text-[#111111]/20 hover:text-[#C0001A] hover:bg-[#F7F4F0] transition-all"
+            className="p-1.5 text-[#7A6E65] hover:text-red-600 hover:bg-red-50 rounded-md transition-all"
+            title="Delete review"
           >
-            <Trash2 size={16} />
+            <Trash2 size={14} />
           </button>
         </div>
       </div>
 
-      <blockquote className="text-sm md:text-base text-[#111111]/80 leading-relaxed font-light italic mb-10 flex-1">
+      <blockquote className="text-xs sm:text-sm text-[#333333] leading-relaxed italic mb-6 flex-1 bg-[#FAF9F6] p-4 rounded-lg border border-[#EAE8E2]">
         "{testimonial.quote}"
       </blockquote>
 
-      <div className="flex items-center gap-5 pt-8 border-t border-[#f5f5f5]">
-        <div className="h-12 w-12 rounded-none bg-[#F7F4F0] flex items-center justify-center text-[#111111] font-black border border-[#eeeeee] overflow-hidden">
+      <div className="flex items-center gap-3.5 pt-4 border-t border-[#F0EDE6] mt-auto">
+        <div className="w-10 h-10 rounded-full bg-[#1C130D] text-[#E0AB76] flex items-center justify-center font-bold text-xs shrink-0">
           {testimonial.client_image ? (
-            <img src={testimonial.client_image} alt={testimonial.client_name} className="w-full h-full object-cover" />
+            <img
+              src={testimonial.client_image}
+              alt={testimonial.client_name}
+              className="w-full h-full object-cover rounded-full"
+            />
           ) : (
             testimonial.client_name?.charAt(0) || "C"
           )}
         </div>
         <div>
-          <h4 className="text-sm font-black text-[#111111] tracking-tight">{testimonial.client_name}</h4>
-          <p className="text-[9px] text-[#C0001A] font-bold uppercase tracking-[0.2em] mt-0.5">{testimonial.client_role || "Exclusive Client"}</p>
+          <h4 className="text-sm font-bold text-[#1C130D]">{testimonial.client_name}</h4>
+          <p className="text-[10px] text-[#8A572A] font-bold uppercase tracking-wider mt-0.5">
+            {testimonial.client_role || "Nilambur Teak Client"}
+          </p>
         </div>
       </div>
     </motion.div>
