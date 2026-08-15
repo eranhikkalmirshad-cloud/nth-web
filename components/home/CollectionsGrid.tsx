@@ -40,11 +40,11 @@ const collections = [
   },
   {
     id: 4,
-    title: "Curtains & Drapes",
-    brand: "Soft Furnishings",
-    href: "/products",
+    title: "Solid Teak Beds",
+    brand: "Heritage Bedroom Sets",
+    href: "/products?category=beds",
     image:
-      "https://images.unsplash.com/photo-1615874959474-d609969a20ed?q=80&w=900&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=900&auto=format&fit=crop",
     colSpan: 1,
     rowSpan: 1,
   },

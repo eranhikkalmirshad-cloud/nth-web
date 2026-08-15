@@ -167,32 +167,41 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[0.65rem] font-bold uppercase tracking-widest text-body/60 pl-1">Category</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 pl-1">Category</label>
                 <select
                   name="category_id"
                   defaultValue={product?.category_id || ""}
-                  className="w-full bg-[#F9F9F9] border border-[#eeeeee] rounded-none px-4 py-3 text-sm focus:outline-none focus:border-[#C0001A] transition-all appearance-none"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-600 focus:bg-white transition-all"
                 >
-                  <option value="">Select Category</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.base_category}</option>
-                  ))}
+                  <option value="">Select Category (19 Master Collections)</option>
+                  {categories && categories.length > 0
+                    ? categories.map(cat => (
+                        <option key={cat.id} value={cat.id}>{cat.name || cat.base_category}</option>
+                      ))
+                    : [
+                        "Sofas", "Chairs", "Tables", "Dining", "Lounge Chairs", "Sitout", "Study and Office",
+                        "Beds", "TV Units", "Coffee Tables", "Cabinet", "Bookshelves", "Diwan Beds",
+                        "Wardrobes", "Benches", "Shoes Racks", "Outdoor Furniture", "Bedside Table", "Wall Decors"
+                      ].map(name => (
+                        <option key={name} value={name}>{name}</option>
+                      ))
+                  }
                 </select>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[0.65rem] font-bold uppercase tracking-widest text-body/60 pl-1">Room</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 pl-1">Room Collection</label>
                 <select
                   name="room"
                   defaultValue={product?.room || ""}
-                  className="w-full bg-[#F9F9F9] border border-[#eeeeee] rounded-none px-4 py-3 text-sm focus:outline-none focus:border-[#C0001A] transition-all appearance-none"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-600 focus:bg-white transition-all"
                 >
                   <option value="">Select Room</option>
-                  <option value="livingRoom">Living Room</option>
-                  <option value="diningRoom">Dining Room</option>
-                  <option value="bedroom">Bedroom</option>
-                  <option value="office">Office</option>
-                  <option value="sitout">Sitout</option>
+                  <option value="Living Room">Living Room</option>
+                  <option value="Dining Room">Dining Room</option>
+                  <option value="Bedroom">Bedroom</option>
+                  <option value="Sitout">Sitout</option>
+                  <option value="Study & Office">Study & Office</option>
                 </select>
               </div>
             </div>

@@ -34,16 +34,15 @@ export default function HomeSettingsClient({
   categories, 
   instagramPosts 
 }: Props) {
-  const [activeTab, setActiveTab] = useState<"hero" | "elite" | "curtains" | "instagram">("hero");
+  const [activeTab, setActiveTab] = useState<"hero" | "elite" | "instagram">("hero");
   const [isSaving, setIsSaving] = useState(false);
   const getSection = (key: string) => initialSections.find(s => s.section_key === key);
 
   // ─── TABS DEFINITION ───
   const tabs = [
-    { id: "hero", label: "Hero Banner", icon: ImageIcon },
+    { id: "hero", label: "Hero Video & Banner", icon: ImageIcon },
     { id: "elite", label: "Elite Collections", icon: LayoutGrid },
-    { id: "curtains", icon: Layers, label: "Curtains & Blinds" },
-    { id: "instagram", label: "Instagram", icon: Instagram },
+    { id: "instagram", label: "Instagram Gallery", icon: Instagram },
   ] as const;
 
   return (
@@ -118,19 +117,6 @@ export default function HomeSettingsClient({
             </motion.div>
           )}
 
-          {activeTab === "curtains" && (
-            <motion.div
-              key="curtains"
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
-            >
-              <CurtainsSectionForm 
-                sections={initialSections}
-                onSaveSuccess={() => toast.success("Curtain spotlight updated successfully")}
-              />
-            </motion.div>
-          )}
 
           {activeTab === "instagram" && (
             <motion.div
@@ -254,138 +240,7 @@ function EliteSectionForm({ section, categories, onSaveSuccess }: { section?: Ho
   );
 }
 
-// ─── CURTAINS SECTION FORM ───
-function CurtainsSectionForm({ sections, onSaveSuccess }: { sections: HomepageSection[], onSaveSuccess: () => void }) {
-  const [isSaving, setIsSaving] = useState(false);
-  
-  const header = sections.find(s => s.section_key === "curtain-spotlight-header");
-  const card1 = sections.find(s => s.section_key === "curtain-spotlight-1");
-  const card2 = sections.find(s => s.section_key === "curtain-spotlight-2");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSaving(true);
-    const formData = new FormData(e.currentTarget);
-    
-    // We'll need to send multiple update requests or a combined one.
-    // For simplicity, let's use a server action that handles multiple entries if needed, 
-    // but here we'll do them sequentially in the client for now OR better, one action.
-    
-    // For this specific task, let's assume we handle card data in JSON or multiple hidden fields.
-    // I'll implement a 'saveCurtainSpotlights' action.
-    const result = await saveHomepageSection(formData); // This will be multi-purpose
-    
-    setIsSaving(false);
-    if (!result.error) {
-      onSaveSuccess();
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-12">
-      <div>
-        <h3 className="text-xl font-playfair font-black text-[#111] mb-2">Curtains & Roman Blinds</h3>
-        <p className="text-[11px] text-gray-500 max-w-xl leading-relaxed">
-          Manage the editorial focus of your custom window treatments. This section allows exactly two featured items.
-        </p>
-      </div>
-
-      <div className="space-y-6">
-        <label className="text-[10px] font-bold uppercase tracking-widest text-[#C0001A] border-b border-[#C0001A] pb-1 w-fit block">Section Branding</label>
-        <input type="hidden" name="is_multi" value="true" />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Heading</label>
-            <input 
-              name="curtain-spotlight-header_title" 
-              defaultValue={header?.title || "Curtains & Roman Blinds"} 
-              className="w-full p-4 border border-[#eeeeee] focus:outline-none focus:border-[#C0001A] text-[13px]"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Subtitle</label>
-            <input 
-              name="curtain-spotlight-header_subtitle" 
-              defaultValue={header?.subtitle || "Elevate your windows with our custom-made treatments."} 
-              className="w-full p-4 border border-[#eeeeee] focus:outline-none focus:border-[#C0001A] text-[13px]"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* Card 1 */}
-        <div className="space-y-6 p-6 border border-[#eeeeee] bg-[#F9F9F9]">
-          <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]">Spotlight Card 01</label>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Title</label>
-              <input 
-                name="curtain-spotlight-1_title" 
-                defaultValue={card1?.title || "Premium Drapes"} 
-                className="w-full p-4 border border-[#eeeeee] bg-white text-[13px]"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Description</label>
-              <textarea 
-                name="curtain-spotlight-1_description" 
-                defaultValue={card1?.description || "Custom floor-to-ceiling drapes tailored to your window size."} 
-                rows={2}
-                className="w-full p-4 border border-[#eeeeee] bg-white text-[13px] resize-none"
-              />
-            </div>
-            <ImageUploadField 
-              name="curtain-spotlight-1_image_url" 
-              defaultValue={card1?.image_url || "/images/curtain-1.jpg"} 
-              label="Image URL"
-              dimensions="1280 x 720px (16:9)"
-            />
-          </div>
-        </div>
-
-        {/* Card 2 */}
-        <div className="space-y-6 p-6 border border-[#eeeeee] bg-[#F9F9F9]">
-          <label className="text-[10px] font-bold uppercase tracking-widest text-[#111]">Spotlight Card 02</label>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Title</label>
-              <input 
-                name="curtain-spotlight-2_title" 
-                defaultValue={card2?.title || "Roman Blinds"} 
-                className="w-full p-4 border border-[#eeeeee] bg-white text-[13px]"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Description</label>
-              <textarea 
-                name="curtain-spotlight-2_description" 
-                defaultValue={card2?.description || "Modern and space-saving window solutions."} 
-                rows={2}
-                className="w-full p-4 border border-[#eeeeee] bg-white text-[13px] resize-none"
-              />
-            </div>
-            <ImageUploadField 
-              name="curtain-spotlight-2_image_url" 
-              defaultValue={card2?.image_url || "/images/curtain-2.jpg"} 
-              label="Image URL"
-              dimensions="1280 x 720px (16:9)"
-            />
-          </div>
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        disabled={isSaving}
-        className="bg-[#111] text-white px-10 py-5 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-3 w-fit hover:bg-[#C0001A] transition-all disabled:opacity-50 shadow-xl"
-      >
-        {isSaving ? "Updating Spotlight..." : "Update Curtains Section"} <Save size={16} />
-      </button>
-    </form>
-  );
-}
 
 // ─── INSTAGRAM MANAGEMENT ───
 function InstagramManagement({ posts, section, onSaveSuccess }: { posts: InstagramPost[], section?: HomepageSection, onSaveSuccess: () => void }) {
