@@ -52,14 +52,14 @@ export default function EliteCollections() {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Centered Header Matching Exact Reference */}
+        {/* Top Centered Header with Warm Teak Brand Color */}
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#C0001A] block mb-3 font-sans">
+          <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#8A572A] block mb-3 font-sans">
             SHOP BY CATEGORY
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-sans font-bold text-slate-900 tracking-tight">
             Elite Home{" "}
-            <span className="text-[#C0001A] italic font-serif font-normal">
+            <span className="text-[#8A572A] italic font-serif font-normal">
               Collections
             </span>
           </h2>
@@ -72,7 +72,7 @@ export default function EliteCollections() {
         <div className="flex items-center justify-between mb-8">
           <Link
             href="/products"
-            className="text-[11px] font-bold tracking-[0.2em] uppercase text-slate-400 hover:text-slate-900 transition-colors"
+            className="text-[11px] font-bold tracking-[0.2em] uppercase text-slate-400 hover:text-[#8A572A] transition-colors"
           >
             EXPLORE ALL
           </Link>
@@ -81,14 +81,14 @@ export default function EliteCollections() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => scroll("left")}
-              className="w-10 h-10 rounded-full border border-slate-200 hover:border-slate-900 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-all cursor-pointer hover:bg-slate-50"
+              className="w-10 h-10 rounded-full border border-slate-200 hover:border-[#8A572A] flex items-center justify-center text-slate-600 hover:text-[#8A572A] transition-all cursor-pointer hover:bg-amber-50/50"
               aria-label="Previous"
             >
               <ChevronLeft size={18} />
             </button>
             <button
               onClick={() => scroll("right")}
-              className="w-10 h-10 rounded-full border border-slate-200 hover:border-slate-900 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-all cursor-pointer hover:bg-slate-50"
+              className="w-10 h-10 rounded-full border border-slate-200 hover:border-[#8A572A] flex items-center justify-center text-slate-600 hover:text-[#8A572A] transition-all cursor-pointer hover:bg-amber-50/50"
               aria-label="Next"
             >
               <ChevronRight size={18} />
@@ -117,10 +117,10 @@ export default function EliteCollections() {
 
                 {/* Text Labels */}
                 <div className="text-center px-1">
-                  <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-[#C0001A] block mb-0.5">
+                  <span className="text-[10px] font-bold tracking-[0.15em] uppercase text-[#8A572A] block mb-0.5">
                     {col.category}
                   </span>
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#C0001A] transition-colors">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#8A572A] transition-colors">
                     {col.title}
                   </h3>
                 </div>

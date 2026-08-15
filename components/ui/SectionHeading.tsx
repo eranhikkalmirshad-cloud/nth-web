@@ -23,7 +23,7 @@ export default function SectionHeading({
     <div className={`max-w-3xl text-center mx-auto ${className}`}>
       {(label) && (
         <FadeInView delay={0.1}>
-          <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] mb-3 block text-[#C0001A]">
+          <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] mb-3 block text-[#8A572A]">
             {label}
           </span>
         </FadeInView>
@@ -35,7 +35,7 @@ export default function SectionHeading({
           ) : (
             <>
               {titlePart1}{" "}
-              <span className="text-[#C0001A] italic">{titlePart2}</span>
+              <span className="text-[#8A572A] italic">{titlePart2}</span>
             </>
           )}
         </h2>
