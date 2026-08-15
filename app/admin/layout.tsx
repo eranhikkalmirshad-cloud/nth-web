@@ -172,11 +172,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* User / Logout Footer */}
-        <div className="p-3.5 border-t border-slate-100 bg-slate-50/50 space-y-2">
+        <div className="p-4 pb-6 border-t border-slate-100 bg-slate-50/60 space-y-2 mt-auto">
           <Link
             href="/"
             target="_blank"
-            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white transition-all shadow-2xs"
+            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:text-slate-950 hover:bg-white transition-all shadow-2xs border border-transparent hover:border-slate-200"
           >
             <span className="flex items-center gap-2">
               <ExternalLink size={13} className="text-amber-600" />
@@ -188,10 +188,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <form action={handleLogout} className="w-full">
             <button
               type="submit"
-              className="flex items-center gap-2.5 px-3 py-2 w-full text-xs font-semibold text-rose-600 hover:text-white hover:bg-rose-600 rounded-lg transition-all cursor-pointer"
+              className="flex items-center gap-2 px-3 py-2 w-full text-xs font-semibold text-rose-600 hover:text-white hover:bg-rose-600 rounded-lg transition-all cursor-pointer"
             >
-              <LogOut size={14} />
-              <span>Logout</span>
+              <LogOut size={13} />
+              <span>Logout Portal</span>
             </button>
           </form>
         </div>
