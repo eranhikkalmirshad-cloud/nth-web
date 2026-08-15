@@ -86,7 +86,7 @@ export default function ExclusiveTable({ products }: ExclusiveTableProps) {
             </button>
             
             <a
-              href={`https://wa.me/?text=${encodeURIComponent(`Greetings! We are pleased to invite you to view our exclusive private collection at Magnat Furniture. Explore our latest limited-edition masterpieces here: ${showroomLink}`)}`}
+              href={`https://wa.me/?text=${encodeURIComponent(`Greetings! We are pleased to invite you to view our exclusive private collection at Nilambur Teak Heritage. Explore our latest limited-edition masterpieces here: ${showroomLink}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 text-[10px] font-bold uppercase tracking-widest hover:bg-[#1ebc5a] transition-all"

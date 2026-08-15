@@ -1,11 +1,12 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit, Lato, Playfair_Display } from "next/font/google";
+import { Playfair_Display, Cormorant_Garamond, Lato, Cinzel, Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppFloating from "@/components/ui/WhatsAppFloating";
+import MobileBottomBar from "@/components/layout/MobileBottomBar";
 import Preloader from "@/components/ui/Preloader";
 import FavoritesDrawer from "@/components/ui/FavoritesDrawer";
 import { FavoritesProvider } from "@/lib/context/FavoritesContext";
@@ -15,6 +16,7 @@ import LocalBusinessSchema from "@/components/schemas/LocalBusinessSchema";
 import MainContentWrapper from "@/components/layout/MainContentWrapper";
 import { Toaster } from "sonner";
 import VisitTracker from "@/components/analytics/VisitTracker";
+import { SITE_CONFIG } from "@/config/site";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -22,6 +24,21 @@ const playfair = Playfair_Display({
   display: "swap",
   weight: ["400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+});
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  variable: "--font-cinzel",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const lato = Lato({
@@ -37,144 +54,76 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
   weight: ["300", "400", "500", "600", "700"],
-  preload: true,
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
 });
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#8B4513",
+  themeColor: "#5C3D1E",
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://magnat.in"),
+  metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: "Magnat Furniture | Best Sofa Manufacturers & Showroom in Kondotty, Kerala",
-    template: "%s | Magnat Furniture Kondotty",
+    default: "Nilambur Teak Heritage™ - Kerala's Finest Teak Wood Furniture",
+    template: "%s | Nilambur Teak Heritage™",
   },
   description:
-    "Leading sofa manufacturers in Kondotty, Malappuram. Premium custom sofas, L-shape, recliners, curtains & interior solutions. 25+ years of excellence. Free home consultation & delivery across Kerala.",
+    "Buy 100% genuine Nilambur teak wood furniture. Handcrafted by master artisans. Government certified teak. Pan-India delivery. Custom orders welcome.",
   keywords: [
-    "sofa manufacturers kondotty",
-    "furniture showroom kondotty",
-    "sofa near kondotty",
-    "furniture near kondotty",
-    "curtain shops kondotty",
-    "sofa kondotty",
-    "furniture kondotty",
-    "magnat furniture",
-    "magnat sofa kondotty",
-    "custom sofa kondotty",
-    "modular sofa kondotty",
-    "l shape sofa kondotty",
-    "corner sofa kondotty",
-    "recliner sofa kondotty",
-    "leather sofa kondotty",
-    "fabric sofa kondotty",
-    "wooden sofa kondotty",
-    "3 seater sofa kondotty",
-    "5 seater sofa kondotty",
-    "sofa cum bed kondotty",
-    "sofa set kondotty",
-    "living room sofa kondotty",
-    "bedroom furniture kondotty",
-    "dining chairs kondotty",
-    "office furniture kondotty",
-    "executive chairs kondotty",
-    "sofa repair kondotty",
-    "sofa upholstery kondotty",
-    "sofa cleaning kondotty",
-    "furniture repair kondotty",
-    "sofa customization kondotty",
-    "made to order sofa kondotty",
-    "curtain installation kondotty",
-    "home furnishing kondotty",
-    "interior design kondotty",
-    "bespoke furniture kondotty",
-    "teak wood sofa kondotty",
-    "velvet sofa kondotty",
-    "luxury sofa kondotty",
-    "premium furniture kondotty",
-    "designer sofa kondotty",
-    "modern sofa kondotty",
-    "contemporary furniture kondotty",
-    "traditional sofa kondotty",
-    "sofa manufacturers malappuram",
-    "furniture showroom malappuram",
-    "sofa near malappuram",
-    "best furniture showroom in malappuram",
-    "furniture manufacturers malappuram",
-    "sofa manufacturers kozhikode",
-    "furniture showroom calicut",
-    "sofa near kozhikode",
-    "furniture stores calicut",
-    "sofa manufacturers kerala",
-    "furniture manufacturers kerala",
-    "top sofa manufacturers in kerala",
-    "best furniture showroom kerala",
-    "premium sofa kerala",
-    "buy sofa kondotty",
-    "sofa price kondotty",
-    "cheap sofa kondotty",
-    "affordable furniture kondotty",
-    "sofa on emi kondotty",
-    "sofa offers kondotty",
-    "furniture deals kondotty",
-    "wholesale furniture kondotty",
-    "best price sofa kondotty",
-    "magnat sofa",
-    "magnat kondotty",
-    "magnat showroom",
-    "magnat curtains",
-    "magnat.in",
+    "nilambur teak furniture",
+    "teak wood furniture kerala",
+    "genuine teak furniture india",
+    "buy teak furniture online",
+    "nilambur teak heritage",
+    "kerala teak furniture",
+    "solid teak wood sofa",
+    "teak dining table sets",
+    "teak wood bedroom cots",
+    "kerala teak wood doors",
+    "heirloom teak furniture",
+    "custom teak woodwork",
+    "nilambur teak malappuram",
   ],
-  authors: [{ name: "Magnat Furniture & Interiors" }],
-  creator: "Magnat Furniture",
-  publisher: "Magnat Furniture",
+  authors: [{ name: "Nilambur Teak Heritage™" }],
+  creator: "Nilambur Teak Heritage™",
+  publisher: "Nilambur Teak Heritage™",
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://magnat.in",
-    siteName: "Magnat Furniture",
-    title: "Magnat Furniture | Best Sofa Manufacturers & Showroom in Kondotty, Kerala",
-    description: "Leading sofa manufacturers in Kondotty. Custom sofas, L-shape, recliners, curtains & complete interior solutions across Malappuram & Kerala.",
+    url: SITE_CONFIG.url,
+    siteName: SITE_CONFIG.name,
+    title: "Nilambur Teak Heritage™ - Kerala's Finest Teak Wood Furniture",
+    description:
+      "Buy 100% genuine Nilambur teak wood furniture. Handcrafted by master artisans. Government certified teak. Pan-India delivery.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: SITE_CONFIG.ogImage,
         width: 1200,
         height: 630,
-        alt: "Magnat Furniture Showroom – Kondotty, Kerala",
+        alt: "Nilambur Teak Heritage - Kerala's Finest Teak Wood Furniture",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Magnat Furniture | Sofa Manufacturers in Kondotty",
-    description: "Premium sofa manufacturers in Kondotty. Custom sofas, curtains & interior solutions. 25+ years of excellence.",
-    images: ["/og-image.jpg"],
+    title: "Nilambur Teak Heritage™ | Kerala's Finest Teak Wood Furniture",
+    description:
+      "100% genuine Nilambur teak wood furniture handcrafted by master artisans. Pan-India delivery.",
+    images: [SITE_CONFIG.ogImage],
   },
   robots: {
     index: true,
     follow: true,
   },
   alternates: {
-    canonical: "https://magnat.in",
+    canonical: SITE_CONFIG.url,
   },
   formatDetection: {
     email: false,
     address: true,
     telephone: true,
-  },
-  verification: {
-    google: ["-5B831SDmmqEdpt_x36lJrytP0KOfXmnBKoFHxHlojw", "GQyq1DTvGuhE4QxjoN3KEG27jjirbdLDhrXA3TMg3pI"],
   },
 };
 
@@ -184,23 +133,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${lato.variable} ${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${playfair.variable} ${cormorant.variable} ${cinzel.variable} ${lato.variable} ${inter.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="dns-prefetch" href="https://maps.googleapis.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-
-
         <meta name="geo.region" content="IN-KL" />
-        <meta name="geo.placename" content="Kondotty, Malappuram, Kerala" />
-        <meta name="geo.position" content="11.2188;75.9965" />
-        <meta name="ICBM" content="11.2188, 75.9965" />
+        <meta name="geo.placename" content="Nilambur, Malappuram District, Kerala, India" />
+        <meta name="geo.position" content="11.2778;76.2241" />
+        <meta name="ICBM" content="11.2778, 76.2241" />
         <OrganizationSchema />
         <LocalBusinessSchema />
       </head>
-      <body className="min-h-screen flex flex-col bg-[#F7F4F0] antialiased">
+      <body
+        suppressHydrationWarning
+        className="min-h-screen flex flex-col bg-white text-[#111111] antialiased"
+      >
         <VisitTracker />
         <FavoritesProvider>
           <Preloader />
@@ -215,6 +166,7 @@ export default function RootLayout({
           <AdminExclusionWrapper>
             <Footer />
             <WhatsAppFloating />
+            <MobileBottomBar />
           </AdminExclusionWrapper>
         </FavoritesProvider>
 

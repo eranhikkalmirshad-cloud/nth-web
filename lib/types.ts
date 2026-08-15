@@ -1,5 +1,5 @@
 // ============================================
-// MAGNAT FURNITURE — TypeScript Types
+// NILAMBUR TEAK HERITAGE™ — TypeScript Types
 // ============================================
 
 export interface Product {
@@ -56,9 +56,11 @@ export interface Testimonial {
 export interface HeroSlide {
   id: string;
   image_url: string;
+  video_url?: string | null;
   mobile_image_url: string | null;
   alt_text: string | null;
   heading: string;
+  eyebrow?: string | null;
   description: string | null;
   sort_order: number;
   is_active: boolean;

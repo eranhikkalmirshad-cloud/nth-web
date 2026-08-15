@@ -1,165 +1,217 @@
+// app/contact/page.tsx
 "use client";
 
-import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Instagram, MessageSquare, Clock } from "lucide-react";
-import FadeInView from "@/components/ui/FadeInView";
 import { useState } from "react";
-import { submitInquiry } from "@/app/actions/contact";
+import { MessageCircle, Phone, Mail, MapPin, Send } from "lucide-react";
+import { toast } from "sonner";
+import { SITE_CONFIG } from "@/config/site";
 
 export default function ContactPage() {
-   const [formState, setFormState] = useState<"idle" | "submitting" | "success" | "error">("idle");
-   const [errorMsg, setErrorMsg] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    category: "Living Room",
+    message: "",
+  });
 
-   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setFormState("submitting");
-      setErrorMsg("");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.phone) {
+      toast.error("Please provide your phone number");
+      return;
+    }
 
-      const formData = new FormData(e.currentTarget);
-      const result = await submitInquiry(formData);
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSubmitting(false);
+      toast.success("Inquiry received! Our artisan will contact you shortly.");
 
-      if (result.error) {
-         setFormState("error");
-         setErrorMsg(result.error);
-      } else {
-         setFormState("success");
-      }
-   };
+      const waMsg = encodeURIComponent(
+        `Hello ${SITE_CONFIG.name},\nName: ${formData.name}\nPhone: ${formData.phone}\nInterested In: ${formData.category}\nRequirements: ${formData.message}`
+      );
+      window.open(`https://wa.me/${SITE_CONFIG.contact.whatsappNumber}?text=${waMsg}`, "_blank");
+    }, 500);
+  };
 
-   return (
-      <main className="pt-24 min-h-screen bg-white">
-         {/* ── Page Header ── */}
-         <section className="py-32 bg-[#f9f9f9]">
-            <div className="max-container">
-               <FadeInView className="max-w-4xl space-y-6">
-                  <span className="heading-label">Channel Excellence</span>
-                  <h1 className="heading-title" >
-                     Get in <span className="italic font-normal">Touch.</span>
-                  </h1>
-                  <p className="text-xl text-black/40 font-light max-w-2xl leading-relaxed">
-                     Whether you are a discerning homeowner or a professional architect, our team
-                     is ready to assist your inquiry.
-                  </p>
-               </FadeInView>
+  return (
+    <main className="min-h-screen bg-white py-16 md:py-24">
+      <div className="max-container">
+        
+        {/* Header */}
+        <div className="max-w-2xl mb-16 space-y-3">
+          <span className="eyebrow text-[#7A4E2D]">Get in Touch</span>
+          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#141414] leading-tight tracking-tight">
+            Discuss Custom Orders & Visits.
+          </h1>
+          <p className="text-base text-[#555555] font-light leading-relaxed">
+            Connect directly with our master woodcraft studio in Nilambur for bespoke furniture commissions, architectural floor plan quotes, or showroom appointments.
+          </p>
+        </div>
+
+        {/* 2-Column Split */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          
+          {/* Left Column: Clean Contact Form (7 cols) */}
+          <div className="lg:col-span-7 bg-[#FAFAF9] p-8 md:p-12 rounded-xs border border-[#EBEBEA]">
+            <h2 className="text-2xl font-serif font-bold text-[#141414] mb-6">
+              Request a Quotation
+            </h2>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#333333] mb-2">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full bg-white border border-[#E0E0DE] rounded-xs px-4 py-3 text-sm text-[#141414] focus:outline-none focus:border-[#141414]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#333333] mb-2">
+                    Phone / WhatsApp *
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="+91 XXXXXXXXXX"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full bg-white border border-[#E0E0DE] rounded-xs px-4 py-3 text-sm text-[#141414] focus:outline-none focus:border-[#141414]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#333333] mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="yourname@domain.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full bg-white border border-[#E0E0DE] rounded-xs px-4 py-3 text-sm text-[#141414] focus:outline-none focus:border-[#141414]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#333333] mb-2">
+                    Category of Interest
+                  </label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full bg-white border border-[#E0E0DE] rounded-xs px-4 py-3 text-sm text-[#141414] focus:outline-none focus:border-[#141414]"
+                  >
+                    <option value="Living Room">Living Room (Sofas, Diwans, Tables)</option>
+                    <option value="Dining Suites">Dining Suites (6 to 12-Seater Tables)</option>
+                    <option value="Bedroom">Bedroom (Teak Cots, Wardrobes)</option>
+                    <option value="Doors & Frames">Carved Teak Doors & Frames</option>
+                    <option value="Chairs & Accent">Chairs & Planter Easy Chairs</option>
+                    <option value="Custom Woodwork">Custom Architectural Woodwork</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#333333] mb-2">
+                  Requirements / Custom Dimensions
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="Describe your furniture requirements, room dimensions, or custom design ideas..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="w-full bg-white border border-[#E0E0DE] rounded-xs px-4 py-3 text-sm text-[#141414] focus:outline-none focus:border-[#141414]"
+                ></textarea>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn-primary w-full sm:w-auto"
+                >
+                  <span>{isSubmitting ? "Sending..." : "Submit Inquiry"}</span>
+                </button>
+
+                <a
+                  href={SITE_CONFIG.contact.whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-secondary w-full sm:w-auto flex items-center justify-center gap-2"
+                >
+                  <MessageCircle size={15} className="text-[#25D366]" />
+                  <span>Instant WhatsApp Chat</span>
+                </a>
+              </div>
+            </form>
+          </div>
+
+          {/* Right Column: Workshop & Contact Information (5 cols) */}
+          <div className="lg:col-span-5 space-y-8">
+            <div className="space-y-4">
+              <h3 className="text-xl font-serif font-bold text-[#141414]">
+                Workshop & Experience Center
+              </h3>
+              <p className="text-sm text-[#555555] font-light leading-relaxed">
+                Visit our Nilambur workshop to inspect timber seasoning, traditional mortise joints, and finished heirloom collections.
+              </p>
             </div>
-         </section>
 
-         {/* ── Contact Grid ── */}
-         <section className="py-40">
-            <div className="max-container grid grid-cols-1 lg:grid-cols-2 gap-32">
+            <div className="space-y-4 text-sm text-[#444444] border-t border-[#EBEBEA] pt-6">
+              <div className="flex items-start gap-3">
+                <MapPin size={18} className="text-[#7A4E2D] flex-shrink-0 mt-0.5" />
+                <div>
+                  <strong className="text-[#141414] block mb-0.5">Address</strong>
+                  <span>{SITE_CONFIG.contact.address.full}</span>
+                </div>
+              </div>
 
-               {/* Left: Global Inquiries Form */}
-               <div className="space-y-16">
-                  <div className="space-y-4">
-                     <h2 className="text-4xl font-bold" >Start a Design Dialogue.</h2>
-                     <div className="h-px w-20 bg-[#C0001A]" />
-                  </div>
+              <div className="flex items-start gap-3">
+                <Phone size={18} className="text-[#7A4E2D] flex-shrink-0 mt-0.5" />
+                <div>
+                  <strong className="text-[#141414] block mb-0.5">Telephone</strong>
+                  <a href={`tel:${SITE_CONFIG.contact.phone}`} className="hover:text-[#141414]">
+                    {SITE_CONFIG.contact.phoneDisplay}
+                  </a>
+                </div>
+              </div>
 
-                  {formState !== "success" ? (
-                     <form onSubmit={handleSubmit} className="space-y-8">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                           <div className="space-y-2">
-                              <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-black/30">Your Name</label>
-                              <input type="text" name="fullName" required className="w-full bg-transparent border-b border-black/10 py-4 text-sm focus:outline-none focus:border-[#C0001A] transition-colors" />
-                           </div>
-                           <div className="space-y-2">
-                              <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-black/30">Your Email</label>
-                              <input type="email" name="email" required className="w-full bg-transparent border-b border-black/10 py-4 text-sm focus:outline-none focus:border-[#C0001A] transition-colors" />
-                           </div>
-                        </div>
-
-                        <div className="space-y-2">
-                           <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-black/30">Inquiry Type</label>
-                           <select name="subject" className="w-full bg-transparent border-b border-black/10 py-4 text-sm focus:outline-none focus:border-[#C0001A] transition-colors appearance-none">
-                              <option value="Residential Project">Residential Project</option>
-                              <option value="Commercial Unit">Commercial Unit</option>
-                              <option value="Signature Model Inquiry">Signature Model Inquiry</option>
-                              <option value="Curtains & Blinds">Curtains & Blinds</option>
-                           </select>
-                        </div>
-
-                        <div className="space-y-2">
-                           <label className="text-[10px] font-bold tracking-[0.2em] uppercase text-black/30">Detailed Message</label>
-                           <textarea name="message" rows={5} className="w-full bg-transparent border-b border-black/10 py-4 text-sm focus:outline-none focus:border-[#C0001A] transition-colors resize-none"></textarea>
-                        </div>
-
-                        {formState === "error" && (
-                           <div className="p-4 bg-red-50 text-[#C0001A] border border-[#C0001A]/20 text-xs font-bold text-center">
-                              {errorMsg}
-                           </div>
-                        )}
-
-                        <button disabled={formState === "submitting"} type="submit" className="btn-primary w-full lg:w-fit py-5 px-16 disabled:opacity-50 h-[60px] flex items-center justify-center">
-                           {formState === "submitting" ? (
-                              <span className="flex items-center gap-2">
-                                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                 Transmitting...
-                              </span>
-                           ) : "Submit Inquiry"}
-                        </button>
-                     </form>
-                  ) : (
-                     <div className="bg-[#f9f9f9] p-16 border border-black/5 text-center space-y-6">
-                        <div className="w-16 h-16 bg-[#111] rounded-full flex items-center justify-center mx-auto text-white">
-                           <MessageSquare size={32} />
-                        </div>
-                        <h3 className="text-3xl font-bold" >Engagement Received.</h3>
-                        <p className="text-black/50">Our Kondotty desk will respond to your invitation within 24 business hours.</p>
-                     </div>
-                  )}
-               </div>
-
-               {/* Right: Studio Credentials */}
-               <div className="space-y-20">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-                     <div className="space-y-6">
-                        <h4 className="heading-label">Kondotty Studio</h4>
-                        <div className="space-y-4 text-sm text-[#111]/70 leading-relaxed font-light">
-                           <p className="flex items-start gap-3">
-                              <MapPin size={18} className="text-[#C0001A] mt-1 shrink-0" />
-                              Kondotty — Areekode Road,<br />Chungam Junction,<br />Kerala 673638
-                           </p>
-                           <p className="flex items-center gap-3">
-                              <Clock size={16} className="text-[#C0001A]" />
-                              09:30 AM — 08:30 PM
-                           </p>
-                        </div>
-                     </div>
-
-                     <div className="space-y-6">
-                        <h4 className="heading-label">Direct Lines</h4>
-                        <div className="space-y-4 text-sm text-[#111]/70 font-light">
-                           <a href="tel:9446516395" className="flex items-center gap-3 hover:text-[#C0001A] transition-colors">
-                              <Phone size={16} className="text-[#C0001A]" />
-                              +91 9446516395
-                           </a>
-                           <a href="mailto:info@magnat.in" className="flex items-center gap-3 hover:text-[#C0001A] transition-colors">
-                              <Mail size={16} className="text-[#C0001A]" />
-                              info@magnat.in
-                           </a>
-                           <a href="https://www.instagram.com/magnat_furniture_.kondotty?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#C0001A] transition-colors">
-                              <Instagram size={16} className="text-[#C0001A]" />
-                              @magnat_furniture_.kondotty
-                           </a>
-                        </div>
-                     </div>
-                  </div>
-
-                  {/* Interactive Google Map */}
-                  <div className="aspect-video bg-[#f9f9f9] border border-black/5 relative overflow-hidden">
-                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3914.577732999317!2d75.9678667!3d11.1447936!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba64ee03d3e05f3%3A0x895ea8e05f23c7d8!2sMagnat%20Furniture%20and%20Interiors!5e0!3m2!1sen!2sin!4v1775902098710!5m2!1sen!2sin"
-                        className="w-full h-full"
-                        style={{ border: 0 }}
-                        allowFullScreen={true}
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                     ></iframe>
-                  </div>
-               </div>
-
+              <div className="flex items-start gap-3">
+                <Mail size={18} className="text-[#7A4E2D] flex-shrink-0 mt-0.5" />
+                <div>
+                  <strong className="text-[#141414] block mb-0.5">Email</strong>
+                  <a href={`mailto:${SITE_CONFIG.contact.email}`} className="hover:text-[#141414]">
+                    {SITE_CONFIG.contact.email}
+                  </a>
+                </div>
+              </div>
             </div>
-         </section>
-      </main>
-   );
+
+            {/* Simple Map Placeholder */}
+            <div className="rounded-xs overflow-hidden border border-[#EBEBEA] bg-[#FAFAF9] aspect-[16/10] relative">
+              <iframe
+                title="Nilambur Teak Heritage Showroom Map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15655.45785565191!2d76.220!3d11.277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba63a32f0c1cbb1%3A0x868bceef7cf1e4a!2sNilambur%2C%20Kerala!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin"
+                className="w-full h-full border-0"
+                loading="lazy"
+              ></iframe>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  );
 }

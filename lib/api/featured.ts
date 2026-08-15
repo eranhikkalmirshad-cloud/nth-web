@@ -4,55 +4,67 @@ import { FeaturedItem } from "@/lib/types";
 const FALLBACK_FEATURED_ITEMS: FeaturedItem[] = [
   {
     id: "1",
-    category: "Living Area",
-    name: "Nordic Chair",
-    subtitle: "A stylish and comfortable Nordic chair designed with minimal aesthetics, perfect for modern living rooms.",
-    image_url: "/images/singlesofa.png",
+    category: "Living Room",
+    name: "Royal Malabar Teak Sofa Set",
+    slug: "royal-malabar-teak-sofa-set",
+    subtitle: "Hand-carved Nilambur teak 3+1+1 living suite with royal brass accents.",
+    image_url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200&auto=format&fit=crop",
     sort_order: 0,
     is_active: true,
+    is_featured: true,
+    is_bestseller: true,
   },
   {
     id: "2",
-    category: "Living Area",
-    name: "Skyline Sofa",
-    subtitle: "A premium skyline sofa offering superior comfort and elegant design, ideal for relaxing and entertaining guests.",
-    image_url: "/images/sofa3d1.png",
+    category: "Dining Sets",
+    name: "Imperial Nilambur 8-Seater Dining Suite",
+    slug: "imperial-nilambur-8-seater-dining-suite",
+    subtitle: "Solid seasoned Nilambur teak slab table with handcrafted ergonomic chairs.",
+    image_url: "https://images.unsplash.com/photo-1617806118233-18e1de247200?q=80&w=1200&auto=format&fit=crop",
     sort_order: 1,
     is_active: true,
+    is_featured: true,
+    is_bestseller: true,
   },
   {
     id: "3",
-    category: "Living Area",
-    name: "Bloom Sofa",
-    subtitle: "A cozy and compact bloom sofa that blends softness with contemporary design for small and large spaces.",
-    image_url: "/images/singlesofa.png",
+    category: "Bedroom",
+    name: "Travancore Heritage Teak Cot",
+    slug: "travancore-heritage-teak-cot",
+    subtitle: "King size solid teak bed with intricate headboard wood carvings and heirloom joinery.",
+    image_url: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop",
     sort_order: 2,
     is_active: true,
+    is_featured: true,
+    is_new: true,
   },
   {
     id: "4",
-    category: "Bedroom",
-    name: "Luna Armchair",
-    subtitle: "A luxurious armchair crafted for bedroom comfort, featuring soft cushioning and a sleek modern look.",
-    image_url: "/images/sofa3d1.png",
+    category: "Office Furniture",
+    name: "Governor Executive Teak Desk",
+    slug: "governor-executive-teak-desk",
+    subtitle: "Stately executive work desk handcrafted from premium seasoned teak wood.",
+    image_url: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop",
     sort_order: 3,
     is_active: true,
+    is_featured: true,
   },
   {
     id: "5",
-    category: "Office",
-    name: "Crest Desk Chair",
-    subtitle: "An ergonomic office chair designed for long working hours, providing excellent back support and comfort.",
-    image_url: "/images/singlesofa.png",
+    category: "Doors & Windows",
+    name: "Aalayam Heritage Carved Main Door",
+    slug: "aalayam-heritage-carved-main-door",
+    subtitle: "Traditional Kerala temple-inspired teak entrance door with antique brass work.",
+    image_url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop",
     sort_order: 4,
     is_active: true,
+    is_featured: true,
   },
 ];
 
 export async function getFeaturedItems(): Promise<FeaturedItem[]> {
   try {
     const supabase = createClient();
-    // Fetch products marked as Signature Collection (is_featured=true)
     const { data, error } = await supabase
       .from("products")
       .select(`
@@ -79,13 +91,12 @@ export async function getFeaturedItems(): Promise<FeaturedItem[]> {
       return FALLBACK_FEATURED_ITEMS;
     }
 
-    // Map Product data to FeaturedItem shape for the carousel
     return data.map((item: any) => ({
       id: item.id.toString(),
       slug: item.slug,
-      category: item.categories?.name || "Premium Collection",
+      category: item.categories?.name || "Nilambur Teak Collection",
       name: item.name,
-      subtitle: item.subtitle || "Exclusive design for modern luxury.",
+      subtitle: item.subtitle || "Handcrafted from 100% genuine Nilambur teak wood.",
       image_url: Array.isArray(item.image_url) ? item.image_url[0] : item.image_url || "/images/placeholder-furniture.jpg",
       sort_order: 0,
       is_active: item.is_active,
@@ -93,7 +104,6 @@ export async function getFeaturedItems(): Promise<FeaturedItem[]> {
       is_bestseller: item.is_bestseller,
       is_featured: item.is_featured,
     }));
-
   } catch (err) {
     return FALLBACK_FEATURED_ITEMS;
   }

@@ -1,32 +1,17 @@
 // app/products/sofas/layout.tsx
 import { Metadata } from "next";
-import { CATEGORY_KEYWORDS } from "@/lib/keywords";
+import { SITE_CONFIG } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Custom Sofas in Kondotty | L-Shape, Recliner, Leather – Magnat Furniture",
+  title: `Solid Teak Sofas & Living Suites | Nilambur Teak Heritage™`,
   description:
-    "Best sofa manufacturers in Kondotty. Custom L-shape sofas, corner sofas, recliner sofas, leather sofas, fabric sofas & sofa sets. All made-to-order in our Kondotty factory. Free home consultation & delivery across Malappuram.",
-  keywords: [
-    ...CATEGORY_KEYWORDS.sofas,
-    "sofa manufacturers kondotty",
-    "l shape sofa kondotty price",
-    "recliner sofa kondotty",
-    "leather sofa kondotty price",
-    "corner sofa kondotty",
-    "sofa set kondotty",
-    "buy sofa kondotty",
-    "custom sofa maker near kondotty",
-    "best sofa showroom kondotty",
-    "sofa on emi kondotty",
-    "sofa delivery kondotty malappuram",
-  ],
+    "Handcrafted solid Nilambur teak wood sofas, royal diwans, and living room suites handcrafted in Kerala.",
   openGraph: {
-    title: "Custom Sofas – Magnat Furniture Kondotty | L-Shape, Recliner, Leather",
-    description:
-      "Premium custom sofa manufacturers in Kondotty. L-shape, corner, recliner & leather sofas. Made-to-order. Free delivery.",
-    url: "https://magnat.in/products/sofas",
+    title: `Solid Teak Sofas | Nilambur Teak Heritage™`,
+    description: "Solid Nilambur teak sofas and living suites crafted in Kerala.",
+    url: `${SITE_CONFIG.url}/products/sofas`,
   },
-  alternates: { canonical: "https://magnat.in/products/sofas" },
+  alternates: { canonical: `${SITE_CONFIG.url}/products/sofas` },
 };
 
 export default function SofasLayout({ children }: { children: React.ReactNode }) {

@@ -1,69 +1,49 @@
+// components/home/BannerSection.tsx
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import { MessageCircle, ArrowRight } from "lucide-react";
 import FadeInView from "@/components/ui/FadeInView";
+import { SITE_CONFIG } from "@/config/site";
 
 export default function BannerSection() {
   return (
-    <section className="relative h-[650px] overflow-hidden bg-[#1a1a1a]">
-      
-      {/* Background Image Container */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2560&auto=format&fit=crop"
-          alt="Luxury Interior Design Consultation"
-          fill
-          sizes="100vw"
-          className="object-cover opacity-60 grayscale-[0.3]"
-        />
-        {/* Deep, nuanced gradient for editorial texture */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#0d0d0d]/80 via-[#0d0d0d]/40 to-transparent" />
-      </div>
+    <section className="py-24 md:py-32 bg-white border-t border-[#EBEBEA] text-center">
+      <div className="max-container px-4">
+        <FadeInView>
+          <div className="max-w-3xl mx-auto space-y-6">
+            <span className="eyebrow text-[#7A4E2D]">Nilambur Teak Heritage</span>
 
-      {/* Content Area */}
-      <div className="relative z-10 w-full h-full flex items-center px-8 lg:px-24">
-        <div className="max-w-4xl pt-12">
-          
-          <FadeInView direction="up">
-            <span className="text-[#c9a96e] text-[9px] font-bold tracking-[0.5em] uppercase mb-8 block" >
-              The Concierge Service
-            </span>
-            
-            <h2 className="text-white leading-[1.05] mb-8" style={{  fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)", fontWeight: 600 }}>
-              Design Your <span className="italic text-[#dfc08a]">Private Sanctuary</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#141414] leading-tight tracking-tight">
+              Bring the warmth of natural teak into your home.
             </h2>
-            
-            <div className="w-20 h-[1px] bg-[#c9a96e] mb-10" />
-            
-            <p className="text-white/60 text-lg lg:text-xl font-light leading-relaxed max-w-2xl mb-12" >
-              Consult with our master designers to create a bespoke living environment that becomes an extension of your legacy. Every detail is a testament to your taste.
+
+            <p className="text-base md:text-lg text-[#555555] font-light leading-relaxed max-w-xl mx-auto">
+              From signature living suites to bespoke pooja doors and royal dining tables, discover furniture crafted to be loved for generations.
             </p>
-            
-            <div className="flex flex-wrap gap-6 pt-4">
+
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <Link
-                href="/contact"
-                className="bg-[#c9a96e] hover:bg-[#b8976a] text-[#1a1a1a] px-10 py-4 text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300"
-                
+                href="/products"
+                className="btn-primary flex items-center gap-2"
               >
-                Book a Consultation
+                <span>Explore Collection</span>
+                <ArrowRight size={15} />
               </Link>
-              <Link
-                href="/about"
-                className="border border-white/20 text-white hover:border-white px-10 py-4 text-[10px] font-bold tracking-[0.25em] uppercase transition-all duration-300"
-                
+
+              <a
+                href={SITE_CONFIG.contact.whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary flex items-center gap-2"
               >
-                Our Legacy
-              </Link>
+                <MessageCircle size={15} className="text-[#25D366]" />
+                <span>WhatsApp Consultation</span>
+              </a>
             </div>
-          </FadeInView>
-
-        </div>
+          </div>
+        </FadeInView>
       </div>
-
-      {/* Decorative vertical line */}
-      <div className="absolute left-12 bottom-0 w-px h-32 bg-gradient-to-t from-[#c9a96e]/40 to-transparent hidden lg:block" />
-      
     </section>
   );
 }

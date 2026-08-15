@@ -19,62 +19,62 @@ export default function FilterSection({
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-6 border-b border-[#f0f0f0]">
-        <h2 className="text-[18px] font-normal text-[#111]">
-          Filter By <em className="text-[#C0001A]" style={{ fontStyle: "italic" }}>Type</em>
+      <div className="flex items-center justify-between px-6 py-5 border-b border-[#EBEBEA]">
+        <h2 className="text-base font-serif font-bold text-[#141414]">
+          Filter Collection
         </h2>
         {onClose && (
-          <button 
+          <button
             onClick={onClose}
-            className="p-2 -mr-2 text-[#111] hover:text-[#C0001A] transition-colors"
+            className="p-1.5 text-[#777777] hover:text-[#141414] transition-colors"
+            aria-label="Close Filter"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         )}
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 py-8">
-        <div className="flex flex-col gap-3">
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <div className="flex flex-col gap-2">
           <button
             onClick={() => onTypeChange("All")}
-            className={`flex items-center justify-between px-5 py-4 rounded-[4px] text-[11px] font-bold tracking-widest uppercase transition-all duration-300 ${
+            className={`flex items-center justify-between px-4 py-3 rounded-xs text-xs font-semibold tracking-wider uppercase transition-colors ${
               activeType === "All"
-                ? "bg-[#C0001A] text-white shadow-md shadow-red-900/10"
-                : "bg-[#f9f9f9] text-[#666] border border-[#f0f0f0] hover:border-[#C0001A] hover:text-[#C0001A]"
+                ? "bg-[#141414] text-white"
+                : "bg-[#FAFAF9] text-[#555555] border border-[#EAEAEA] hover:border-[#141414] hover:text-[#141414]"
             }`}
           >
-            <span>All Products</span>
-            {activeType === "All" && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+            <span>All Pieces</span>
           </button>
-          
+
           {types.map((type) => (
             <button
               key={type}
               onClick={() => onTypeChange(type)}
-              className={`flex items-center justify-between px-5 py-4 rounded-[4px] text-[11px] font-bold tracking-widest uppercase transition-all duration-300 ${
+              className={`flex items-center justify-between px-4 py-3 rounded-xs text-xs font-semibold tracking-wider uppercase transition-colors ${
                 activeType === type
-                  ? "bg-[#C0001A] text-white shadow-md shadow-red-900/10"
-                  : "bg-[#f9f9f9] text-[#666] border border-[#f0f0f0] hover:border-[#C0001A] hover:text-[#C0001A]"
+                  ? "bg-[#141414] text-white"
+                  : "bg-[#FAFAF9] text-[#555555] border border-[#EAEAEA] hover:border-[#141414] hover:text-[#141414]"
               }`}
-              
             >
               <span>{type}</span>
-              {activeType === type && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
             </button>
           ))}
         </div>
       </div>
 
       {/* Footer / CTA */}
-      <div className="px-6 py-6 border-t border-[#f0f0f0] bg-white">
-        <button
-          onClick={onClose}
-          className="w-full bg-[#111] text-white text-[10px] font-bold tracking-[0.2em] uppercase py-4 rounded-[4px] hover:bg-[#C0001A] transition-colors"
-        >
-          View Results
-        </button>
-      </div>
+      {onClose && (
+        <div className="px-6 py-4 border-t border-[#EBEBEA] bg-white">
+          <button
+            onClick={onClose}
+            className="btn-primary w-full text-xs"
+          >
+            Apply Filters
+          </button>
+        </div>
+      )}
     </div>
   );
 }

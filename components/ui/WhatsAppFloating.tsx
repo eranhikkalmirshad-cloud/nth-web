@@ -1,14 +1,15 @@
 // components/ui/WhatsAppFloating.tsx
 "use client";
 
-import { MessageCircle, X } from "lucide-react";
+import { MessageCircle, X, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { SITE_CONFIG } from "@/config/site";
 
 export default function WhatsAppFloating() {
   const [isExpanded, setIsExpanded] = useState(false);
-  const phoneNumber = "919446516395";
-  const message = "Hello MAGNAT Furniture Kondotty, I'd like to enquire about your premium furniture and interior solutions.";
+  const phoneNumber = SITE_CONFIG.contact.whatsappNumber;
+  const message = `Hello ${SITE_CONFIG.name}, I'd like to enquire about your 100% genuine Nilambur teak wood furniture and custom quotes.`;
 
   return (
     <>
@@ -21,7 +22,7 @@ export default function WhatsAppFloating() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsExpanded(false)}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[100]"
+              className="fixed inset-0 bg-black/40 backdrop-blur-xs z-[100]"
             />
 
             {/* Expanded Card */}
@@ -29,32 +30,32 @@ export default function WhatsAppFloating() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="fixed bottom-28 right-6 z-[102] w-80 bg-white rounded-2xl shadow-2xl border border-[#C0001A]/10 overflow-hidden"
+              className="fixed bottom-24 md:bottom-28 right-4 md:right-6 z-[102] w-80 bg-white rounded-2xl shadow-2xl border border-[#EAEAEA] overflow-hidden"
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-[#111111] to-[#2a2a2a] p-4 relative">
+              <div className="bg-[#25D366] p-4 relative text-white">
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="absolute top-3 right-3 text-white/60 hover:text-white transition-colors"
+                  className="absolute top-3 right-3 text-white/80 hover:text-white transition-colors"
                   aria-label="Close"
                 >
                   <X size={20} />
                 </button>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center">
-                    <MessageCircle size={24} className="text-white" fill="white" />
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                    <MessageCircle size={22} className="text-white" fill="white" />
                   </div>
                   <div>
-                    <h3 className="text-white font-semibold">MAGNAT Furniture</h3>
-                    <p className="text-white/70 text-xs">Kondotty Showroom</p>
+                    <h3 className="text-white font-bold text-sm">{SITE_CONFIG.name}</h3>
+                    <p className="text-white/80 text-xs">Nilambur Teak Specialists</p>
                   </div>
                 </div>
               </div>
 
               {/* Content */}
-              <div className="p-5 space-y-4">
-                <p className="text-sm text-[#111111]/80 leading-relaxed">
-                  Need expert consultation for your dream interiors? Our team is ready to assist you.
+              <div className="p-5 space-y-4 text-left">
+                <p className="text-xs text-[#555555] leading-relaxed">
+                  Looking for custom dimensions or genuine Nilambur teak pricing? Connect with our master craftsmen directly.
                 </p>
 
                 {/* Quick Actions */}
@@ -63,25 +64,19 @@ export default function WhatsAppFloating() {
                     href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full bg-[#25D366] hover:bg-[#20bd5a] text-white py-3 px-4 rounded-xl font-medium text-center transition-all duration-300 hover:shadow-lg"
+                    className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1EBE5B] text-white py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
                   >
-                    Start WhatsApp Chat
+                    <MessageCircle size={16} />
+                    Chat on WhatsApp
                   </a>
-                  
-                  <a
-                    href="tel:+919446516395"
-                    className="block w-full bg-[#111111] hover:bg-[#C0001A] text-white py-3 px-4 rounded-xl font-medium text-center transition-all duration-300"
-                  >
-                    Call Now
-                  </a>
-                </div>
 
-                {/* Info */}
-                <div className="pt-3 border-t border-gray-100">
-                  <p className="text-xs text-[#111111]/60 text-center">
-                    <span className="inline-block w-2 h-2 bg-[#25D366] rounded-full mr-2 animate-pulse"></span>
-                    Typically replies within minutes
-                  </p>
+                  <a
+                    href={`tel:${SITE_CONFIG.contact.phone}`}
+                    className="flex items-center justify-center gap-2 w-full bg-[#111111] hover:bg-[#333333] text-white py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors"
+                  >
+                    <Phone size={15} />
+                    Call Studio
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -92,28 +87,20 @@ export default function WhatsAppFloating() {
       {/* Main Floating Button */}
       <motion.button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="fixed bottom-8 right-6 z-[101] group"
+        className="fixed bottom-6 right-4 sm:right-6 z-[95] group"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1.5, type: "spring", stiffness: 260, damping: 20 }}
+        transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        aria-label="Contact on WhatsApp"
+        aria-label="Contact Nilambur Teak Heritage on WhatsApp"
       >
-        {/* Pulse Animation Ring */}
-        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30"></span>
-        
-        {/* Outer Glow */}
-        <span className="absolute inset-0 rounded-full bg-[#25D366]/20 blur-xl group-hover:bg-[#25D366]/30 transition-all duration-500"></span>
-        
-        {/* Main Button */}
-        <div className="relative flex items-center gap-3 bg-gradient-to-r from-[#25D366] to-[#20bd5a] text-white p-4 md:pl-5 md:pr-6 md:py-4 rounded-full shadow-2xl border-2 border-white/30 backdrop-blur-sm">
-          <MessageCircle size={24} fill="currentColor" className="animate-pulse" />
-          <span className="font-semibold text-sm whitespace-nowrap hidden md:block">
-            Chat with Us
+        <div className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1EBE5B] text-white px-4 py-2.5 rounded-full shadow-xl transition-all">
+          <MessageCircle size={18} fill="currentColor" />
+          <span className="font-bold text-xs uppercase tracking-wider hidden sm:block">
+            WhatsApp Inquiry
           </span>
         </div>
-
       </motion.button>
     </>
   );

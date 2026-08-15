@@ -441,7 +441,7 @@ function InstagramManagement({ posts, section, onSaveSuccess }: { posts: Instagr
             <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Subtitle/Handle</label>
             <input 
               name="subtitle" 
-              defaultValue={section?.subtitle || "@magnat_furniture.kondotty"} 
+              defaultValue={section?.subtitle || "@nilamburteakheritage"} 
               className="w-full p-4 border border-[#eeeeee] focus:outline-none focus:border-[#C0001A] text-[13px]"
             />
           </div>
@@ -451,9 +451,9 @@ function InstagramManagement({ posts, section, onSaveSuccess }: { posts: Instagr
           <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Location (Displayed on cards)</label>
           <input 
             name="description" 
-            defaultValue={section?.description || "Kondotty, Kerala"} 
-            className="w-full p-4 border border-[#eeeeee] focus:outline-none focus:border-[#C0001A] text-[13px]"
-            placeholder="Kondotty, Kerala"
+            defaultValue={section?.description || "Nilambur, Kerala"} 
+            className="w-full p-4 border border-[#eeeeee] focus:outline-none focus:border-[#C9922A] text-[13px]"
+            placeholder="Nilambur, Kerala"
           />
         </div>
 
@@ -640,9 +640,18 @@ function HeroManagement({ slides, onSaveSuccess }: { slides: HeroSlide[], onSave
                   <ImageUploadField 
                     name="image_url" 
                     defaultValue={editingSlide?.image_url} 
-                    label="Desktop Image"
+                    label="Poster / Fallback Image"
                     dimensions="2560 x 1440px (16:9)"
                   />
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Background Video URL (Optional MP4)</label>
+                    <input 
+                      name="video_url" 
+                      defaultValue={editingSlide?.video_url || "/video/hero-video.mp4"} 
+                      className="w-full p-4 border border-[#eeeeee] text-[13px] bg-[#F9F9F9]" 
+                      placeholder="/video/hero-video.mp4 or Cloudinary URL" 
+                    />
+                  </div>
                   <ImageUploadField 
                     name="mobile_image_url" 
                     defaultValue={editingSlide?.mobile_image_url || ""} 
@@ -653,8 +662,18 @@ function HeroManagement({ slides, onSaveSuccess }: { slides: HeroSlide[], onSave
 
                 <div className="space-y-4">
                   <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Eyebrow Tagline</label>
+                    <input 
+                      name="eyebrow" 
+                      defaultValue={editingSlide?.eyebrow || "Experience the Pinnacle of Comfort"} 
+                      className="w-full p-4 border border-[#eeeeee] text-[13px] bg-[#F9F9F9]" 
+                      placeholder="Experience the Pinnacle of Comfort" 
+                    />
+                  </div>
+
+                  <div className="space-y-2">
                     <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Heading</label>
-                    <input name="heading" defaultValue={editingSlide?.heading} required className="w-full p-4 border border-[#eeeeee] text-[13px] bg-[#F9F9F9]" placeholder="Living Architecture" />
+                    <input name="heading" defaultValue={editingSlide?.heading || "Comfort, Refined"} required className="w-full p-4 border border-[#eeeeee] text-[13px] bg-[#F9F9F9]" placeholder="Comfort, Refined" />
                   </div>
                   
                   <div className="space-y-2">

@@ -1,131 +1,101 @@
+// components/home/HeritageSection.tsx
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 import FadeInView from "@/components/ui/FadeInView";
-import SectionHeading from "@/components/ui/SectionHeading";
+import { ArrowRight } from "lucide-react";
 
-const trustStats = [
-   {
-      icon: (
-         <svg viewBox="0 0 24 24" fill="none" stroke="#C0001A" strokeWidth={1.8} width={18} height={18}>
-            <rect x="3" y="3" width="7" height="7" rx="1" />
-            <rect x="14" y="3" width="7" height="7" rx="1" />
-            <rect x="3" y="14" width="7" height="7" rx="1" />
-            <rect x="14" y="14" width="7" height="7" rx="1" />
-         </svg>
-      ),
-      number: "25",
-      suffix: " + Yrs",
-      label: "Manufacturing Experience",
-   },
-   {
-      icon: (
-         <svg viewBox="0 0 24 24" fill="none" stroke="#C0001A" strokeWidth={1.8} width={18} height={18}>
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-         </svg>
-      ),
-      number: "5000",
-      suffix: " +",
-      label: "Homes Transformed",
-   },
-   {
-      icon: (
-         <svg viewBox="0 0 24 24" fill="none" stroke="#C0001A" strokeWidth={1.8} width={18} height={18}>
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            <polyline points="9 12 11 14 15 10" />
-         </svg>
-      ),
-      number: "10",
-      suffix: " yr",
-      label: "Product Warranty",
-   },
-   {
-      icon: (
-         <svg viewBox="0 0 24 24" fill="none" stroke="#C0001A" strokeWidth={1.8} width={18} height={18}>
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-         </svg>
-      ),
-      number: "100",
-      suffix: " %",
-      label: "Wood Guaranteed",
-   },
+const pillars = [
+  {
+    num: "01",
+    title: "100% Nilambur Teak",
+    desc: "Sourced strictly from mature Nilambur heartwood, celebrated globally for its high natural oil density, rich golden grain, and natural pest resistance.",
+  },
+  {
+    num: "02",
+    title: "Master Craftsmanship",
+    desc: "Traditional interlocking mortise-and-tenon wood joinery practiced by Kerala artisans whose lineage spans generations.",
+  },
+  {
+    num: "03",
+    title: "Government Certified",
+    desc: "All timber is legally procured through authorized Kerala Forest Department auctions with official transit passes and certificates.",
+  },
+  {
+    num: "04",
+    title: "Pan-India White Glove Delivery",
+    desc: "Insured doorstep transit with professional installation for private residences and architectural projects across India.",
+  },
 ];
 
 export default function HeritageSection() {
-   return (
-      <section className="bg-[#FCFCFC] py-12 md:py-20 relative overflow-hidden">
-         <div className="max-container flex flex-col items-center relative z-10 px-4">
-            <SectionHeading 
-               label="Our Heritage"
-               titlePart1="A Legacy of"
-               titlePart2="Excellence"
-               subtitle="For over 25 years, Magnat has been the benchmark for premium furniture craftsmanship in Kerala, blending traditional artistry with modern design."
-               className="mb-12 md:mb-16"
-            />
-            
-            <FadeInView className="w-full max-w-5xl">
-               <div className="border-t border-[#eee] pt-10 text-nowrap">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6  md:gap-0 items-start">
-                     {trustStats.map((stat, i) => (
-                        <div
-                           key={i}
-                           className={`
-                              flex items-start gap-3 text-left justify-start
-                              ${i !== 0 ? "md:border-l md:border-[#eee] md:pl-5" : ""}
-                              ${i === 1 || i === 3 ? "justify-start sm:justify-start" : ""}
-                           `}
-                        >
-                           {/* Icon */}
-                           <div
-                              className="w-[40px]  h-[40px] min-w-[40px] rounded-full flex items-center justify-center"
-                              style={{
-                                 background: "#fff5f5",
-                                 border: "1px solid rgba(192,0,26,0.15)",
-                              }}
-                           >
-                              {stat.icon}
-                           </div>
+  return (
+    <section className="py-20 md:py-28 bg-white border-t border-[#EBEBEA]">
+      <div className="max-container">
+        
+        {/* ── Top Editorial Split ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-20">
+          <div className="lg:col-span-6 space-y-6">
+            <FadeInView direction="right">
+              <span className="eyebrow text-[#7A4E2D]">Generational Provenance</span>
+              
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#141414] leading-[1.15] tracking-tight">
+                Born in Nilambur. <br />
+                Crafted in Teak. <br />
+                Made to Last.
+              </h2>
 
-                           {/* Text */}
-                           <div>
-                              <p
-                                 className="text-[#111] leading-tight"
-                                 style={{
-                                    fontFamily: "var(--font-outfit)",
-                                    fontSize: "20px",
-                                    fontWeight: 900,
-                                    letterSpacing: "-0.02em",
-                                 }}
-                              >
-                                 {stat.number}
-                                 <span
-                                    className="text-[#C0001A]"
-                                    style={{ fontSize: "14px", fontWeight: 700 }}
-                                 >
-                                    {stat.suffix}
-                                 </span>
-                              </p>
-                              <p
-                                 className="text-[#666] mt-0.5"
-                                 style={{
-                                    fontSize: "10px",
-                                    lineHeight: "1.3",
-                                 }}
-                              >
-                                 {stat.label}
-                              </p>
-                           </div>
-                        </div>
-                     ))}
-                  </div>
-               </div>
+              <p className="text-base text-[#555555] font-light leading-relaxed">
+                Home to the world’s oldest teak plantations, Nilambur’s distinctive climate and rich soil yield timber of rare density and timeless beauty. We honor this living heritage by creating furniture designed to remain in your family for decades.
+              </p>
+
+              <div className="pt-2">
+                <Link
+                  href="/contact"
+                  className="btn-primary"
+                >
+                  Consult Master Artisan
+                </Link>
+              </div>
             </FadeInView>
-         </div>
-      </section>
-   );
+          </div>
+
+          <div className="lg:col-span-6">
+            <FadeInView direction="left">
+              <div className="relative aspect-[4/3] rounded-xs overflow-hidden bg-[#F5F5F3] shadow-sm">
+                <Image
+                  src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1200&auto=format&fit=crop"
+                  alt="Nilambur Teak Wood Legacy"
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            </FadeInView>
+          </div>
+        </div>
+
+        {/* ── 4 Pillars (Numbered Minimal Grid with Lots of Whitespace) ── */}
+        <div className="pt-16 border-t border-[#EBEBEA] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+          {pillars.map((item, idx) => (
+            <FadeInView key={item.num} delay={idx * 0.08}>
+              <div className="space-y-3">
+                <span className="font-serif text-2xl font-bold text-[#7A4E2D]">
+                  {item.num}
+                </span>
+                <h3 className="text-lg font-serif font-bold text-[#141414]">
+                  {item.title}
+                </h3>
+                <p className="text-xs md:text-sm text-[#666666] font-light leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            </FadeInView>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
 }

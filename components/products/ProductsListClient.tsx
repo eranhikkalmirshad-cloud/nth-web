@@ -1,3 +1,4 @@
+// components/products/ProductsListClient.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -5,7 +6,6 @@ import ProductCard from "@/components/ui/ProductCard";
 import FadeInView from "@/components/ui/FadeInView";
 import { Search, SlidersHorizontal, Grid3x3, LayoutGrid } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Categories, Product } from "@/lib/types";
 
@@ -17,14 +17,13 @@ interface ProductsListClientProps {
 export default function ProductsListClient({ initialProducts, categories }: ProductsListClientProps) {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category") || "All Products";
-  
+
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [viewMode, setViewMode] = useState<"grid" | "compact">("grid");
   const [sortBy, setSortBy] = useState("Featured");
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Sync state with URL parameter changes
   useEffect(() => {
     const categoryParam = searchParams.get("category");
     if (categoryParam) {
@@ -32,156 +31,176 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     }
   }, [searchParams]);
 
-  const categoryNames = ["All Products", ...Array.from(new Set(categories.map(c => c.base_category).filter((c): c is string => !!c)))];
-  const sortOptions = ["Featured", "Newest First", "Price: Low to High", "Price: High to Low", "Best Sellers"];
+  const categoryNames = [
+    "All Products",
+    "Sofas",
+    "Chairs",
+    "Tables",
+    "Dining",
+    "Lounge Chairs",
+    "Sitout",
+    "Study and Office",
+    "Beds",
+    "TV Units",
+    "Coffee Tables",
+    "Cabinet",
+    "Bookshelves",
+    "Diwan Beds",
+    "Wardrobes",
+    "Benches",
+    "Shoes Racks",
+    "Outdoor Furniture",
+    "Bedside Table",
+    "Wall Decors",
+    "Living Room",
+    "Dining Room",
+    "Bedroom",
+  ];
+  const sortOptions = ["Featured", "Newest First", "Price: Low to High", "Price: High to Low"];
 
-  const filteredProducts = initialProducts.filter(p => {
-    const matchesCategory = activeCategory === "All Products" || p.categories?.base_category === activeCategory;
-    const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredProducts = initialProducts.filter((p) => {
+    const term = activeCategory.toLowerCase();
+    const matchesCategory =
+      activeCategory === "All Products" ||
+      p.name.toLowerCase().includes(term) ||
+      p.categories?.name?.toLowerCase().includes(term) ||
+      p.category_id?.toLowerCase().includes(term) ||
+      p.type?.toLowerCase().includes(term) ||
+      p.room?.toLowerCase().includes(term) ||
+      (p.description?.toLowerCase().includes(term) || false);
+    const matchesSearch =
+      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (p.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
     return matchesCategory && matchesSearch;
   });
 
-  // Parse a price string like "₹1,85,000" → 185000 for numeric sorting
   const parsePrice = (price: string | null | undefined): number => {
     if (!price) return 0;
     return parseFloat(price.replace(/[^\d.]/g, "")) || 0;
   };
 
-  // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
-      case "Newest First": return (b.created_at || "").localeCompare(a.created_at || "");
-      case "Price: Low to High": return parsePrice(a.price) - parsePrice(b.price);
-      case "Price: High to Low": return parsePrice(b.price) - parsePrice(a.price);
-      case "Best Sellers": return a.is_bestseller === b.is_bestseller ? 0 : a.is_bestseller ? -1 : 1;
-      default: return 0;
+      case "Newest First":
+        return (b.created_at || "").localeCompare(a.created_at || "");
+      case "Price: Low to High":
+        return parsePrice(a.price) - parsePrice(b.price);
+      case "Price: High to Low":
+        return parsePrice(b.price) - parsePrice(a.price);
+      default:
+        return 0;
     }
   });
 
   return (
     <>
-      {/* Search & Filter Bar */}
-      <section className="sticky top-20 z-40 bg-white/98 backdrop-blur-xl border-b border-[#eeeeee] shadow-sm">
+      {/* ── Search & Category Filter Bar (Sticky) ── */}
+      <section className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md border-b border-[#EBEBEA]">
         <div className="max-container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-4 border-b border-[#eeeeee]/50">
-            <div className="relative w-full md:w-96">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666666]" size={18} />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-3 border-b border-[#F0F0EE]">
+            {/* Search Input */}
+            <div className="relative w-full md:w-80">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#888888]" size={16} />
               <input
                 type="text"
-                placeholder="Search by name or material..."
+                placeholder="Search teak furniture pieces..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-[#eeeeee] rounded-lg text-sm focus:outline-none focus:border-[#C0001A] transition-colors"
+                className="w-full pl-10 pr-4 py-2 bg-[#FAFAF9] border border-[#E0E0DE] rounded-xs text-xs md:text-sm text-[#141414] focus:outline-none focus:border-[#141414] transition-colors"
               />
             </div>
 
-            <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+            {/* Sort & View Modes */}
+            <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-3 border border-[#eeeeee] rounded-lg text-xs font-medium uppercase tracking-wider focus:outline-none focus:border-[#C0001A] transition-colors cursor-pointer"
+                className="px-3 py-2 bg-[#FAFAF9] border border-[#E0E0DE] rounded-xs text-xs font-semibold uppercase tracking-wider text-[#141414] focus:outline-none cursor-pointer"
               >
-                {sortOptions.map(option => (
-                  <option key={option} value={option}>{option}</option>
+                {sortOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
                 ))}
               </select>
 
-              <div className="flex items-center gap-2 p-1 bg-[#f9f9f9] rounded-lg">
+              <div className="flex items-center gap-1 p-1 bg-[#FAFAF9] rounded-xs border border-[#E0E0DE]">
                 <button
                   onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded transition-colors ${viewMode === "grid" ? "bg-white shadow-sm text-[#C0001A]" : "text-[#666666] hover:text-[#111111]"
-                    }`}
+                  className={`p-1.5 rounded-xs transition-colors ${
+                    viewMode === "grid" ? "bg-white shadow-xs text-[#141414]" : "text-[#888888] hover:text-[#141414]"
+                  }`}
                   aria-label="Grid view"
                 >
-                  <LayoutGrid size={18} />
+                  <LayoutGrid size={15} />
                 </button>
                 <button
                   onClick={() => setViewMode("compact")}
-                  className={`p-2 rounded transition-colors ${viewMode === "compact" ? "bg-white shadow-sm text-[#C0001A]" : "text-[#666666] hover:text-[#111111]"
-                    }`}
+                  className={`p-1.5 rounded-xs transition-colors ${
+                    viewMode === "compact" ? "bg-white shadow-xs text-[#141414]" : "text-[#888888] hover:text-[#141414]"
+                  }`}
                   aria-label="Compact view"
                 >
-                  <Grid3x3 size={18} />
+                  <Grid3x3 size={15} />
                 </button>
               </div>
 
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="md:hidden p-3 border border-[#eeeeee] rounded-lg hover:border-[#C0001A] transition-colors"
+                className="md:hidden p-2 bg-[#FAFAF9] border border-[#E0E0DE] rounded-xs text-[#141414]"
+                aria-label="Toggle Filters"
               >
-                <SlidersHorizontal size={18} />
+                <SlidersHorizontal size={15} />
               </button>
             </div>
           </div>
 
-          <div className={`${showFilters ? 'block' : 'hidden md:block'}`}>
-            <div className="flex items-center gap-6 py-6 overflow-x-auto no-scrollbar">
+          {/* Categories Tab Strip */}
+          <div className={`${showFilters ? "block" : "hidden md:block"}`}>
+            <div className="flex items-center gap-6 py-3 overflow-x-auto no-scrollbar">
               {categoryNames.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
-                  className={`relative text-xs font-bold tracking-[0.2em] uppercase transition-all whitespace-nowrap pb-2 group ${activeCategory === cat ? "text-[#111111]" : "text-[#666666] hover:text-[#111111]"
-                    }`}
-
+                  className={`relative text-xs font-semibold tracking-[0.1em] uppercase transition-all whitespace-nowrap pb-2 group ${
+                    activeCategory === cat ? "text-[#141414]" : "text-[#777777] hover:text-[#141414]"
+                  }`}
                 >
                   {cat}
-                  <span className={`absolute bottom-0 left-0 h-0.5 bg-[#C0001A] transition-all duration-300 ${activeCategory === cat ? "w-full" : "w-0 group-hover:w-full"
-                    }`}></span>
+                  {activeCategory === cat && (
+                    <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#141414]" />
+                  )}
                 </button>
               ))}
             </div>
           </div>
-
-          {(searchTerm || activeCategory !== "All Products" || sortBy !== "Featured") && (
-            <div className="flex flex-wrap items-center gap-2 py-3 border-t border-[#eeeeee]/50">
-              <span className="text-xs text-[#666666] uppercase tracking-wider">Active:</span>
-              {activeCategory !== "All Products" && (
-                <span className="px-3 py-1 bg-[#C0001A]/10 text-[#C0001A] text-xs rounded-full flex items-center gap-2">
-                  {activeCategory}
-                  <button onClick={() => setActiveCategory("All Products")} className="hover:text-[#111111]">×</button>
-                </span>
-              )}
-              {searchTerm && (
-                <span className="px-3 py-1 bg-[#C0001A]/10 text-[#C0001A] text-xs rounded-full flex items-center gap-2">
-                  "{searchTerm}"
-                  <button onClick={() => setSearchTerm("")} className="hover:text-[#111111]">×</button>
-                </span>
-              )}
-              {sortBy !== "Featured" && (
-                <span className="px-3 py-1 bg-[#f9f9f9] text-[#666666] text-xs rounded-full">
-                  Sorted by: {sortBy}
-                </span>
-              )}
-            </div>
-          )}
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
+      {/* ── Product Grid ── */}
+      <section className="py-12 md:py-16 bg-[#FAFAF9]">
         <div className="max-container">
-          <FadeInView>
-            <div className="flex items-center justify-between mb-8">
-              <p className="text-sm text-[#666666]">
-                Showing <span className="font-semibold text-[#111111]">{sortedProducts.length}</span> of {initialProducts.length} pieces
-              </p>
-            </div>
-          </FadeInView>
+          <div className="flex items-center justify-between mb-8">
+            <p className="text-xs text-[#777777]">
+              Showing <span className="font-semibold text-[#141414]">{sortedProducts.length}</span> of {initialProducts.length} handcrafted pieces
+            </p>
+          </div>
 
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCategory + searchTerm + viewMode}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className={`grid gap-x-8 gap-y-16 ${viewMode === "grid"
-                ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-                }`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className={`grid gap-6 md:gap-8 ${
+                viewMode === "grid"
+                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+              }`}
             >
               {sortedProducts.map((product, index) => (
-                <FadeInView key={product.slug} delay={index * 0.05}>
+                <FadeInView key={product.slug} delay={index * 0.03}>
                   <ProductCard product={product} compact={viewMode === "compact"} />
                 </FadeInView>
               ))}
@@ -189,29 +208,24 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
           </AnimatePresence>
 
           {sortedProducts.length === 0 && (
-            <FadeInView>
-              <div className="py-32 text-center">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#f9f9f9] flex items-center justify-center">
-                  <Search className="text-[#666666]" size={28} />
-                </div>
-                <h3 className="text-2xl font-semibold mb-3">
-                  No pieces found
-                </h3>
-                <p className="text-[#666666] mb-8 max-w-md mx-auto">
-                  We couldn't find any pieces matching your search. Try adjusting your filters or contact us for custom manufacturing.
-                </p>
-                <button
-                  onClick={() => {
-                    setActiveCategory("All Products");
-                    setSearchTerm("");
-                    setSortBy("Featured");
-                  }}
-                  className="btn-ghost-dark"
-                >
-                  Reset Filters
-                </button>
-              </div>
-            </FadeInView>
+            <div className="py-24 text-center">
+              <h3 className="text-2xl font-serif font-bold text-[#141414] mb-2">
+                No pieces found
+              </h3>
+              <p className="text-[#666666] text-sm mb-6 max-w-md mx-auto">
+                Try adjusting your search filters or contact our Nilambur workshop directly for bespoke furniture commissions.
+              </p>
+              <button
+                onClick={() => {
+                  setActiveCategory("All Products");
+                  setSearchTerm("");
+                  setSortBy("Featured");
+                }}
+                className="btn-primary"
+              >
+                Reset Filters
+              </button>
+            </div>
           )}
         </div>
       </section>

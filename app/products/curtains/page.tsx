@@ -2,90 +2,61 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
-import { MessageCircle, ChevronDown } from "lucide-react";
-import Link from "next/link";
+import { MessageCircle } from "lucide-react";
 import { getProducts } from "@/lib/api/products";
 import ProductListWithFilter from "@/components/products/ProductListWithFilter";
+import { SITE_CONFIG } from "@/config/site";
 
-// ─────────────────────────────────────────────────────────────
-// SEO METADATA
-// ─────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
-  title: "Premium Curtains & Drapes | Custom Fabrics | MAGNAT™ Kerala",
-  description:
-    "Discover MAGNAT's premium curtains and home textiles. From blackout drapes to sheer linens, we offer custom-fit solutions for every window. Manufactured in Kondotty, Kerala.",
-  keywords: [
-    "curtains Kondotty",
-    "blackout curtains Kerala",
-    "sheer drapes Malappuram",
-    "custom curtains Kerala",
-    "home textiles Kondotty",
-    "window treatments Kerala",
-  ],
-  alternates: { canonical: "https://magnat.in/products/curtains" },
+  title: "Interior Textiles & Drapes | Nilambur Teak Heritage™",
+  description: "Explore curated luxury draperies and upholstery fabrics crafted to complement our solid teak wood furniture.",
 };
-
-// ─────────────────────────────────────────────────────────────
-// DATA
-// ─────────────────────────────────────────────────────────────
-const seoStats = [
-  { num: "1000+", label: "Windows Dressed" },
-  { num: "50+", label: "Fabric Choices" },
-  { num: "Custom", label: "Tailoring" },
-  { num: "7day", label: "Expert Setup" },
-];
 
 export default async function CurtainsPage() {
   const allProducts = await getProducts();
-  const curtainProducts = allProducts.filter(p => {
+  const curtainProducts = allProducts.filter((p) => {
     const baseCat = p.categories?.base_category?.toLowerCase();
     const slug = p.categories?.slug?.toLowerCase();
-    const name = p.categories?.name?.toLowerCase();
-    return baseCat === "curtains" || slug?.includes("curtain") || name?.includes("curtain") || name?.includes("drape");
+    const name = p.name?.toLowerCase();
+    return baseCat === "curtains" || slug?.includes("curtain") || name?.includes("curtain");
   });
 
   return (
-    <main className="bg-[#fafaf9] min-h-screen">
-      {/* ── SEO Intro ── */}
-      <section className="hidden md:block bg-white border-b border-[#f0f0f0] py-20">
-        <div className="max-container">
-          <div className="seo-kicker flex items-center gap-3 mb-12 text-[10px] tracking-[0.3em] uppercase text-[#C0001A]" >
-            Elevate Your View · Textile Excellence
-            <span className="flex-1 h-px bg-[#f0f0f0]" aria-hidden="true" />
+    <main className="bg-[#FDFAF5] min-h-screen">
+      <section className="hidden md:block bg-white border-b border-[#D4A96A]/30 py-16">
+        <div className="max-container px-4 md:px-8">
+          <div className="flex items-center gap-3 mb-8 text-[11px] font-bold tracking-[0.25em] uppercase text-[#C9922A] font-lato">
+            Luxury Textiles & Draperies
+            <span className="flex-1 h-px bg-[#D4A96A]/30" aria-hidden="true" />
           </div>
 
-          <div className="grid grid-cols-2 gap-0">
-            <div className="pr-16 border-r border-[#f0f0f0]">
-              <h2 className="text-[40px] font-normal leading-[1.15] tracking-[-0.01em] text-[#111] mb-6" >
-                Curating <em className="text-[#C0001A]" style={{ fontStyle: "italic" }}>Light</em> & Privacy
-              </h2>
-              <div className="w-10 h-px bg-[#C0001A] mb-5" />
-              <p className="text-sm text-[#666] leading-[1.85] font-light" >
-                MAGNAT Furniture brings you a curated selection of curtains and drapes designed to transform your rooms through the interplay of light and texture. From elegant blackout fabrics for master bedrooms to airy sheer linens for your living area, our textiles are sourced for quality and visual appeal.
+          <div className="grid grid-cols-2 gap-12">
+            <div className="pr-8 border-r border-[#D4A96A]/30">
+              <h1 className="text-3xl lg:text-4xl font-bold leading-tight text-[#2C1810] font-playfair mb-4">
+                Curated Interior Draperies
+              </h1>
+              <div className="w-12 h-0.5 bg-[#C9922A] mb-4" />
+              <p className="text-xs md:text-sm text-[#6B4226] leading-relaxed font-lato mb-4">
+                Premium fabrics and sheer linens designed to harmoniously pair with our hand-carved Nilambur teak wood collections.
               </p>
             </div>
 
-            <div className="pl-16 flex flex-col justify-between gap-7">
-              <div className="grid grid-cols-2 gap-px bg-[#f0f0f0] border border-[#f0f0f0]">
-                {seoStats.map((s) => (
-                  <div key={s.label} className="bg-white px-5 py-6 flex flex-col gap-1.5">
-                    <span className="text-[30px] font-medium text-[#111] leading-none" >{s.num}</span>
-                    <span className="text-[10px] tracking-[0.18em] uppercase text-[#999]" >{s.label}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex gap-2.5">
-                <a href="https://wa.me/919446516395" className="flex-1 inline-flex items-center justify-center gap-2 bg-[#111] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-5 py-3.5 no-underline rounded-[3px]" >
-                  WhatsApp Enquiry
-                </a>
-              </div>
+            <div className="flex flex-col justify-center">
+              <a
+                href={SITE_CONFIG.contact.whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-[#4A7C59] hover:bg-[#3D6649] text-white text-xs font-bold tracking-wider uppercase py-3.5 px-6 rounded-lg transition-colors shadow"
+              >
+                <MessageCircle size={15} />
+                <span>Textile Consultation on WhatsApp</span>
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Product List with Filter ── */}
-      <ProductListWithFilter initialProducts={curtainProducts} category="Curtains" />
+      <ProductListWithFilter initialProducts={curtainProducts} category="Curtains & Textiles" />
     </main>
   );
 }

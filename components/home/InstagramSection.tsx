@@ -1,67 +1,98 @@
+// components/home/InstagramSection.tsx
 "use client";
 
 import Image from "next/image";
 import { Instagram } from "lucide-react";
 import FadeInView from "@/components/ui/FadeInView";
+import { SITE_CONFIG } from "@/config/site";
 
-import { InstagramPost } from "@/lib/types";
-
-const FALLBACK_POSTS: InstagramPost[] = [
-  { id: "1", image_url: "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=2070&auto=format&fit=crop", is_active: true, sort_order: 0, caption: null, post_url: null },
-  { id: "2", image_url: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070&auto=format&fit=crop", is_active: true, sort_order: 1, caption: null, post_url: null },
-  { id: "3", image_url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2064&auto=format&fit=crop", is_active: true, sort_order: 2, caption: null, post_url: null },
-  { id: "4", image_url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2070&auto=format&fit=crop", is_active: true, sort_order: 3, caption: null, post_url: null },
-  { id: "5", image_url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2070&auto=format&fit=crop", is_active: true, sort_order: 4, caption: null, post_url: null },
-  { id: "6", image_url: "https://images.unsplash.com/photo-1540574163026-643ea20ade25?q=80&w=2070&auto=format&fit=crop", is_active: true, sort_order: 5, caption: null, post_url: null },
+const instaPosts = [
+  {
+    image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?q=80&w=600&auto=format&fit=crop",
+    caption: "Solid Nilambur Teak Dining Table ready for shipping.",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop",
+    caption: "Artisan living suite with natural teak oil polish.",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=600&auto=format&fit=crop",
+    caption: "Heirloom king cot crafted for a private villa in Kochi.",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1580481077111-54f65c92842c?q=80&w=600&auto=format&fit=crop",
+    caption: "Traditional Kerala cane planter easy chair.",
+  },
+  {
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=600&auto=format&fit=crop",
+    caption: "Custom hand-carved temple entrance door in teak.",
+  },
 ];
 
-export default function InstagramSection({ posts }: { posts?: InstagramPost[] }) {
-  const activePosts = posts && posts.length > 0 ? posts : FALLBACK_POSTS;
+export default function InstagramSection() {
   return (
-    <section className="bg-white py-32 border-t border-black/5">
-      <div className="max-container">
+    <section className="py-12 sm:py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row items-end justify-between mb-16 gap-8">
-          <FadeInView className="max-w-2xl">
-            <span className="heading-label">Follow Perspective</span>
-            <h2 className="heading-title" >
-              Magnat on <br />
-              <span className="italic font-normal">Instagram.</span>
-            </h2>
-            <p className="text-black/50 text-base font-light max-w-xl leading-relaxed">
-              A daily diary of interior excellence. Join our community of designers and homeowners 
-              discovering the world&apos;s finest handcrafted furniture.
-            </p>
-          </FadeInView>
-          
-          <FadeInView delay={0.4}>
-            <a
-              href="https://www.instagram.com/magnat_furniture_.kondotty?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary"
-            >
-              Follow Us
-            </a>
-          </FadeInView>
-        </div>
+        {/* Eyebrow & Heading */}
+        <FadeInView>
+          <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase text-[#8B5E3C] block mb-2 font-sans">
+            Social Feed
+          </span>
 
-        {/* Gallery Grid (Grayscale to Color) */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {activePosts.map((post, index) => (
-            <FadeInView key={index} delay={index * 0.1} className="group relative aspect-square overflow-hidden bg-white">
-              <a href={post.post_url || "https://www.instagram.com/magnat_furniture_.kondotty?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-                <Image
-                  src={post.image_url}
-                  alt={post.caption || `Instagram Post ${index + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                  className="object-cover transition-all duration-1000 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-[#111111]/30 opacity-0 transition-opacity duration-700 group-hover:opacity-100 flex items-center justify-center">
-                  <div className="border border-white/40 p-5 rounded-full backdrop-blur-sm">
-                    <Instagram size={20} className="text-white" strokeWidth={1.5} />
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#111111] tracking-tight mb-1.5 sm:mb-2">
+            We're on{" "}
+            <span className="text-[#8B5E3C] italic font-serif font-normal">
+              Instagram
+            </span>
+          </h2>
+
+          <a
+            href={SITE_CONFIG.social.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] sm:text-xs font-semibold text-[#8B5E3C] hover:underline uppercase tracking-wider block mb-8 sm:mb-16"
+          >
+            @nilamburteakheritage
+          </a>
+        </FadeInView>
+
+        {/* 5-Item Horizontal Feed with Frame */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6">
+          {instaPosts.map((post, idx) => (
+            <FadeInView key={idx} delay={idx * 0.06}>
+              <a
+                href={SITE_CONFIG.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white rounded-xl p-2.5 sm:p-3 border border-[#EAEAEA] shadow-xs block group hover:shadow-md transition-shadow"
+              >
+                {/* User Header */}
+                <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-2.5">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full overflow-hidden relative flex-shrink-0">
+                    <Image
+                      src="/images/logo-proper.png"
+                      alt="Nilambur Teak"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-[#111111] truncate">
+                    nilamburteakheritage
+                  </span>
+                </div>
+
+                {/* Photo */}
+                <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-[#F5F5F3] mb-2">
+                  <Image
+                    src={post.image}
+                    alt={post.caption}
+                    fill
+                    sizes="(max-width: 640px) 50vw, 20vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute top-2 right-2 p-1 bg-black/60 rounded-full text-white">
+                    <Instagram size={11} />
                   </div>
                 </div>
               </a>

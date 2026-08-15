@@ -1,33 +1,26 @@
 // app/locations/[location]/page.tsx
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CATEGORY_KEYWORDS } from "@/lib/keywords";
-import FAQSchema, { HOMEPAGE_FAQS } from "@/components/schemas/FAQSchema";
+import { KEYWORDS } from "@/lib/keywords";
+import FAQSchema from "@/components/schemas/FAQSchema";
 import BreadcrumbSchema from "@/components/schemas/BreadcrumbSchema";
+import { SITE_CONFIG } from "@/config/site";
+import Link from "next/link";
+import { MessageCircle, Phone, MapPin, TreeDeciduous } from "lucide-react";
 
-// ─── All serviceable locations ───────────────────────────────────────────────
 const LOCATIONS = [
-  { slug: "kondotty",        name: "Kondotty",        district: "Malappuram", pincode: "673638", nearbyAreas: ["Malappuram", "Manjeri", "Angadipuram", "Perinthalmanna", "Kozhikode"] },
-  { slug: "malappuram",      name: "Malappuram",       district: "Malappuram", pincode: "676505", nearbyAreas: ["Kondotty", "Manjeri", "Perinthalmanna", "Tirur"] },
-  { slug: "kozhikode",       name: "Kozhikode",        district: "Kozhikode",  pincode: "673001", nearbyAreas: ["Kondotty", "Calicut", "Feroke", "Ramanattukara", "Beypore"] },
-  { slug: "calicut",         name: "Calicut",          district: "Kozhikode",  pincode: "673001", nearbyAreas: ["Kozhikode", "Kondotty", "Feroke", "Beypore"] },
-  { slug: "manjeri",         name: "Manjeri",          district: "Malappuram", pincode: "676121", nearbyAreas: ["Malappuram", "Kondotty", "Perinthalmanna"] },
-  { slug: "perinthalmanna",  name: "Perinthalmanna",   district: "Malappuram", pincode: "679322", nearbyAreas: ["Manjeri", "Malappuram", "Kondotty", "Nilambur"] },
-  { slug: "angadipuram",     name: "Angadipuram",      district: "Malappuram", pincode: "679321", nearbyAreas: ["Perinthalmanna", "Kondotty", "Malappuram"] },
-  { slug: "nilambur",        name: "Nilambur",         district: "Malappuram", pincode: "679329", nearbyAreas: ["Perinthalmanna", "Manjeri", "Malappuram"] },
-  { slug: "tirur",           name: "Tirur",            district: "Malappuram", pincode: "676101", nearbyAreas: ["Malappuram", "Tanur", "Kondotty"] },
-  { slug: "tanur",           name: "Tanur",            district: "Malappuram", pincode: "676302", nearbyAreas: ["Tirur", "Ponnani", "Malappuram"] },
-  { slug: "ponnani",         name: "Ponnani",          district: "Malappuram", pincode: "679577", nearbyAreas: ["Tanur", "Malappuram", "Thrissur"] },
-  { slug: "kottakkal",       name: "Kottakkal",        district: "Malappuram", pincode: "676503", nearbyAreas: ["Malappuram", "Manjeri", "Kondotty"] },
-  { slug: "wandoor",         name: "Wandoor",          district: "Malappuram", pincode: "679328", nearbyAreas: ["Nilambur", "Malappuram", "Kondotty"] },
-  { slug: "edappal",         name: "Edappal",          district: "Malappuram", pincode: "679576", nearbyAreas: ["Ponnani", "Malappuram", "Thrissur"] },
-  { slug: "feroke",          name: "Feroke",           district: "Kozhikode",  pincode: "673631", nearbyAreas: ["Kozhikode", "Kondotty", "Ramanattukara"] },
-  { slug: "ramanattukara",   name: "Ramanattukara",    district: "Kozhikode",  pincode: "673633", nearbyAreas: ["Kozhikode", "Feroke", "Kondotty"] },
-  { slug: "beypore",         name: "Beypore",          district: "Kozhikode",  pincode: "673015", nearbyAreas: ["Kozhikode", "Calicut", "Feroke"] },
-  { slug: "chaliyam",        name: "Chaliyam",         district: "Kozhikode",  pincode: "673301", nearbyAreas: ["Beypore", "Kozhikode", "Kondotty"] },
-  { slug: "parappanangadi",  name: "Parappanangadi",   district: "Malappuram", pincode: "676303", nearbyAreas: ["Tirur", "Tanur", "Malappuram"] },
-  { slug: "tirurangadi",     name: "Tirurangadi",      district: "Malappuram", pincode: "676306", nearbyAreas: ["Malappuram", "Tirur", "Kondotty"] },
-  { slug: "valanchery",      name: "Valanchery",       district: "Malappuram", pincode: "676552", nearbyAreas: ["Malappuram", "Kuttippuram", "Kondotty"] },
+  { slug: "nilambur",        name: "Nilambur",         district: "Malappuram", pincode: "679329", nearbyAreas: ["Manjeri", "Perinthalmanna", "Wandoor", "Kozhikode"] },
+  { slug: "manjeri",         name: "Manjeri",          district: "Malappuram", pincode: "676121", nearbyAreas: ["Nilambur", "Malappuram", "Wandoor"] },
+  { slug: "malappuram",      name: "Malappuram",       district: "Malappuram", pincode: "676505", nearbyAreas: ["Nilambur", "Manjeri", "Perinthalmanna", "Tirur"] },
+  { slug: "kozhikode",       name: "Kozhikode",        district: "Kozhikode",  pincode: "673001", nearbyAreas: ["Nilambur", "Calicut", "Feroke", "Ramanattukara"] },
+  { slug: "calicut",         name: "Calicut",          district: "Kozhikode",  pincode: "673001", nearbyAreas: ["Nilambur", "Kozhikode", "Feroke"] },
+  { slug: "perinthalmanna",  name: "Perinthalmanna",   district: "Malappuram", pincode: "679322", nearbyAreas: ["Nilambur", "Manjeri", "Malappuram"] },
+  { slug: "bengaluru",       name: "Bengaluru",        district: "Karnataka",  pincode: "560001", nearbyAreas: ["Mysuru", "Hosur"] },
+  { slug: "mumbai",          name: "Mumbai",           district: "Maharashtra", pincode: "400001", nearbyAreas: ["Thane", "Navi Mumbai", "Pune"] },
+  { slug: "chennai",         name: "Chennai",          district: "Tamil Nadu", pincode: "600001", nearbyAreas: ["Kanchipuram", "Coimbatore"] },
+  { slug: "hyderabad",       name: "Hyderabad",        district: "Telangana",  pincode: "500001", nearbyAreas: ["Secunderabad", "Warangal"] },
+  { slug: "delhi",           name: "Delhi NCR",        district: "Delhi",      pincode: "110001", nearbyAreas: ["Noida", "Gurgaon", "Faridabad"] },
+  { slug: "kochi",           name: "Kochi",            district: "Ernakulam",  pincode: "682001", nearbyAreas: ["Thrissur", "Alappuzha", "Kottayam"] },
 ];
 
 export async function generateStaticParams() {
@@ -37,173 +30,127 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { location: string };
+  params: Promise<{ location: string }>;
 }): Promise<Metadata> {
-  const loc = LOCATIONS.find((l) => l.slug === params.location);
+  const { location } = await params;
+  const loc = LOCATIONS.find((l) => l.slug === location);
   if (!loc) return {};
 
-  const title = `Best Sofa Manufacturers & Furniture Showroom Near ${loc.name} | Magnat Furniture`;
-  const desc = `Premium sofa manufacturers near ${loc.name}, ${loc.district}. Custom sofas, L-shape, recliners, curtains & interior solutions. Free home consultation & delivery to ${loc.name}. Visit Magnat Furniture Kondotty.`;
+  const title = `Solid Nilambur Teak Furniture in ${loc.name} | ${SITE_CONFIG.name}`;
+  const desc = `Handcrafted 100% genuine Nilambur teak wood furniture delivered to ${loc.name}, ${loc.district}. Custom royal dining sets, living suites, and carved doors with insured pan-India delivery.`;
 
   return {
     title,
     description: desc,
     keywords: [
-      `sofa manufacturers ${loc.slug}`,
-      `furniture showroom ${loc.slug}`,
-      `sofa near ${loc.slug}`,
-      `furniture near ${loc.slug}`,
-      `custom sofa ${loc.slug}`,
-      `l shape sofa ${loc.slug}`,
-      `recliner sofa ${loc.slug}`,
-      `curtain shops ${loc.slug}`,
-      `furniture stores ${loc.slug}`,
-      `best sofa ${loc.slug}`,
-      `sofa price ${loc.slug}`,
-      `sofa delivery ${loc.slug}`,
-      ...loc.nearbyAreas.map((area) => `sofa near ${area.toLowerCase()}`),
-      ...CATEGORY_KEYWORDS.sofas,
+      `nilambur teak furniture ${loc.slug}`,
+      `solid teak wood ${loc.slug}`,
+      `teak wood dining table ${loc.slug}`,
+      `teak sofa ${loc.slug}`,
+      `teak furniture delivery ${loc.slug}`,
+      ...KEYWORDS.primary,
     ],
     openGraph: {
       title,
       description: desc,
-      url: `https://magnat.in/locations/${loc.slug}`,
+      url: `${SITE_CONFIG.url}/locations/${loc.slug}`,
     },
     alternates: {
-      canonical: `https://magnat.in/locations/${loc.slug}`,
+      canonical: `${SITE_CONFIG.url}/locations/${loc.slug}`,
     },
   };
 }
 
-export default function LocationPage({
+export default async function LocationPage({
   params,
 }: {
-  params: { location: string };
+  params: Promise<{ location: string }>;
 }) {
-  const loc = LOCATIONS.find((l) => l.slug === params.location);
+  const { location } = await params;
+  const loc = LOCATIONS.find((l) => l.slug === location);
   if (!loc) notFound();
 
   const breadcrumbs = [
-    { name: "Home", url: "https://magnat.in" },
-    { name: "Locations", url: "https://magnat.in/locations" },
-    { name: loc!.name, url: `https://magnat.in/locations/${loc!.slug}` },
+    { name: "Home", url: SITE_CONFIG.url },
+    { name: "Locations", url: `${SITE_CONFIG.url}/locations` },
+    { name: loc.name, url: `${SITE_CONFIG.url}/locations/${loc.slug}` },
   ];
 
-  // Location-specific FAQs
   const locationFAQs = [
     {
-      question: `Is there a Magnat Furniture showroom near ${loc!.name}?`,
-      answer: `Yes! Magnat Furniture is conveniently located in Kondotty, just a short drive from ${loc!.name}. We are the nearest premium sofa manufacturer serving ${loc!.name} and all of ${loc!.district}. Call +91-9876543210 for directions.`,
+      question: `Do you deliver genuine Nilambur teak furniture to ${loc.name}?`,
+      answer: `Yes! ${SITE_CONFIG.name} provides insured white-glove delivery directly from our Nilambur workshop to ${loc.name} and surrounding areas.`,
     },
     {
-      question: `Do you deliver sofas to ${loc!.name}?`,
-      answer: `Absolutely! Magnat Furniture offers free delivery to ${loc!.name} and all areas of ${loc!.district}. EMI options are also available. Call us or visit our Kondotty showroom today.`,
+      question: `Is the teak wood government certified?`,
+      answer: `Every log used at ${SITE_CONFIG.name} is purchased through legal Kerala Forest Department auctions and comes with provenance certification.`,
     },
     {
-      question: `What sofas are available for customers in ${loc!.name}?`,
-      answer: `We offer custom L-shape sofas, corner sofas, recliner sofas, fabric sofas, leather sofas, 3- and 5-seater sets, sofa cum beds, and modular sofas — all available for delivery to ${loc!.name}.`,
-    },
-    {
-      question: `Do you offer home consultation in ${loc!.name}?`,
-      answer: `Yes, our designers offer free home consultation visits to ${loc!.name} and surrounding areas in ${loc!.district}. Book your slot by calling +91-9876543210.`,
+      question: `Can I customize the dimensions and finish for my home in ${loc.name}?`,
+      answer: `Yes, all our pieces can be custom-crafted according to your floor plans, dimensions, and preferred wood finishes.`,
     },
   ];
 
   return (
-    <>
+    <div className="bg-[#FDFAF5] min-h-screen py-16 md:py-24">
       <BreadcrumbSchema items={breadcrumbs} />
       <FAQSchema faqs={locationFAQs} />
 
-      {/*
-        ── NOTE TO DEVELOPER ────────────────────────────────────────────────────
-        This page provides full SEO value via:
-        1. generateMetadata() — keyword-rich title, description, canonical
-        2. BreadcrumbSchema — structured navigation signals to Google
-        3. FAQSchema       — FAQ rich results in Google SERPs
-        4. Keyword-dense semantic HTML below
-
-        The <article> content below is intentionally rich with location + product
-        keyword combinations. You can wrap this inside your existing UI layout/
-        page template without changing any visual components.
-        ─────────────────────────────────────────────────────────────────────── */}
-
-      <main>
-        <article itemScope itemType="https://schema.org/WebPage">
-          {/* ── H1: Primary keyword target ── */}
-          <h1>
-            Best Sofa Manufacturers & Furniture Showroom near {loc!.name},{" "}
-            {loc!.district}
-          </h1>
-
-          <p>
-            Looking for premium quality sofas near <strong>{loc!.name}</strong>?{" "}
-            <strong>Magnat Furniture</strong> is the leading sofa manufacturer
-            and furniture showroom serving {loc!.name}, {loc!.district}, and all
-            of Kerala. Located in Kondotty — just minutes away — we craft
-            bespoke sofas, curtains, and interior solutions to transform your home.
-          </p>
-
-          <h2>Custom Sofa Manufacturers Near {loc!.name}</h2>
-          <p>
-            We design and manufacture custom sofas tailored to your exact
-            specifications. Customers from {loc!.name} choose Magnat for our
-            25+ years of craftsmanship, premium materials, and competitive pricing.
-            Whether you need an L-shape sofa, corner sofa, recliner, or a
-            full living room set — we deliver to {loc!.name} with free installation.
-          </p>
-
-          <h2>Our Products Available for {loc!.name} Customers</h2>
-          <ul>
-            <li>L-Shape Sofas — custom sized for your living room in {loc!.name}</li>
-            <li>Corner Sofas & Sectional Sets near {loc!.name}</li>
-            <li>Recliner Sofas — single, double, and triple recliner options</li>
-            <li>Leather Sofas — Italian and bonded leather, delivered to {loc!.name}</li>
-            <li>Fabric Sofas — 50+ fabric options, mold resistant for Kerala climate</li>
-            <li>Wooden Sofas — teak and rosewood frames with custom cushions</li>
-            <li>Sofa Cum Beds — space-saving designs for {loc!.name} apartments</li>
-            <li>3-Seater & 5-Seater Sofa Sets near {loc!.name}</li>
-            <li>Curtains & Drapes — premium fabric with professional installation in {loc!.name}</li>
-            <li>Dining Chairs & Tables — custom matching sets</li>
-            <li>Office Furniture — ergonomic chairs and workstation sets</li>
-          </ul>
-
-          <h2>Why Customers from {loc!.name} Choose Magnat Furniture</h2>
-          <ul>
-            <li>✅ 25+ Years of Manufacturing Experience</li>
-            <li>✅ Free Home Consultation in {loc!.name} & {loc!.district}</li>
-            <li>✅ Free Delivery & Professional Installation</li>
-            <li>✅ 100% Custom — your design, your size, your fabric</li>
-            <li>✅ EMI with 0% Interest (up to 12 months)</li>
-            <li>✅ 1-Year Warranty on all products</li>
-            <li>✅ After-sales repair & upholstery service</li>
-          </ul>
-
-          <h2>Areas We Serve Near {loc!.name}</h2>
-          <p>
-            In addition to <strong>{loc!.name}</strong>, Magnat Furniture
-            provides sofa delivery and home consultation across:{" "}
-            <strong>{loc!.nearbyAreas.join(", ")}</strong>, and all towns across
-            Malappuram and Kozhikode districts.
-          </p>
-
-          <h2>Contact Magnat Furniture — Serving {loc!.name}</h2>
-          <address itemScope itemType="https://schema.org/LocalBusiness">
-            <meta itemProp="name" content="Magnat Furniture" />
-            <p>
-              📍 <span itemProp="address">Kondotty Main Road, Kondotty, Malappuram, Kerala – 673638</span>
+      <main className="max-container px-4 md:px-8">
+        <article className="max-w-4xl mx-auto space-y-10">
+          <div className="text-center space-y-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#3D1F0D] border border-[#C9922A]/40 text-[#E8B84B] text-xs font-bold uppercase tracking-[0.2em]">
+              <TreeDeciduous size={14} />
+              <span>Pan-India Delivery Service</span>
+            </div>
+            <h1 className="text-3xl md:text-5xl font-bold text-[#2C1810] font-playfair">
+              Solid Nilambur Teak Furniture in {loc.name}, {loc.district}
+            </h1>
+            <p className="text-[#6B4226] text-sm md:text-base leading-relaxed font-lato max-w-2xl mx-auto">
+              Direct from the world’s teak capital to your doorstep in <strong>{loc.name}</strong>. Experience handcrafted heirlooms made from 100% legal Nilambur teak wood.
             </p>
+          </div>
+
+          <div className="bg-white p-8 md:p-12 rounded-2xl border border-[#D4A96A]/30 shadow-sm space-y-6 text-[#6B4226] text-sm leading-relaxed font-lato">
+            <h2 className="text-2xl font-bold text-[#2C1810] font-playfair">
+              Heirloom Craftsmanship Delivered to {loc.name}
+            </h2>
             <p>
-              📞 <a href="tel:+919876543210" itemProp="telephone">+91-9876543210</a>
+              Homeowners and interior designers in <strong>{loc.name}</strong> choose {SITE_CONFIG.name} for our unyielding commitment to mature Nilambur heartwood, traditional mortise-and-tenon joinery, and transparent legal sourcing.
             </p>
-            <p>
-              🕒 Mon–Sat: 9:00 AM – 8:00 PM | Sun: 10:00 AM – 6:00 PM
-            </p>
-            <p>
-              🚚 Free delivery to {loc!.name} & all of {loc!.district}
-            </p>
-          </address>
+
+            <h3 className="text-lg font-bold text-[#2C1810] font-playfair pt-4">
+              Our Teak Collections Available in {loc.name}:
+            </h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs md:text-sm text-[#2C1810]">
+              <li className="flex items-center gap-2">✔ Hand-carved solid teak sofa sets & diwans</li>
+              <li className="flex items-center gap-2">✔ 6 to 12-seater royal teak dining suites</li>
+              <li className="flex items-center gap-2">✔ King-size heritage cots and wardrobes</li>
+              <li className="flex items-center gap-2">✔ Traditional Kerala temple & entrance doors</li>
+              <li className="flex items-center gap-2">✔ Executive office desks & library bookcases</li>
+              <li className="flex items-center gap-2">✔ Custom architectural wood commissions</li>
+            </ul>
+
+            <div className="pt-6 flex flex-col sm:flex-row items-center gap-4">
+              <a
+                href={SITE_CONFIG.contact.whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#4A7C59] hover:bg-[#3D6649] text-white px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors shadow"
+              >
+                <MessageCircle size={16} />
+                <span>WhatsApp Delivery Inquiry</span>
+              </a>
+              <Link
+                href="/contact"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#3D1F0D] hover:bg-[#5C3D1E] text-[#F5ECD7] px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors"
+              >
+                <span>Request Custom Quote</span>
+              </Link>
+            </div>
+          </div>
         </article>
       </main>
-    </>
+    </div>
   );
 }

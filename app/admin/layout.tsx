@@ -3,18 +3,32 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, ListTree, MessageSquare, Image as ImageIcon, Users, LogOut, ExternalLink, ShieldCheck, Menu, X } from "lucide-react";
+import {
+  LayoutDashboard,
+  Package,
+  ListTree,
+  MessageSquare,
+  Image as ImageIcon,
+  Users,
+  LogOut,
+  ExternalLink,
+  ShieldCheck,
+  Menu,
+  X,
+  Sparkles,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { handleLogout } from "@/app/actions/auth";
+import { SITE_CONFIG } from "@/config/site";
 
 const adminNavItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { label: "Home Page", href: "/admin/home", icon: ImageIcon },
-  { label: "Products", href: "/admin/products", icon: Package },
-  { label: "Exclusive", href: "/admin/exclusive", icon: ShieldCheck },
+  { label: "Home Showcase", href: "/admin/home", icon: ImageIcon },
+  { label: "Teak Products", href: "/admin/products", icon: Package },
+  { label: "Exclusive Catalog", href: "/admin/exclusive", icon: ShieldCheck },
   { label: "Categories", href: "/admin/categories", icon: ListTree },
-  { label: "Inquiries", href: "/admin/inquiries", icon: MessageSquare },
-  { label: "Testimonials", href: "/admin/testimonials", icon: Users },
+  { label: "Customer Inquiries", href: "/admin/inquiries", icon: MessageSquare },
+  { label: "Client Reviews", href: "/admin/testimonials", icon: Users },
   { label: "Media Assets", href: "/admin/media", icon: ImageIcon },
 ];
 
@@ -25,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (isLoginPage) {
     return (
-      <div className="min-h-screen bg-[#F7F4F0] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FDFAF5] flex items-center justify-center">
         {children}
       </div>
     );
@@ -34,28 +48,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
-    <div className="flex min-h-screen bg-[#F7F4F0] font-inter max-w-[100vw] overflow-x-hidden">
-
+    <div className="flex min-h-screen bg-[#FDFAF5] font-lato max-w-[100vw] overflow-x-hidden">
       {/* Mobile Header (Hidden on Desktop) */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-[#eeeeee] z-40 flex items-center justify-between px-4">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#2C1810] text-[#F5ECD7] border-b border-[#D4A96A]/30 z-40 flex items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <ShieldCheck size={20} strokeWidth={1.5} className="text-[#C0001A]" />
-          <span className="font-playfair text-lg font-black tracking-tighter text-[#111111] leading-none">
-            MAGNAT
+          <img src={SITE_CONFIG.logo} alt="Logo" className="w-8 h-8 rounded-full border border-[#C9922A]" />
+          <span className="font-cinzel text-sm font-bold text-[#E8B84B]">
+            NILAMBUR TEAK
           </span>
         </Link>
         <div className="flex items-center gap-2">
-          <form action={handleLogout} className="flex items-center">
-            <button
-              type="submit"
-              className="p-2 text-[#C0001A] bg-[#F7F4F0] border border-[#C0001A]/10 hover:border-[#C0001A] transition-all cursor-pointer"
-              title="Logout"
-            >
-              <LogOut size={16} strokeWidth={1.5} />
-            </button>
-          </form>
-          <button onClick={toggleMenu} className="p-2 text-[#111] bg-[#F7F4F0]">
-            {isMobileMenuOpen ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
+          <button onClick={toggleMenu} className="p-2 text-[#F5ECD7]">
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
@@ -69,29 +73,37 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={() => setIsMobileMenuOpen(false)}
-            className="fixed inset-0 bg-[#111111]/20 backdrop-blur-sm z-40 md:hidden"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
           />
         )}
       </AnimatePresence>
 
       {/* Sidebar */}
-      <aside className={`w-72 bg-white flex flex-col fixed inset-y-0 z-50 border-r border-[#eeeeee] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
-        <div className="p-8 pb-10">
-          <Link href="/" className="flex items-center gap-3 mb-10 group relative pb-2 border-b border-[#eeeeee] md:border-transparent md:pb-0">
-            <ShieldCheck size={26} strokeWidth={1.5} className="text-[#C0001A]" />
+      <aside
+        className={`w-72 bg-[#2C1810] text-[#F5ECD7] flex flex-col fixed inset-y-0 z-50 border-r border-[#D4A96A]/30 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
+      >
+        <div className="p-6 pb-8">
+          <Link
+            href="/"
+            className="flex items-center gap-3 mb-8 group relative pb-2 border-b border-[#D4A96A]/20"
+          >
+            <img src={SITE_CONFIG.logo} alt="Logo" className="w-10 h-10 rounded-full border border-[#C9922A]" />
             <div className="flex flex-col">
-              <span className="font-playfair text-xl font-black tracking-tighter text-[#111111] leading-none">
-                MAGNAT
+              <span className="font-cinzel text-sm font-bold text-[#E8B84B] leading-none">
+                NILAMBUR TEAK
               </span>
-              <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-[#C0001A] mt-1">Admin Portal</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#C4956A] mt-1">
+                Admin Console
+              </span>
             </div>
-            {/* Close button inside sidebar for mobile */}
-            <button onClick={toggleMenu} className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 p-2 text-[#111]">
-              <X size={18} strokeWidth={1.5} />
+            <button onClick={toggleMenu} className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 p-2 text-[#F5ECD7]">
+              <X size={18} />
             </button>
           </Link>
 
-          <nav className="space-y-1.5 mt-6 md:mt-0">
+          <nav className="space-y-1 mt-6">
             {adminNavItems.map((item) => {
               const isActive = pathname === item.href;
               return (
@@ -99,53 +111,28 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex flex-col relative px-4 py-3.5 transition-all group ${isActive
-                    ? "text-[#111111]"
-                    : "text-[#666666] hover:text-[#111111] hover:bg-[#F9F9F9]"
-                    }`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                    isActive
+                      ? "bg-[#C9922A] text-[#2C1810] shadow-md"
+                      : "text-[#EAD5B0] hover:text-white hover:bg-white/5"
+                  }`}
                 >
-                  <div className="flex items-center gap-4 z-10 w-full">
-                    <item.icon size={18} className={isActive ? "text-[#C0001A]" : "text-[#111111]/30 group-hover:text-[#C0001A] transition-colors"} />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.1em] mt-0.5">{item.label}</span>
-                  </div>
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavBg"
-                      className="absolute inset-0 bg-[#F9F9F9] border-r-2 border-[#C0001A] pointer-events-none"
-                    />
-                  )}
+                  <item.icon size={16} />
+                  <span>{item.label}</span>
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        <div className="mt-auto p-8 space-y-4">
-          <div className="bg-[#F7F4F0] p-6 rounded-none border border-[#eeeeee] mb-6 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-1 h-full bg-[#111] group-hover:bg-[#C0001A] transition-colors" />
-            <p className="text-[9px] uppercase tracking-widest text-[#111] mb-2 font-bold flex items-center gap-2">
-              Enterprise CMS
-            </p>
-            <p className="text-[11px] text-[#666] leading-relaxed mb-4">
-              Optimized for production deployments.
-            </p>
-            <a
-              href="https://wa.me/917736767759?text=Hi%2C%20I%20need%20support%20with%20the%20Magnat%20Enterprise%20CMS."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[10px] uppercase font-bold text-[#C0001A] hover:text-[#111] transition-colors flex items-center gap-2 tracking-widest"
-            >
-              Support <ExternalLink size={12} />
-            </a>
-          </div>
-
+        <div className="mt-auto p-6 space-y-4">
           <form action={handleLogout} className="w-full">
             <button
               type="submit"
-              className="flex items-center gap-4 px-4 py-4 w-full text-[10px] font-bold uppercase tracking-[0.15em] text-[#C0001A] hover:bg-[#C0001A]/5 transition-all group cursor-pointer"
+              className="flex items-center gap-3 px-4 py-3 w-full text-xs font-bold uppercase tracking-wider text-[#E8B84B] bg-[#3D1F0D] hover:bg-[#5C3D1E] rounded-lg transition-all cursor-pointer border border-[#D4A96A]/20"
             >
-              <LogOut size={16} className="group-hover:-translate-x-1 transition-transform" />
-              Logout
+              <LogOut size={16} />
+              <span>Logout</span>
             </button>
           </form>
         </div>
@@ -153,35 +140,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content */}
       <main className="flex-1 md:ml-72 pt-16 md:pt-0 w-full md:w-[calc(100%-18rem)]">
-        <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 px-6 md:px-12 py-8 md:py-10 bg-white border-b border-[#eeeeee]">
+        <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 px-6 md:px-10 py-6 md:py-8 bg-white border-b border-[#D4A96A]/20">
           <div>
-            <h1 className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] text-[#C0001A] mb-2">Back-Office Infrastructure</h1>
-            <h2 className="font-playfair text-2xl md:text-3xl font-black text-[#111] tracking-tight">Management Dashboard</h2>
+            <h1 className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#C9922A] mb-1">
+              Nilambur Teak Heritage™
+            </h1>
+            <h2 className="font-playfair text-2xl font-bold text-[#2C1810]">
+              Management Portal
+            </h2>
           </div>
 
-          <div className="flex items-center gap-4 md:gap-5 self-end md:self-auto">
-            <div className="flex flex-col items-end text-right">
-              <span className="text-[10px] md:text-xs font-bold text-[#111] uppercase tracking-widest">Admin User</span>
-              <span className="text-[8px] md:text-[9px] text-[#C0001A] uppercase tracking-[0.2em] font-bold mt-1">Authorized</span>
-            </div>
-            <div className="h-8 w-8 md:h-10 md:w-10 border border-[#eeeeee] bg-[#F7F4F0] flex items-center justify-center text-[10px] md:text-xs font-bold text-[#111]">
-              AD
-            </div>
-            <form action={handleLogout} className="flex items-center">
-              <button
-                type="submit"
-                className="flex items-center justify-center h-8 w-8 md:h-10 md:w-10 border border-[#C0001A]/20 hover:border-[#C0001A] bg-white text-[#C0001A] hover:bg-[#C0001A]/5 transition-all cursor-pointer"
-                title="Logout"
-              >
-                <LogOut size={16} />
-              </button>
-            </form>
+          <div className="flex items-center gap-4">
+            <span className="text-xs font-bold text-[#6B4226] uppercase tracking-wider">
+              Authorized Artisan
+            </span>
           </div>
         </header>
 
-        <div className="p-4 md:p-10 w-full overflow-x-hidden">
-          {children}
-        </div>
+        <div className="p-4 md:p-8 w-full overflow-x-hidden">{children}</div>
       </main>
     </div>
   );

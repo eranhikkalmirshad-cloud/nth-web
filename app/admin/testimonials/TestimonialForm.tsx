@@ -140,7 +140,7 @@ export default function TestimonialForm({ testimonial }: TestimonialFormProps) {
                   type="text"
                   name="client_role"
                   defaultValue={testimonial?.client_role || ""}
-                  placeholder="e.g., Kondotty"
+                  placeholder="e.g., Nilambur / Bengaluru"
                   className="w-full px-4 py-3 bg-[#F9F9F9] border border-[#eeeeee] rounded-none focus:outline-none focus:border-[#C0001A] transition-all text-sm font-light"
                 />
               </div>

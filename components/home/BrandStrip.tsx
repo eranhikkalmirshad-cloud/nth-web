@@ -1,47 +1,35 @@
+// components/home/BrandStrip.tsx
 "use client";
 
-const brands = [
-  "Natuzzi",
-  "Flexform",
-  "Minotti",
-  "Cassina",
-  "Poliform",
-  "Walter Knoll",
-  "B&B Italia",
-  "Roche Bobois",
-  "Poltrona Frau",
-  "Molteni&C",
-  "Giorgetti",
-  "Arketipo",
-];
+import { Trees, Award, Truck, Star, ShieldCheck, PackageCheck } from "lucide-react";
 
-// Duplicate for seamless infinite loop
-const tickerItems = [...brands, ...brands];
+const TRUST_ITEMS = [
+  { icon: Trees, text: "100% Nilambur Teak" },
+  { icon: Award, text: "Govt. Certified Source" },
+  { icon: Truck, text: "Pan-India Insured Delivery" },
+  { icon: Star, text: "25+ Years Craftsmanship" },
+  { icon: ShieldCheck, text: "Lifetime Guarantee" },
+  { icon: PackageCheck, text: "Custom Orders Welcome" },
+];
 
 export default function BrandStrip() {
   return (
-    <section className="bg-[#1e1e1e] py-4 overflow-hidden border-y border-white/8">
-      <div className="relative flex items-center">
-        {/* Fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-r from-[#1e1e1e] to-transparent pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 z-10 bg-gradient-to-l from-[#1e1e1e] to-transparent pointer-events-none" />
-
-        <div className="brand-ticker-track">
-          {tickerItems.map((brand, i) => (
-            <div
-              key={`${brand}-${i}`}
-              className="flex items-center gap-0 shrink-0"
-            >
-              <span
-                className="text-white/60 text-[10px] font-semibold tracking-[0.35em] uppercase px-10 hover:text-[#c9a96e] transition-colors duration-300 cursor-default"
-                
-              >
-                {brand}
-              </span>
-              {/* Divider dot */}
-              <span className="text-[#c9a96e]/40 text-[6px]">◆</span>
-            </div>
-          ))}
+    <section id="trust-bar" className="w-full bg-[#C9922A] text-[#2C1810] py-4 overflow-hidden border-y border-[#9A6E1A] shadow-md">
+      <div className="flex w-full overflow-hidden select-none">
+        {/* Continuous Marquee Track */}
+        <div className="marquee-track flex items-center gap-12 text-sm md:text-base font-bold uppercase tracking-wider font-lato whitespace-nowrap">
+          {[...TRUST_ITEMS, ...TRUST_ITEMS, ...TRUST_ITEMS].map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div key={idx} className="flex items-center gap-3 shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#2C1810]/10 flex items-center justify-center">
+                  <Icon size={18} className="text-[#2C1810]" />
+                </div>
+                <span>{item.text}</span>
+                <span className="text-[#2C1810]/40 ml-8 text-xs">◆</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

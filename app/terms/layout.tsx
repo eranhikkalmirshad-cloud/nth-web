@@ -1,15 +1,10 @@
-// app/terms/layout.tsx
 import { Metadata } from "next";
+import { SITE_CONFIG } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "Terms and Conditions | Magnat Furniture",
-  description:
-    "Terms and conditions for using Magnat Furniture's website and services. Quality warranty, delivery terms, and customer service agreements.",
-  robots: {
-    index: false,
-    follow: true,
-  },
-  alternates: { canonical: "https://magnat.in/terms" },
+  title: `Terms & Conditions | ${SITE_CONFIG.name}`,
+  description: `Terms and conditions for commissions, delivery, and lifetime craftsmanship warranty at ${SITE_CONFIG.name}.`,
+  alternates: { canonical: `${SITE_CONFIG.url}/terms` },
 };
 
 export default function TermsLayout({ children }: { children: React.ReactNode }) {

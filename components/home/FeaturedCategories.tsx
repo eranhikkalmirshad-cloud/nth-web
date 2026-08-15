@@ -1,117 +1,103 @@
+// components/home/FeaturedCategories.tsx
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import FadeInView from "@/components/ui/FadeInView";
-import SectionHeading from "@/components/ui/SectionHeading";
 
-const categories = [
+const collections = [
   {
-    name: "Living Room",
-    label: "Sofas & Sectionals",
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2070&auto=format&fit=crop",
-    href: "/products?category=sofas",
-    colSpan: "lg:col-span-2",
+    title: "Living Room",
+    subtitle: "Solid Teak Sofas, Diwans & Accent Tables",
+    href: "/products/sofas",
+    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1000&auto=format&fit=crop",
   },
   {
-    name: "Dining Room",
-    label: "Refined Sets",
-    image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=2000&auto=format&fit=crop",
-    href: "/products?category=dining",
-    colSpan: "lg:col-span-1",
+    title: "Dining Suites",
+    subtitle: "6 & 8-Seater Solid Teak Dining Tables",
+    href: "/products/dining",
+    image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?q=80&w=1000&auto=format&fit=crop",
   },
   {
-    name: "Master Suite",
-    label: "Bedroom Oasis",
-    image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=2000&auto=format&fit=crop",
-    href: "/products?category=bedroom",
-    colSpan: "lg:col-span-1",
+    title: "Bedroom Collections",
+    subtitle: "Heirloom Teak Cots, Wardrobes & Dressers",
+    href: "/rooms/bedroom",
+    image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1000&auto=format&fit=crop",
   },
   {
-    name: "Armchairs",
-    label: "Sculptural Seating",
-    image: "https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=1964&auto=format&fit=crop",
-    href: "/products?category=chairs",
-    colSpan: "lg:col-span-1",
+    title: "Handcrafted Chairs",
+    subtitle: "Artisan Armchairs, Planter Chairs & Benches",
+    href: "/products/chairs",
+    image: "https://images.unsplash.com/photo-1580481077111-54f65c92842c?q=80&w=1000&auto=format&fit=crop",
   },
   {
-    name: "Workplace",
-    label: "Executive Offices",
-    image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070&auto=format&fit=crop",
-    href: "/products?category=office",
-    colSpan: "lg:col-span-1",
+    title: "Carved Teak Doors",
+    subtitle: "Traditional Heritage Entrance & Pooja Doors",
+    href: "/products/doors",
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1000&auto=format&fit=crop",
+  },
+  {
+    title: "Bespoke Commissions",
+    subtitle: "Custom Architectural Woodwork & Millwork",
+    href: "/contact",
+    image: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?q=80&w=1000&auto=format&fit=crop",
   },
 ];
 
 export default function FeaturedCategories() {
   return (
-    <section className="bg-[#FCFCFC] py-12 md:py-20 px-4 overflow-hidden">
+    <section className="py-20 md:py-28 bg-white">
       <div className="max-container">
-        <SectionHeading 
-          label="Curated Collections"
-          titlePart1="The World of"
-          titlePart2="Magnat Furniture"
-          subtitle="A comprehensive exploration of high-end living spaces, where every category is a testament to our commitment to architectural beauty."
-          className="mb-10 md:mb-16"
-        />
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-4">
+          <div>
+            <span className="eyebrow text-[#7A4E2D]">Curated Categories</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-[#141414] tracking-tight">
+              Explore Our Teak Collections
+            </h2>
+          </div>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.15em] text-[#141414] hover:text-[#7A4E2D] pb-1 border-b border-[#141414] transition-colors self-start md:self-auto"
+          >
+            <span>View All Pieces</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
 
-        {/* Diagonal / Masonry-inspired Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-          {categories.map((category, index) => (
-            <FadeInView
-              key={category.name}
-              delay={0.1 * index}
-              className={`group relative h-[450px] lg:h-[600px] overflow-hidden ${category.colSpan}`}
-            >
-              <Link href={category.href} className="block relative h-full w-full">
-                {/* Image Component */}
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover grayscale-[0.2] transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
-                />
-
-                {/* Scrim */}
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-700" />
-                
-                {/* Overlay Text — Bottom left editorial style */}
-                <div className="absolute inset-0 p-10 flex flex-col justify-end">
-                  <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-700">
-                    <span className="block text-[9px] font-bold tracking-[0.3em] uppercase text-[#c9a96e] mb-2" >
-                      {category.label}
-                    </span>
-                    <h3 className="text-white text-3xl font-semibold leading-tight" >
-                      {category.name}
+        {/* 3-Column Image-First Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+          {collections.map((col, idx) => (
+            <FadeInView key={col.title} delay={idx * 0.05}>
+              <Link href={col.href} className="group block space-y-4">
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F5F5F3] rounded-xs shadow-xs">
+                  <Image
+                    src={col.image}
+                    alt={col.title}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl md:text-2xl font-serif font-bold text-[#141414] group-hover:text-[#7A4E2D] transition-colors">
+                      {col.title}
                     </h3>
+                    <ArrowRight
+                      size={16}
+                      className="text-[#888888] group-hover:text-[#141414] group-hover:translate-x-1 transition-all"
+                    />
                   </div>
-                  
-                  {/* Modern reveal rule */}
-                  <div className="mt-8 h-[1px] w-0 bg-white/40 transition-all duration-700 group-hover:w-full" />
-                  
-                  {/* Invisible CTA that slides up */}
-                  <div className="mt-4 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-100">
-                    <span className="text-white text-[9px] font-bold tracking-[0.25em] uppercase flex items-center gap-3">
-                      View Collection
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                    </span>
-                  </div>
+                  <p className="text-xs md:text-sm text-[#666666] font-light mt-1">
+                    {col.subtitle}
+                  </p>
                 </div>
               </Link>
             </FadeInView>
           ))}
         </div>
-        
-        {/* Mobile Mobile CTA */}
-        <div className="mt-12 text-center lg:hidden">
-          <Link href="/products" className="btn-gold-outline w-full justify-center">
-            Explore All Categories
-          </Link>
-        </div>
-
       </div>
     </section>
   );

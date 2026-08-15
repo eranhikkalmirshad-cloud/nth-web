@@ -148,22 +148,27 @@ export async function saveHeroSlide(formData: FormData) {
   
   const id = formData.get("id") as string;
   const heading = formData.get("heading") as string;
+  const eyebrow = formData.get("eyebrow") as string || null;
   const description = formData.get("description") as string;
   const image_url = formData.get("image_url") as string;
+  const video_url = formData.get("video_url") as string || null;
   const mobile_image_url = formData.get("mobile_image_url") as string || null;
   const alt_text = formData.get("alt_text") as string;
   const sort_order = parseInt(formData.get("sort_order") as string || "0");
   const is_active = formData.get("is_active") === "true";
 
-  const slideData = {
+  const slideData: Record<string, any> = {
     heading,
     description,
     image_url,
-    mobile_image_url,
-    alt_text,
     sort_order,
     is_active,
   };
+
+  if (eyebrow) slideData.eyebrow = eyebrow;
+  if (video_url) slideData.video_url = video_url;
+  if (mobile_image_url) slideData.mobile_image_url = mobile_image_url;
+  if (alt_text) slideData.alt_text = alt_text;
 
   let query;
   if (id && id !== "new") {

@@ -1,618 +1,213 @@
 @import "tailwindcss";
 
 /* ============================================
-   MAGNAT FURNITURE — PREMIUM LUXURY REFINEMENT
-   Full Color Prominence | Architectural Precision
+   NILAMBUR TEAK HERITAGE™ — MODERN LUXURY DESIGN SYSTEM
+   Clean, Editorial, Natural Light & Restrained Teak Elegance
    ============================================ */
+
+:root {
+  /* Core Palette: 75% Light/Warm Neutrals, 20% Teak/Dark Neutral, 5% Brass Accent */
+  --bg-main: #FFFFFF;
+  --bg-warm: #FAFAF9;
+  --bg-subtle: #F5F5F3;
+  --bg-dark: #1A120B;        /* Deep Teak Charcoal */
+  --bg-dark-subtle: #241A12;
+
+  --text-main: #141414;      /* Pure Crisp Dark */
+  --text-muted: #666666;     /* Editorial Muted */
+  --text-light: #F7F5F0;
+
+  --primary: #1A120B;        /* Primary UI Dark Teak */
+  --teak-brown: #7A4E2D;     /* Rich Teak Wood Accent */
+  --brass-gold: #C29B38;     /* Antique Brass / Gold Subtle Accent */
+  --brass-light: #DFC27D;
+  
+  --border-light: #EBEBEA;
+  --border-subtle: #F0F0EE;
+  --border-dark: #33261C;
+
+  /* Typography Variables */
+  --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-display: var(--font-cinzel), "Cinzel", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", "Helvetica Neue", sans-serif;
+  --font-lato: var(--font-lato), "Lato", "Helvetica Neue", sans-serif;
+}
 
 @theme {
-  /* Core Brand Colors (Soft & Premium) */
-  --color-red: #C0001A;
-  --color-gold-classic: #c9a96e;
-  --color-bg-primary: #FCFCFC;
-  --color-bg-secondary: #FAF8F6;
-  --color-bg-dark: #111111;
-  --color-text-main: #111111;
-  --color-text-muted: #666666;
-  --color-border-subtle: #eeeeee;
-  
-  /* Typography */
-  --font-playfair: "Playfair Display", Georgia, serif;
-  --font-lato: "Lato", "Helvetica Neue", sans-serif;
-  --font-inter: "Inter", "Helvetica Neue", sans-serif;
-  --font-outfit: "Outfit", sans-serif;
+  --color-bg-main: var(--bg-main);
+  --color-bg-warm: var(--bg-warm);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-bg-dark: var(--bg-dark);
 
-  /* Premium Elevations */
-  --shadow-luxury: 0 10px 40px rgba(0, 0, 0, 0.04), 0 2px 10px rgba(0, 0, 0, 0.02);
-  --shadow-mega: 0 40px 100px -20px rgba(0, 0, 0, 0.1), 0 20px 50px -10px rgba(0, 0, 0, 0.05);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-text-light: var(--text-light);
 
-  /* Spacing */
-  --spacing-section: 5rem; /* py-20 */
-  --spacing-section-sm: 3rem; /* py-12 */
+  --color-teak: var(--teak-brown);
+  --color-brass: var(--brass-gold);
+  --color-brass-light: var(--brass-light);
 
-  /* Transitions */
-  --ease-luxury: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --color-border-light: var(--border-light);
+  --color-border-subtle: var(--border-subtle);
+
+  --font-serif: var(--font-serif);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-lato: var(--font-lato);
 }
 
-/* ============================================
-   GLOBAL BASE STYLES
-   ============================================ */
-
+/* Base resets & typography */
 body {
-  background-color: #FCFCFC;
-  color: #111111;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 16px;
+  background-color: #FAFAF9;
+  color: #141414;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 15px;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.015em;
-}
-
-@media (max-width: 768px) {
-  body {
-    font-size: 14px;
-  }
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-lato), sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1.25;
-}
-
-h1 { 
-  font-size: 26px; 
-  margin-bottom: 1rem;
-}
-
-h2 { 
-  font-size: 20px; 
-  margin-bottom: 1rem;
-}
-
-@media (min-width: 768px) {
-  h1 { font-size: 34px; margin-bottom: 1.25rem; }
-  h2 { font-size: 24px; margin-bottom: 1.25rem; }
-}
-
-@media (min-width: 1024px) {
-  h1 { font-size: 44px; margin-bottom: 1.5rem; }
-  h2 { font-size: 48px; margin-bottom: 1.5rem; }
-}
-
-h3 { font-size: clamp(18px, 3vw, 20px); }
-
-button {
-  cursor: pointer;
-  font-family: var(--font-inter), sans-serif;
-}
-
-/* ============================================
-   STANDARDIZED LUXURY COMPONENTS
-   ============================================ */
-
-/* Primary CTA (Standardized) */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #111111;
-  color: #ffffff;
-  padding: 1rem 3rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 15px;
+  color: #141414;
+  font-family: var(--font-serif);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  transition: all 0.4s var(--ease-luxury);
-  border: 1px solid #111111;
-  border-radius: 8px;
-  cursor: pointer;
+  letter-spacing: -0.01em;
 }
 
-.btn-primary:hover {
-  background-color: transparent;
-  color: #111111;
-}
-
-.btn-red {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #C0001A;
-  color: #ffffff;
-  padding: 0.875rem 2.5rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  transition: all 0.4s var(--ease-luxury);
-  border: 1px solid #C0001A;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.btn-red:hover {
-  background-color: #111111;
-  border-color: #111111;
-}
-
-.btn-ghost-dark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  color: #111111;
-  padding: 0.875rem 2.5rem;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  transition: all 0.4s var(--ease-luxury);
-  border: 1px solid #111111;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.btn-ghost-dark:hover {
-  background-color: #111111;
-  color: #ffffff;
-}
-
-/* Standard Imagery (Color Prominent) */
-.img-premium {
-  transition: all 1s var(--ease-luxury);
-}
-
-.img-premium-hover:hover .img-premium {
-  transform: scale(1.05);
-}
-
-/* Section Headings */
-.heading-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: #C0001A;
-  margin-bottom: 1.5rem;
-  font-family: var(--font-inter), sans-serif;
-}
-
-.heading-title {
-  font-family: var(--font-lato), sans-serif;
-  font-weight: 700;
-  font-style: italic;
-  font-size: 36px;
-  line-height: 1.1;
-  margin-bottom: 1rem;
-}
-
-@media (min-width: 768px) {
-  .heading-title { font-size: 48px; margin-bottom: 1.25rem; }
-}
-
-@media (min-width: 1024px) {
-  .heading-title { font-size: 56px; margin-bottom: 1.5rem; }
-}
-
-/* Reusable Section Styles */
-.section-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: #C0001A;
-  margin-bottom: 1.5rem;
-  font-family: var(--font-inter), sans-serif;
-}
-
-.section-title {
-  font-size: 28px;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-  font-family: var(--font-lato), sans-serif;
-  font-weight: 700;
-  font-style: italic;
-}
-
-@media (min-width: 768px) {
-  .section-title { font-size: 36px; margin-bottom: 1.25rem; }
-}
-
-@media (min-width: 1024px) {
-  .section-title { font-size: 44px; margin-bottom: 1.5rem; }
-}
-
-.section-subtitle {
-  font-size: clamp(15px, 2vw, 17px);
-  line-height: 1.7;
-  color: #111111;
-  opacity: 0.6;
-  font-family: var(--font-inter), sans-serif;
-  max-width: 650px;
-  font-weight: 400;
-}
-
-/* Premium Image Container */
-.premium-image-wrapper {
-  position: relative;
-  overflow: hidden;
-  background-color: #f6f6f6;
-  transition: all 0.7s var(--ease-luxury);
-}
-
-.premium-image-wrapper::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.1), transparent);
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
-.premium-image-wrapper:hover::after {
-  opacity: 1;
-}
-
-/* ============================================
-   UTILITIES
-   ============================================ */
-
-.font-number {
-  font-family: var(--font-outfit), sans-serif !important;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-}
-
+/* Container */
 .max-container {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+  max-width: 1360px;
 }
 
-/* Tablet (Minimizing gutters) */
-@media (min-width: 768px) {
-  .max-container {
-    max-width: 740px; 
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-/* 11-12" Small Laptops */
 @media (min-width: 1024px) {
   .max-container {
-    max-width: 1000px;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 }
 
-/* 13-14" Medium Laptops */
-@media (min-width: 1280px) {
-  .max-container {
-    max-width: 1240px;
-  }
-}
-
-/* 15-16" Large Laptops */
-@media (min-width: 1440px) {
-  .max-container {
-    max-width: 1400px;
-  }
-}
-
-/* 17-18" Workstations */
-@media (min-width: 1700px) {
-  .max-container {
-    max-width: 1640px;
-  }
-}
-
-
-
-
-::selection {
-  background: #C0001A;
-  color: #ffffff;
-}
-
-::-webkit-scrollbar {
-  width: 4px;
-}
-
-::-webkit-scrollbar-track {
-  background: #ffffff;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #eeeeee;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #111111;
-}
-
-/* ============================================
-   KONDOTTY GALLERY MARQUEE
-   ============================================ */
-
-@keyframes marqueeGallery {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-.marquee-track {
-  animation: marqueeGallery 60s linear infinite;
-  animation-play-state: running;
-}
-
-.marquee-track.paused {
-  animation-play-state: paused;
-}
-
-/* WhatsApp Pulse Animation */
-@keyframes whatsapp-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-  }
-}
-
-.whatsapp-pulse {
-  animation: whatsapp-pulse 2s infinite;
-}
-
-/* ============================================
-   ENHANCED WHATSAPP & FLOATING ELEMENTS
-   ============================================ */
-
-/* Enhanced WhatsApp Pulse with Glow */
-@keyframes whatsapp-pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4),
-                0 0 20px rgba(37, 211, 102, 0.2);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 0 15px rgba(37, 211, 102, 0),
-                0 0 30px rgba(37, 211, 102, 0.3);
-    transform: scale(1.02);
-  }
-}
-
-.whatsapp-pulse-glow {
-  animation: whatsapp-pulse-glow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Smooth Scale on Hover */
-.hover-lift {
-  transition: transform 0.4s var(--ease-luxury), box-shadow 0.4s var(--ease-luxury);
-}
-
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(17, 17, 17, 0.15);
-}
-
-/* Glass Morphism for Floating Cards */
-.glass-luxury {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Gradient Button (Optional Alternative) */
-.btn-gradient-whatsapp {
-  background: linear-gradient(135deg, #25D366 0%, #20bd5a 100%);
-  color: #ffffff;
-  padding: 1rem 2rem;
-  border-radius: 999px;
-  font-family: var(--font-inter), sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  transition: all 0.3s var(--ease-luxury);
-  border: none;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-}
-
-.btn-gradient-whatsapp:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
-}
-
-/* ============================================
-   LUXURY MICRO-INTERACTIONS
-   ============================================ */
-
-/* Smooth Underline Links */
-.link-underline {
-  position: relative;
+/* Editorial Heading Classes */
+.eyebrow {
   display: inline-block;
-  color: #111111;
-  text-decoration: none;
-  transition: color 0.3s var(--ease-luxury);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--brass-gold);
+  margin-bottom: 0.75rem;
 }
 
-.link-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background-color: #C0001A;
-  transition: width 0.4s var(--ease-luxury);
+.heading-xl {
+  font-size: clamp(32px, 5vw, 64px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
-.link-underline:hover {
-  color: #C0001A;
+.heading-lg {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
-.link-underline:hover::after {
-  width: 100%;
+.heading-md {
+  font-size: clamp(22px, 3vw, 32px);
+  line-height: 1.25;
 }
 
-/* Fade In Animation */
-@keyframes luxury-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1A120B;
+  color: #FFFFFF;
+  padding: 0.9rem 2rem;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  border: 1px solid #1A120B;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 
-.animate-fade-in {
-  animation: luxury-fade-in 0.8s var(--ease-luxury) forwards;
+.btn-primary:hover {
+  background-color: #C29B38;
+  border-color: #C29B38;
+  color: #1A120B;
+  transform: translateY(-1px);
 }
 
-/* Stagger Animation for Lists */
-.animate-stagger > * {
-  opacity: 0;
-  animation: luxury-fade-in 0.6s var(--ease-luxury) forwards;
+.btn-secondary, .btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: #141414;
+  padding: 0.9rem 2rem;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  border: 1px solid #D1D1CF;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 
-.animate-stagger > *:nth-child(1) { animation-delay: 0.1s; }
-.animate-stagger > *:nth-child(2) { animation-delay: 0.2s; }
-.animate-stagger > *:nth-child(3) { animation-delay: 0.3s; }
-.animate-stagger > *:nth-child(4) { animation-delay: 0.4s; }
-.animate-stagger > *:nth-child(5) { animation-delay: 0.5s; }
-
-/* ============================================
-   BADGE & NOTIFICATION STYLES
-   ============================================ */
-
-.badge-live {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 12px;
-  height: 12px;
-  background-color: #C0001A;
-  border-radius: 999px;
-  border: 2px solid #ffffff;
-  animation: badge-pulse 2s ease-in-out infinite;
+.btn-secondary:hover, .btn-outline:hover {
+  border-color: #1A120B;
+  background-color: #1A120B;
+  color: #FFFFFF;
 }
 
-@keyframes badge-pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
-  }
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #25D366;
+  color: #FFFFFF;
+  padding: 0.9rem 1.75rem;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
 }
 
-/* ============================================
-   RESPONSIVE UTILITIES
-   ============================================ */
-
-/* Mobile-First Contact Bar */
-.mobile-contact-bar {
-  background: #ffffff;
-  box-shadow: 0 -4px 20px rgba(17, 17, 17, 0.1);
-  border-top: 1px solid #eeeeee;
+.btn-whatsapp:hover {
+  background-color: #1EBE5B;
 }
 
-/* Tooltip */
-.tooltip {
-  position: absolute;
-  background-color: #111111;
-  color: #ffffff;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-family: var(--font-inter), sans-serif;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s var(--ease-luxury);
-  z-index: 1000;
+/* Subtle Card Hover */
+.product-card-hover {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
 }
 
-.tooltip-trigger:hover .tooltip {
-  opacity: 1;
+.product-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
 }
 
-/* Arrow for Tooltip */
-.tooltip::before {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
 }
-
-.tooltip-left::before {
-  left: -6px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-width: 6px 6px 6px 0;
-  border-color: transparent #111111 transparent transparent;
+::-webkit-scrollbar-track {
+  background: #FAFAF9;
 }
-
-/* ============================================
-   ACCESSIBILITY ENHANCEMENTS
-   ============================================ */
-
-/* Focus Styles */
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid #C0001A;
-  outline-offset: 4px;
+::-webkit-scrollbar-thumb {
+  background: #D1D1CF;
+  border-radius: 2px;
 }
-
-/* Reduced Motion Support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ============================================
-   PRINT STYLES (Professional Touch)
-   ============================================ */
-
-@media print {
-  .no-print,
-  .whatsapp-pulse,
-  .mobile-contact-bar {
-    display: none !important;
-  }
-  
-  body {
-    background: #ffffff;
-  }
-  
-  a[href]::after {
-    content: " (" attr(href) ")";
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: #999999;
 }

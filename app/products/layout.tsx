@@ -1,34 +1,25 @@
 // app/products/layout.tsx
 import { Metadata } from "next";
+import { SITE_CONFIG } from "@/config/site";
 
 export const metadata: Metadata = {
-  title: "All Furniture Products | Sofas, Curtains, Chairs – Magnat Furniture Kondotty",
+  title: `Teak Furniture Catalog | ${SITE_CONFIG.name}`,
   description:
-    "Browse Magnat Furniture's complete collection — custom sofas, L-shape sofas, recliners, leather sofas, curtains, dining chairs & bedroom furniture. All manufactured in Kondotty. Free delivery across Malappuram & Kerala.",
+    "Browse our complete solid Nilambur teak wood furniture catalog. Royal dining sets, living suites, heirloom cots, and hand-carved doors.",
   keywords: [
-    "furniture products kondotty",
-    "sofa collection kondotty",
-    "buy furniture kondotty",
-    "magnat furniture products",
-    "sofa catalogue kondotty",
-    "custom furniture kondotty",
-    "furniture shop kondotty",
-    "sofa types kondotty",
-    "curtains furniture kondotty",
-    "chairs kondotty",
-    "dining furniture kondotty",
-    "furniture price list kondotty",
-    "all furniture kondotty",
-    "premium sofa collection kerala",
-    "furniture catalogue malappuram",
+    "nilambur teak furniture",
+    "teak wood catalog kerala",
+    "solid teak dining table",
+    "handcrafted teak sofa",
+    "teak cot nilambur",
   ],
   openGraph: {
-    title: "Furniture Products | Magnat Furniture Kondotty",
+    title: `Teak Furniture Catalog | ${SITE_CONFIG.name}`,
     description:
-      "Explore our complete range of custom sofas, curtains, chairs & dining furniture. Manufactured in Kondotty.",
-    url: "https://magnat.in/products",
+      "Explore 100% genuine legal Nilambur teak furniture. Direct from master artisans in Nilambur.",
+    url: `${SITE_CONFIG.url}/products`,
   },
-  alternates: { canonical: "https://magnat.in/products" },
+  alternates: { canonical: `${SITE_CONFIG.url}/products` },
 };
 
 export default function ProductsLayout({ children }: { children: React.ReactNode }) {

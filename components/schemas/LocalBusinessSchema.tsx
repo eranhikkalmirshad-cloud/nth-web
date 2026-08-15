@@ -1,110 +1,77 @@
 // components/schemas/LocalBusinessSchema.tsx
+import { SITE_CONFIG } from "@/config/site";
+
 export default function LocalBusinessSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://magnat.in/#localbusiness",
-    name: "Magnat Furniture Kondotty",
+    "@id": `${SITE_CONFIG.url}/#localbusiness`,
+    name: SITE_CONFIG.name,
     image: [
-      "https://magnat.in/showroom-exterior.jpg",
-      "https://magnat.in/showroom-interior.jpg",
-      "https://magnat.in/manufacturing-unit.jpg",
-      "https://magnat.in/sofa-collection.jpg",
+      `${SITE_CONFIG.url}/og-image.jpg`,
     ],
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Kondotty - Malappuram Road",
-      addressLocality: "Kondotty",
+      streetAddress: SITE_CONFIG.contact.address.street,
+      addressLocality: SITE_CONFIG.contact.address.area,
       addressRegion: "KL",
-      postalCode: "673638",
+      postalCode: SITE_CONFIG.contact.address.pincode,
       addressCountry: "IN",
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: 11.1447936,
-      longitude: 75.9678667,
+      latitude: parseFloat(SITE_CONFIG.contact.geo.latitude),
+      longitude: parseFloat(SITE_CONFIG.contact.geo.longitude),
     },
-    url: "https://magnat.in",
-    telephone: "+91-9446516395",
-    email: "info@magnat.in",
-    priceRange: "₹₹–₹₹₹",
+    url: SITE_CONFIG.url,
+    telephone: SITE_CONFIG.contact.phone,
+    email: SITE_CONFIG.contact.email,
+    priceRange: "₹₹₹–₹₹₹₹",
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         opens: "09:00",
-        closes: "20:00",
+        closes: "19:00",
       },
       {
         "@type": "OpeningHoursSpecification",
         dayOfWeek: "Sunday",
         opens: "10:00",
-        closes: "18:00",
+        closes: "17:00",
       },
     ],
-    hasMap: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3914.577732999317!2d75.9678667!3d11.1447936",
     currenciesAccepted: "INR",
-    paymentAccepted: "Cash, Credit Card, Debit Card, UPI, EMI",
-    areaServed: "Kondotty, Malappuram, Kozhikode, Kerala",
-    // Keywords for rich results
+    paymentAccepted: "Cash, Credit Card, Debit Card, UPI, Bank Transfer",
+    areaServed: "Pan-India, Kerala, Malappuram, Kozhikode, Bangalore, Mumbai, Delhi",
     keywords:
-      "sofa manufacturers kondotty, furniture showroom kondotty, custom sofa kondotty, l shape sofa kondotty, recliner kondotty, curtains kondotty",
-
-    // Service catalog
+      "nilambur teak furniture, teak wood furniture kerala, genuine teak furniture india, buy teak furniture online, kerala teak wood",
     makesOffer: [
       {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: "Custom Sofa Manufacturing",
-          description:
-            "Bespoke sofa design and manufacturing tailored to your space and style preferences.",
+          name: "Genuine Nilambur Teak Furniture Crafting",
+          description: "100% genuine legal Nilambur teak wood handcrafted by generational master artisans.",
         },
       },
       {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: "Free Home Consultation",
-          description:
-            "Our design experts visit your home to suggest the perfect furniture for your space.",
+          name: "Custom Bespoke Woodworking",
+          description: "Custom built-to-order dining sets, sofas, cots, wardrobes, and carved doors.",
         },
       },
       {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: "Curtain Design & Installation",
-          description:
-            "Premium curtains, drapes, and blinds with professional installation across Kerala.",
-        },
-      },
-      {
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "Sofa Repair & Upholstery",
-          description:
-            "Expert repair and reupholstery service for all sofa brands and models.",
-        },
-      },
-      {
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "Furniture Delivery & Installation",
-          description:
-            "Free delivery and professional installation across Malappuram and Kozhikode districts.",
+          name: "Pan-India Secure Furniture Delivery",
+          description: "Insured transit and white-glove setup across all Indian cities.",
         },
       },
     ],
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "312",
-      bestRating: "5",
-      worstRating: "1",
-    },
   };
 
   return (

@@ -21,7 +21,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   // Load favorites from local storage on mount
   useEffect(() => {
     setIsMounted(true);
-    const storedFavorites = localStorage.getItem("magnat_favorites");
+    const storedFavorites = localStorage.getItem("nilambur_favorites");
     if (storedFavorites) {
       try {
         setFavorites(JSON.parse(storedFavorites));
@@ -34,7 +34,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   // Save to local storage whenever favorites change
   useEffect(() => {
     if (isMounted) {
-      localStorage.setItem("magnat_favorites", JSON.stringify(favorites));
+      localStorage.setItem("nilambur_favorites", JSON.stringify(favorites));
     }
   }, [favorites, isMounted]);
 

@@ -32,7 +32,7 @@ export default async function AdminHomePage() {
     <div className="font-inter max-w-7xl mx-auto">
       <div className="mb-12">
         <h2 className="text-2xl font-playfair font-black text-[#111111] tracking-tight">Home Page Architecture</h2>
-        <p className="text-[10px] text-[#C0001A] uppercase tracking-[0.2em] mt-2 font-bold">Orchestrate the landing experience of the Magnat brand</p>
+        <p className="text-[10px] text-[#C9922A] uppercase tracking-[0.2em] mt-2 font-bold">Orchestrate the showcase experience of Nilambur Teak Heritage</p>
       </div>
 
       <HomeSettingsClient 

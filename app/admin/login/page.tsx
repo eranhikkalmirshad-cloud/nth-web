@@ -3,38 +3,39 @@
 import { useActionState, useState } from "react";
 import { loginAction } from "@/app/actions/auth";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, ArrowRight, Sofa } from "lucide-react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { SITE_CONFIG } from "@/config/site";
 
 export default function AdminLoginPage() {
   const [state, action, isPending] = useActionState(loginAction, null);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F7F3EE] flex items-center justify-center p-6 antialiased">
+    <div className="min-h-screen bg-[#FDFAF5] flex items-center justify-center p-6 antialiased">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6 }}
         className="w-full max-w-[440px]"
       >
         {/* Logo */}
-        <div className="flex flex-col items-center mb-10">
-          <div className="w-11 h-11 bg-[#C0001A] flex items-center justify-center mb-4">
-            <img src="/images/magnat-icon-white.png" alt="Magnat Logo" className="h-8 w-auto object-contain" />
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#C9922A] bg-[#2C1810] shadow-md p-1 mb-3">
+            <img src={SITE_CONFIG.logo} alt="Logo" className="w-full h-full object-contain" />
           </div>
-          <h1 className="text-[#1A1208] text-xl font-semibold tracking-[0.18em] uppercase">
-            Magnat
+          <h1 className="text-[#2C1810] text-xl font-bold font-cinzel tracking-wider uppercase text-center">
+            {SITE_CONFIG.shortName}
           </h1>
-          <p className="text-[#9A9080] text-[10px] tracking-[0.25em] uppercase mt-1">
-            Admin Portal
+          <p className="text-[#C9922A] text-[10px] font-bold tracking-[0.25em] uppercase mt-1">
+            Admin Management Portal
           </p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-sm shadow-sm border border-[#EAE4DC] px-10 py-10">
-          <h2 className="text-[#1A1208] text-xl font-semibold mb-1">Sign in</h2>
-          <p className="text-[#9A9080] text-sm mb-7">
-            Enter your credentials to continue.
+        <div className="bg-white rounded-xl shadow-lg border border-[#D4A96A]/30 px-8 py-10">
+          <h2 className="text-[#2C1810] text-xl font-bold font-playfair mb-1">Sign In</h2>
+          <p className="text-[#6B4226] text-xs mb-6 font-lato">
+            Enter authorized artisan credentials to manage inventory & orders.
           </p>
 
           <form action={action} className="space-y-4">
@@ -42,7 +43,7 @@ export default function AdminLoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-[#1A1208] text-xs font-medium tracking-wide mb-1.5"
+                className="block text-[#2C1810] text-xs font-bold uppercase tracking-wider mb-1.5 font-lato"
               >
                 Email Address
               </label>
@@ -52,7 +53,8 @@ export default function AdminLoginPage() {
                 type="email"
                 required
                 autoComplete="email"
-                className="w-full bg-[#FAFAF8] border border-[#E4DED4] px-4 py-4 text-[#1A1208] text-base placeholder:text-[#C4BDAF] focus:outline-none focus:border-[#C8873A] focus:bg-white transition-all rounded-sm"
+                placeholder="admin@nilamburteakheritage.com"
+                className="w-full bg-[#FDFAF5] border border-[#D4A96A]/40 px-4 py-3 text-[#2C1810] text-sm focus:outline-none focus:border-[#C9922A] transition-all rounded-lg"
               />
             </div>
 
@@ -60,7 +62,7 @@ export default function AdminLoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="block text-[#1A1208] text-xs font-medium tracking-wide mb-1.5"
+                className="block text-[#2C1810] text-xs font-bold uppercase tracking-wider mb-1.5 font-lato"
               >
                 Password
               </label>
@@ -71,16 +73,17 @@ export default function AdminLoginPage() {
                   type={showPassword ? "text" : "password"}
                   required
                   autoComplete="current-password"
-                  className="w-full bg-[#FAFAF8] border border-[#E4DED4] px-4 pr-11 py-4 text-[#1A1208] text-base placeholder:text-[#C4BDAF] focus:outline-none focus:border-[#C8873A] focus:bg-white transition-all rounded-sm"
+                  placeholder="••••••••"
+                  className="w-full bg-[#FDFAF5] border border-[#D4A96A]/40 px-4 pr-11 py-3 text-[#2C1810] text-sm focus:outline-none focus:border-[#C9922A] transition-all rounded-lg"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#C4BDAF] hover:text-[#1A1208] transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#6B4226] hover:text-[#2C1810] transition-colors"
                   tabIndex={-1}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
@@ -90,10 +93,10 @@ export default function AdminLoginPage() {
               <motion.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-sm px-3.5 py-2.5"
+                className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5"
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
-                <p className="text-red-500 text-xs">{state.error}</p>
+                <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+                <p className="text-red-600 text-xs">{state.error}</p>
               </motion.div>
             )}
 
@@ -101,17 +104,17 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full group bg-[#1A1208] text-white py-4 text-xs font-semibold uppercase tracking-[0.18em] hover:bg-[#C8873A] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded-sm mt-1 active:scale-[0.99]"
+              className="w-full group bg-[#C9922A] hover:bg-[#E8B84B] text-[#2C1810] py-3.5 text-xs font-bold uppercase tracking-[0.15em] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded-lg mt-2 shadow"
             >
               {isPending ? (
                 <span className="flex items-center gap-2">
-                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Signing in…
+                  <div className="w-3.5 h-3.5 border-2 border-[#2C1810]/30 border-t-[#2C1810] rounded-full animate-spin" />
+                  Authenticating…
                 </span>
               ) : (
                 <>
-                  Sign In
-                  <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                  Access Admin Portal
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
@@ -119,8 +122,8 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-[#C4BDAF] text-[10px] text-center mt-6 uppercase tracking-widest">
-          © {new Date().getFullYear()} Magnat Furniture & Interiors
+        <p className="text-[#6B4226]/60 text-[11px] text-center mt-6 uppercase tracking-widest">
+          © {new Date().getFullYear()} {SITE_CONFIG.name}. All Rights Reserved.
         </p>
       </motion.div>
     </div>

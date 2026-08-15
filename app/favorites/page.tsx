@@ -5,8 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useFavorites } from "@/lib/context/FavoritesContext";
 import { getProductBySlug, Product } from "@/lib/data/products";
-import { Trash2, HeartCrack, ArrowRight } from "lucide-react";
+import { Trash2, HeartCrack, ArrowRight, MessageCircle, Sparkles } from "lucide-react";
 import FadeInView from "@/components/ui/FadeInView";
+import { SITE_CONFIG } from "@/config/site";
 
 export default function FavoritesPage() {
   const { favorites, toggleFavorite } = useFavorites();
@@ -21,8 +22,6 @@ export default function FavoritesPage() {
         return;
       }
 
-      // We load them dynamically using the exported getProductBySlug 
-      // (which creates them dynamically if missing!)
       const loaded = await Promise.all(
         favorites.map((slug) => getProductBySlug(slug))
       );
@@ -35,112 +34,126 @@ export default function FavoritesPage() {
     loadFavorites();
   }, [favorites]);
 
+  const waInquiryMsg = encodeURIComponent(
+    `Hello ${SITE_CONFIG.name}, I have saved the following pieces from your catalog:\n${favoriteProducts.map((p) => `- ${p.name}`).join("\n")}\n\nPlease share quotation and delivery timelines.`
+  );
+
   return (
-    <div className="pt-32 pb-32 bg-[#fafaf9] min-h-screen">
-      <div className="max-w-4xl mx-auto px-6 md:px-10">
-        
+    <div className="pt-24 pb-32 bg-[#FDFAF5] min-h-screen">
+      <div className="max-w-4xl mx-auto px-4 md:px-8">
         <FadeInView>
           <div className="mb-12">
-            <span className="block text-[10px] tracking-[0.3em] uppercase text-[#C0001A] font-bold mb-3" >
-              Your Collection
+            <span className="heading-label">
+              Your Curated Selection
             </span>
-             <h1 className="text-[40px] md:text-[50px] text-[#111111] leading-tight" >
-                Saved Favorites
-             </h1>
-             <p className="text-[#666666] text-sm mt-3" >
-                {favorites.length} {favorites.length === 1 ? 'item' : 'items'} saved to your personal collection.
-             </p>
+            <h1 className="text-3xl md:text-5xl font-bold text-[#2C1810] font-playfair">
+              Saved Teak Pieces
+            </h1>
+            <p className="text-[#6B4226] text-sm mt-2 font-lato">
+              {favorites.length} {favorites.length === 1 ? "piece" : "pieces"} saved in your personal Nilambur collection.
+            </p>
           </div>
         </FadeInView>
 
         {isLoading ? (
           <div className="flex justify-center py-20">
-            <div className="w-8 h-8 rounded-full border-2 border-[#111] border-t-transparent animate-spin"></div>
+            <div className="w-8 h-8 rounded-full border-2 border-[#C9922A] border-t-transparent animate-spin" />
           </div>
         ) : favoriteProducts.length === 0 ? (
           <FadeInView delay={0.2}>
-            <div className="bg-white rounded-2xl p-16 text-center border border-[#f0f0f0] shadow-sm flex flex-col items-center">
-              <HeartCrack size={48} className="text-[#e0e0e0] mb-6" strokeWidth={1} />
-              <h2 className="text-xl font-medium text-[#111111] mb-3" >Your favorites list is empty</h2>
-              <p className="text-[#666666] text-sm mb-8 max-w-sm" >
-                Explore our catalog and click the heart icon on any product to save it here for later.
+            <div className="bg-white rounded-2xl p-12 text-center border border-[#D4A96A]/30 shadow-sm flex flex-col items-center">
+              <HeartCrack size={48} className="text-[#D4A96A] mb-4" strokeWidth={1} />
+              <h2 className="text-xl font-bold text-[#2C1810] font-playfair mb-2">
+                Your saved collection is empty
+              </h2>
+              <p className="text-[#6B4226] text-xs md:text-sm mb-6 max-w-sm font-lato">
+                Browse our handcrafted teak furniture catalog and click the heart icon on any piece to save it here.
               </p>
-              <Link 
-                href="/products/sofas" 
-                className="bg-[#111111] text-white px-8 py-3.5 text-[11px] font-bold tracking-[0.2em] uppercase transition-colors hover:bg-[#C0001A] inline-flex items-center gap-2"
-                
+              <Link
+                href="/products"
+                className="bg-[#C9922A] hover:bg-[#E8B84B] text-[#2C1810] px-8 py-3.5 text-xs font-bold tracking-wider uppercase rounded-lg transition-colors inline-flex items-center gap-2 shadow"
               >
-                Browse Collection <ArrowRight size={14} />
+                <span>Browse All Collections</span>
+                <ArrowRight size={14} />
               </Link>
             </div>
           </FadeInView>
         ) : (
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             {favoriteProducts.map((product, i) => (
-              <FadeInView key={product.slug} delay={i * 0.1}>
-                <div className="bg-white rounded-[4px] p-4 flex flex-col sm:flex-row items-center sm:items-stretch gap-6 border border-[#f0f0f0] shadow-sm transition-all hover:shadow-md group">
-                  
+              <FadeInView key={product.slug} delay={i * 0.05}>
+                <div className="bg-white rounded-xl p-4 flex flex-col sm:flex-row items-center sm:items-stretch gap-5 border border-[#D4A96A]/30 shadow-sm transition-all hover:shadow-md group">
                   {/* Image */}
-                  <Link href={`/products/${product.slug}`} className="relative w-full sm:w-48 aspect-square bg-[#f9f9f9] rounded flex-shrink-0 overflow-hidden">
+                  <Link
+                    href={`/products/${product.slug}`}
+                    className="relative w-full sm:w-40 aspect-square bg-[#2C1810] rounded-lg flex-shrink-0 overflow-hidden"
+                  >
                     <Image
                       src={product.images[0] || "/images/placeholder-furniture.jpg"}
                       alt={product.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </Link>
-                  
+
                   {/* Info */}
-                  <div className="flex-1 flex flex-col py-2 w-full">
-                    <div className="flex justify-between items-start w-full">
-                      <div>
-                        <span className="block text-[9px] uppercase tracking-[0.2em] text-[#C0001A] font-bold mb-2">
-                          {product.category || 'Furniture'}
-                        </span>
-                        <Link href={`/products/${product.slug}`}>
-                          <h3 className="text-xl text-[#111111] hover:text-[#C0001A] transition-colors mb-2" >
-                            {product.name}
-                          </h3>
-                        </Link>
+                  <div className="flex-1 flex flex-col justify-between py-1 w-full">
+                    <div>
+                      <div className="flex justify-between items-start w-full">
+                        <div>
+                          <span className="block text-[10px] uppercase tracking-wider text-[#C9922A] font-bold mb-1">
+                            100% Genuine Nilambur Teak
+                          </span>
+                          <Link href={`/products/${product.slug}`}>
+                            <h3 className="text-lg md:text-xl font-bold text-[#2C1810] font-playfair hover:text-[#C9922A] transition-colors">
+                              {product.name}
+                            </h3>
+                          </Link>
+                        </div>
+
+                        <button
+                          onClick={() => toggleFavorite(product.slug)}
+                          className="text-[#6B4226] hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition-colors shrink-0"
+                          title="Remove from saved"
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </div>
-                      
-                      <button 
-                        onClick={() => toggleFavorite(product.slug)}
-                        className="text-[#999] hover:text-[#C0001A] p-2 rounded-full hover:bg-red-50 transition-colors shrink-0"
-                        title="Remove from favorites"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+
+                      <p className="text-[#6B4226] text-xs line-clamp-2 mt-2 font-lato">
+                        {product.short_description || product.description}
+                      </p>
                     </div>
-                    
-                    <p className="text-[#666666] text-sm line-clamp-2 mt-1 mb-4 max-w-lg" >
-                      {product.short_description || product.description}
-                    </p>
-                    
-                    <div className="mt-auto flex items-center justify-between">
-                       <Link 
-                         href={`/products/${product.slug}`} 
-                         className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#111111] hover:text-[#C0001A] transition-colors flex items-center gap-1"
-                       >
-                         View Details <ArrowRight size={12} />
-                       </Link>
+
+                    <div className="mt-4 flex items-center justify-between pt-2 border-t border-[#D4A96A]/20">
+                      <span className="text-sm font-bold text-[#8B5E3C]">
+                        {product.price || "Price on Request"}
+                      </span>
+                      <Link
+                        href={`/products/${product.slug}`}
+                        className="text-xs font-bold uppercase tracking-wider text-[#C9922A] hover:text-[#9A6E1A] transition-colors flex items-center gap-1"
+                      >
+                        <span>View Piece</span>
+                        <ArrowRight size={12} />
+                      </Link>
                     </div>
                   </div>
                 </div>
               </FadeInView>
             ))}
-            
-            <FadeInView delay={0.4}>
-               <div className="mt-8 flex justify-end">
-                  <a 
-                    href="https://wa.me/919446516395?text=Hello%20MAGNAT%20Furniture%2C%20I%20have%20saved%20some%20items%20to%20my%20favorites%20and%20would%20like%20to%20enquire%20about%20availability%20and%20customization."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-[#25D366] text-white px-8 py-4 text-[11px] font-bold tracking-[0.2em] uppercase transition-colors hover:bg-[#20bd5a] shadow-lg flex items-center gap-3 rounded-[3px]"
-                  >
-                     Enquire Saved Collection on WhatsApp
-                  </a>
-               </div>
+
+            <FadeInView delay={0.3}>
+              <div className="mt-6 flex justify-end">
+                <a
+                  href={`https://wa.me/${SITE_CONFIG.contact.whatsappNumber}?text=${waInquiryMsg}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#4A7C59] hover:bg-[#3D6649] text-white px-8 py-4 text-xs font-bold tracking-wider uppercase transition-colors shadow-lg flex items-center gap-2.5 rounded-xl"
+                >
+                  <MessageCircle size={18} />
+                  <span>Enquire Saved Pieces on WhatsApp</span>
+                </a>
+              </div>
             </FadeInView>
           </div>
         )}

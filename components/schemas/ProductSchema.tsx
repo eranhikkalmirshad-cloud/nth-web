@@ -1,4 +1,6 @@
 // components/schemas/ProductSchema.tsx
+import { SITE_CONFIG } from "@/config/site";
+
 interface ProductSchemaProps {
   name: string;
   description: string;
@@ -22,7 +24,7 @@ export default function ProductSchema({
   priceCurrency = "INR",
   availability = "InStock",
   sku,
-  brand = "Magnat",
+  brand = SITE_CONFIG.name,
   category,
   ratingValue,
   reviewCount,
@@ -42,14 +44,14 @@ export default function ProductSchema({
     brand: { "@type": "Brand", name: brand },
     manufacturer: {
       "@type": "Organization",
-      name: "Magnat Furniture",
-      url: "https://magnat.in",
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
     },
     ...(category && { category }),
     ...(price && {
       offers: {
         "@type": "Offer",
-        url: url ?? "https://magnat.in/products",
+        url: url ?? `${SITE_CONFIG.url}/products`,
         priceCurrency,
         price,
         priceValidUntil,
@@ -57,8 +59,8 @@ export default function ProductSchema({
         itemCondition: "https://schema.org/NewCondition",
         seller: {
           "@type": "Organization",
-          name: "Magnat Furniture",
-          url: "https://magnat.in",
+          name: SITE_CONFIG.name,
+          url: SITE_CONFIG.url,
         },
         shippingDetails: {
           "@type": "OfferShippingDetails",
@@ -70,26 +72,7 @@ export default function ProductSchema({
           shippingDestination: {
             "@type": "DefinedRegion",
             addressCountry: "IN",
-            addressRegion: ["KL"],
           },
-          deliveryTime: {
-            "@type": "ShippingDeliveryTime",
-            handlingTime: {
-              "@type": "QuantitativeValue",
-              minValue: 10,
-              maxValue: 20,
-              unitCode: "DAY",
-            },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          "@type": "MerchantReturnPolicy",
-          applicableCountry: "IN",
-          returnPolicyCategory:
-            "https://schema.org/MerchantReturnFiniteReturnWindow",
-          merchantReturnDays: 7,
-          returnMethod: "https://schema.org/ReturnInStore",
-          returnFees: "https://schema.org/FreeReturn",
         },
       },
     }),

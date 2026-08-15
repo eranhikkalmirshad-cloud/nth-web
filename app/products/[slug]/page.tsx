@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { getProductBySlug, getRelatedProducts } from "@/lib/api/products";
 import ProductClientPage from "./ProductClientPage";
 import ProductSchema from "@/components/schemas/ProductSchema";
+import { SITE_CONFIG } from "@/config/site";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -9,23 +10,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!product) {
     return {
-      title: "Product Not Found | MAGNAT™ Furniture",
-      description: "The requested product could not be found.",
+      title: `Piece Not Found | ${SITE_CONFIG.name}`,
+      description: "The requested teak furniture piece could not be found.",
     };
   }
 
   return {
-    title: `${product.name} | Premium Furniture by MAGNAT™`,
+    title: `${product.name} | 100% Genuine Nilambur Teak | ${SITE_CONFIG.name}`,
     description: product.short_description || product.description?.slice(0, 160) || "",
     openGraph: {
-      title: `${product.name} | MAGNAT™`,
+      title: `${product.name} | ${SITE_CONFIG.name}`,
       description: product.short_description || product.description?.slice(0, 160) || "",
       images: [
         {
           url: (product.images && product.images[0]) || "/images/placeholder-furniture.jpg",
           width: 1200,
           height: 630,
-          alt: product.name,
+          alt: `${product.name} - Nilambur Teak Heritage`,
         },
       ],
     },
@@ -42,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const relatedProducts = await getRelatedProducts(product.categories?.slug || "", slug);
 
-  // Parse price (e.g., "₹1,85,000" -> 185000)
+  // Parse price
   const priceString = product.price;
   const numericPrice = priceString && priceString !== "Custom Quote"
     ? parseFloat(priceString.replace(/[^\d]/g, ""))
@@ -57,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         price={numericPrice}
         category={product.categories?.name || undefined}
         sku={product.slug}
-        url={`https://magnat.in/products/${product.slug}`}
+        url={`${SITE_CONFIG.url}/products/${product.slug}`}
       />
       <ProductClientPage product={product} relatedProducts={relatedProducts} />
     </>

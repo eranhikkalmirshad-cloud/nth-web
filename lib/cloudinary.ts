@@ -15,7 +15,7 @@ cloudinary.config({
  * @param folder Optional destination folder in Cloudinary
  * @returns The secure URL of the uploaded image
  */
-export async function uploadToCloudinary(file: File, folder: string = "magnat-furniture"): Promise<string> {
+export async function uploadToCloudinary(file: File, folder: string = "nilambur-teak-heritage"): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
