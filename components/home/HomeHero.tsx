@@ -5,10 +5,11 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { HeroSlide } from "@/lib/types";
+import { HeroSlide, HomepageSection } from "@/lib/types";
 
 interface HomeHeroProps {
   slides?: HeroSlide[];
+  heroSection?: HomepageSection | null;
   videoUrl?: string;
   posterUrl?: string;
   eyebrow?: string;
@@ -18,6 +19,7 @@ interface HomeHeroProps {
 
 export default function HomeHero({
   slides = [],
+  heroSection = null,
   videoUrl = "/video/hero-video.mp4",
   posterUrl = "/video/hero-video-poster.jpg",
   eyebrow = "Experience the Pinnacle of Comfort",
@@ -26,23 +28,41 @@ export default function HomeHero({
 }: HomeHeroProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
-  // If dynamic slides are provided, use them
+  // Check if hero is configured as "video" only or "image_carousel"
+  const isVideoMode = heroSection?.mobile_image_url === "video" || (!heroSection && slides.length <= 1);
+  const isCarouselMode = !isVideoMode;
+
+  // Active slide if carousel mode
   const activeSlide = slides.length > 0 ? slides[currentSlideIndex] : null;
 
-  const currentVideo = activeSlide?.video_url || videoUrl;
-  const currentPoster = activeSlide?.image_url || posterUrl;
-  const currentEyebrow = activeSlide?.eyebrow || eyebrow;
-  const currentHeading = activeSlide?.heading || title;
-  const currentDescription = activeSlide?.description || description;
+  const currentVideo = isVideoMode ? (heroSection?.video_url || videoUrl) : null;
+  const currentPoster = isVideoMode 
+    ? (heroSection?.image_url || posterUrl)
+    : (activeSlide?.image_url || heroSection?.image_url || posterUrl);
+    
+  const currentEyebrow = isVideoMode
+    ? (heroSection?.subtitle || eyebrow)
+    : (activeSlide?.eyebrow || heroSection?.subtitle || eyebrow);
+    
+  const currentHeading = isVideoMode
+    ? (heroSection?.title || title)
+    : (activeSlide?.heading || heroSection?.title || title);
+    
+  const currentDescription = isVideoMode
+    ? (heroSection?.description || description)
+    : (activeSlide?.description || heroSection?.description || description);
 
-  // Auto-advance if multiple slides configured
+  const exploreUrl = heroSection?.cta_url || "/products";
+  const exploreText = heroSection?.cta_text || "Explore Now";
+
+  // Auto-advance if Image Carousel mode is active with multiple slides
   useEffect(() => {
-    if (slides.length <= 1) return;
+    if (!isCarouselMode || slides.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentSlideIndex((prev) => (prev + 1) % slides.length);
-    }, 7000);
+    }, 6000);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, [isCarouselMode, slides.length]);
 
   return (
     <section className="bg-white pt-2 sm:pt-3 pb-8 sm:pb-16 px-3 sm:px-6 lg:px-8">
@@ -50,9 +70,9 @@ export default function HomeHero({
         {/* ── Inset Rounded Hero Card ── */}
         <div className="relative w-full h-[480px] sm:h-[540px] lg:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden bg-[#1A1816] shadow-sm">
           
-          {/* Background Video / Image Layer */}
+          {/* Background Layer: Video Mode OR Image Carousel Mode */}
           <div className="absolute inset-0 w-full h-full">
-            {currentVideo ? (
+            {isVideoMode && currentVideo ? (
               <video
                 key={currentVideo}
                 autoPlay
@@ -75,14 +95,25 @@ export default function HomeHero({
                 />
               </video>
             ) : (
-              <Image
-                src={currentPoster}
-                alt={currentHeading}
-                fill
-                priority
-                sizes="(max-width: 1280px) 100vw, 1280px"
-                className="object-cover object-center"
-              />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentPoster}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="relative w-full h-full"
+                >
+                  <Image
+                    src={currentPoster}
+                    alt={currentHeading}
+                    fill
+                    priority
+                    sizes="(max-width: 1280px) 100vw, 1280px"
+                    className="object-cover object-center"
+                  />
+                </motion.div>
+              </AnimatePresence>
             )}
           </div>
 
@@ -94,11 +125,11 @@ export default function HomeHero({
           <div className="relative z-20 h-full flex flex-col justify-center px-6 sm:px-12 lg:px-16 max-w-xl">
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeSlide?.id || "default-hero"}
+                key={isCarouselMode ? (activeSlide?.id || currentSlideIndex) : "video-hero"}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.5 }}
                 className="space-y-3.5 sm:space-y-5 text-left"
               >
                 {/* Eyebrow in Radiant Gold */}
@@ -122,10 +153,10 @@ export default function HomeHero({
                 {/* Dual High-Contrast Buttons */}
                 <div className="flex flex-wrap items-center gap-3 pt-2">
                   <Link
-                    href="/products"
+                    href={exploreUrl}
                     className="inline-flex items-center justify-center bg-[#8A572A] hover:bg-[#6E3F18] text-white text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase px-6 sm:px-7 py-3 sm:py-3.5 rounded-full transition-all shadow-[0_4px_16px_rgba(0,0,0,0.4)] active:scale-95 border border-[#B37B47]/60"
                   >
-                    Explore Now
+                    {exploreText}
                   </Link>
 
                   <Link
@@ -139,29 +170,23 @@ export default function HomeHero({
             </AnimatePresence>
           </div>
 
-          {/* Carousel Dots (Active if multiple slides) */}
-          <div className="absolute bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-            {slides.length > 1 ? (
-              slides.map((_, idx) => (
+          {/* Carousel Dots (Active when in Image Carousel mode with multiple slides) */}
+          {isCarouselMode && slides.length > 1 && (
+            <div className="absolute bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+              {slides.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentSlideIndex(idx)}
-                  className={`transition-all ${
+                  className={`transition-all cursor-pointer ${
                     idx === currentSlideIndex
                       ? "w-6 h-1.5 rounded-full bg-[#E5B56E]"
                       : "w-2 h-2 rounded-full bg-white/50 hover:bg-white"
                   }`}
                   aria-label={`Slide ${idx + 1}`}
                 />
-              ))
-            ) : (
-              <>
-                <span className="w-6 h-1.5 rounded-full bg-[#E5B56E] transition-all" />
-                <span className="w-2 h-2 rounded-full bg-white/50 transition-all" />
-                <span className="w-2 h-2 rounded-full bg-white/50 transition-all" />
-              </>
-            )}
-          </div>
+              ))}
+            </div>
+          )}
 
         </div>
       </div>

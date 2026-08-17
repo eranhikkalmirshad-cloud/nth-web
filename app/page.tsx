@@ -40,6 +40,7 @@ export default async function HomePage() {
       .select("*"),
   ]);
 
+  const heroSection = dbHomepageSections?.find((s) => s.section_key === "hero_section");
   const legacyHeritage = dbHomepageSections?.find((s) => s.section_key === "legacy_heritage");
 
   return (
@@ -49,8 +50,8 @@ export default async function HomePage() {
       <LocalBusinessSchema />
       <FAQSchema faqs={HOMEPAGE_FAQS} />
 
-      {/* 1. Hero Card (Inset rounded card with video background, left-aligned text & dual pills) */}
-      <HomeHero slides={heroSlides} />
+      {/* 1. Hero Card (Supports both Video Mode and Multiple Image Carousel Mode) */}
+      <HomeHero slides={heroSlides} heroSection={heroSection} />
 
       {/* 2. "A Legacy of Excellence" Intro Section with 4 Stats */}
       <HeritageStatsSection section={legacyHeritage} />

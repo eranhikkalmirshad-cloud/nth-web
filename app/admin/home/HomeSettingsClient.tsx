@@ -22,7 +22,10 @@ import {
   Landmark,
   ShieldCheck,
   Leaf,
-  Users
+  Users,
+  Film,
+  Edit2,
+  Video
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HomepageSection, HeroSlide, InstagramPost, Categories } from "@/lib/types";
@@ -117,7 +120,19 @@ export default function HomeSettingsClient({
             >
               <HeroManagement 
                 slides={heroSlides} 
-                onSaveSuccess={() => toast.success("Hero slides updated successfully.")} 
+                sections={sections}
+                onSectionsSaved={(updated) => {
+                  setSections((prev) => {
+                    const idx = prev.findIndex((s) => s.section_key === updated.section_key);
+                    if (idx > -1) {
+                      const copy = [...prev];
+                      copy[idx] = updated;
+                      return copy;
+                    }
+                    return [...prev, updated];
+                  });
+                }}
+                onSaveSuccess={() => toast.success("Hero settings updated successfully.")} 
               />
             </motion.div>
           )}
@@ -980,190 +995,701 @@ function EliteCategorySelector({ categories }: { categories: Categories[] }) {
   );
 }
 
-// ─── 3. HERO SLIDES MANAGEMENT ───
-function HeroManagement({ slides, onSaveSuccess }: { slides: HeroSlide[]; onSaveSuccess: () => void }) {
+// ─── 3. HERO SLIDES & VIDEO MODE MANAGEMENT ───
+function HeroManagement({ 
+  slides, 
+  sections, 
+  onSectionsSaved, 
+  onSaveSuccess 
+}: { 
+  slides: HeroSlide[]; 
+  sections: HomepageSection[]; 
+  onSectionsSaved: (section: HomepageSection) => void; 
+  onSaveSuccess: () => void; 
+}) {
+  const heroSection = sections.find((s) => s.section_key === "hero_section");
+  const [heroMode, setHeroMode] = useState<"video" | "carousel">(
+    heroSection?.mobile_image_url === "carousel" || heroSection?.mobile_image_url === "image_carousel"
+      ? "carousel"
+      : "video"
+  );
+
+  // Video Mode State
+  const [videoUrl, setVideoUrl] = useState(heroSection?.video_url || "/video/hero-video.mp4");
+  const [posterUrl, setPosterUrl] = useState(heroSection?.image_url || "/video/hero-video-poster.jpg");
+  const [videoHeading, setVideoHeading] = useState(heroSection?.title || "Comfort, Refined");
+  const [videoEyebrow, setVideoEyebrow] = useState(heroSection?.subtitle || "EXPERIENCE THE PINNACLE OF COMFORT");
+  const [videoDescription, setVideoDescription] = useState(
+    heroSection?.description ||
+      "Discover premium handcrafted teak furniture crafted with care, character and timeless design."
+  );
+  const [ctaText, setCtaText] = useState(heroSection?.cta_text || "Explore Now");
+  const [ctaUrl, setCtaUrl] = useState(heroSection?.cta_url || "/products");
+  const [isSavingVideo, setIsSavingVideo] = useState(false);
+  const [isUploadingPoster, setIsUploadingPoster] = useState(false);
+  const posterFileInputRef = useRef<HTMLInputElement>(null);
+
+  // Image Carousel State
   const [slideList, setSlideList] = useState<HeroSlide[]>(slides);
   const [editingSlide, setEditingSlide] = useState<HeroSlide | null>(null);
-  const [isAdding, setIsAdding] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [heroImage, setHeroImage] = useState(editingSlide?.image_url || "/images/og-datas/IMG_0600.PNG");
-  const heroFileInputRef = useRef<HTMLInputElement>(null);
+  const [isAddingSlide, setIsAddingSlide] = useState(false);
+  const [isUploadingSlideImg, setIsUploadingSlideImg] = useState(false);
+  const [slideImage, setSlideImage] = useState("/images/og-datas/IMG_0600.PNG");
+  const [slideHeading, setSlideHeading] = useState("Comfort, Refined");
+  const [slideEyebrow, setSlideEyebrow] = useState("EXPERIENCE THE PINNACLE OF COMFORT");
+  const [slideDesc, setSlideDesc] = useState("Discover premium handcrafted teak furniture crafted with care, character and timeless design.");
+  const slideFileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDelete = async (id: string) => {
-    toast.warning("Delete this hero slide?", {
-      action: {
-        label: "Delete",
-        onClick: async () => {
-          await deleteHeroSlide(id);
-          setSlideList(slideList.filter(s => s.id !== id));
-          toast.success("Slide removed");
-        }
-      },
-      cancel: { label: "Cancel", onClick: () => {} }
-    });
+  const sampleImages = [
+    { label: "Living Suite", path: "/images/og-datas/IMG_0600.PNG" },
+    { label: "Dining Craft", path: "/images/og-datas/IMG_0628.PNG" },
+    { label: "King Bed", path: "/images/og-datas/IMG_0638.PNG" },
+    { label: "Teak Sofa", path: "/images/og-datas/IMG_0432.PNG" },
+    { label: "Lounge Chair", path: "/images/og-datas/IMG_0452.PNG" },
+    { label: "Diwan Bed", path: "/images/og-datas/IMG_0515.PNG" },
+  ];
+
+  // Save Video Mode Settings to Supabase
+  const handleSaveVideoMode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingVideo(true);
+
+    const formData = new FormData();
+    formData.append("id", heroSection?.id || "new");
+    formData.append("section_key", "hero_section");
+    formData.append("title", videoHeading);
+    formData.append("subtitle", videoEyebrow);
+    formData.append("description", videoDescription);
+    formData.append("image_url", posterUrl);
+    formData.append("video_url", videoUrl);
+    formData.append("mobile_image_url", "video");
+    formData.append("cta_text", ctaText);
+    formData.append("cta_url", ctaUrl);
+
+    const res = await saveHomepageSection(formData);
+    if (res?.error) {
+      toast.error("Failed to save Video Hero", { description: res.error });
+    } else {
+      toast.success("Video Hero mode is now LIVE on homepage!");
+      onSectionsSaved({
+        id: heroSection?.id || "hero_section",
+        section_key: "hero_section",
+        title: videoHeading,
+        subtitle: videoEyebrow,
+        description: videoDescription,
+        image_url: posterUrl,
+        video_url: videoUrl,
+        mobile_image_url: "video",
+        cta_text: ctaText,
+        cta_url: ctaUrl,
+        is_active: true,
+        updated_at: new Date().toISOString(),
+      });
+      onSaveSuccess();
+    }
+    setIsSavingVideo(false);
   };
 
-  const handleHeroFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Activate Carousel Mode on Homepage
+  const handleActivateCarouselMode = async () => {
+    const formData = new FormData();
+    formData.append("id", heroSection?.id || "new");
+    formData.append("section_key", "hero_section");
+    formData.append("title", videoHeading);
+    formData.append("subtitle", videoEyebrow);
+    formData.append("description", videoDescription);
+    formData.append("image_url", posterUrl);
+    formData.append("mobile_image_url", "carousel");
+    formData.append("cta_text", ctaText);
+    formData.append("cta_url", ctaUrl);
+
+    const res = await saveHomepageSection(formData);
+    if (res?.error) {
+      toast.error("Failed to activate Carousel Mode");
+    } else {
+      toast.success("Image Carousel mode is now LIVE on homepage!");
+      onSectionsSaved({
+        id: heroSection?.id || "hero_section",
+        section_key: "hero_section",
+        title: videoHeading,
+        subtitle: videoEyebrow,
+        description: videoDescription,
+        image_url: posterUrl,
+        video_url: null,
+        mobile_image_url: "carousel",
+        cta_text: ctaText,
+        cta_url: ctaUrl,
+        is_active: true,
+        updated_at: new Date().toISOString(),
+      });
+      onSaveSuccess();
+    }
+  };
+
+  // Device Upload for Video Poster
+  const handlePosterUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setIsUploading(true);
+    setIsUploadingPoster(true);
     const fd = new FormData();
     fd.append("file", file);
     try {
       const res = await uploadImage(fd);
       if (res?.url) {
-        setHeroImage(res.url);
-        toast.success("Hero image uploaded to Cloudinary!");
+        setPosterUrl(res.url);
+        toast.success("Poster image uploaded to Cloudinary!");
       } else {
         toast.error(res?.error || "Upload failed");
       }
     } catch {
       toast.error("Upload error");
     } finally {
-      setIsUploading(false);
+      setIsUploadingPoster(false);
+    }
+  };
+
+  // Device Upload for Slide Image
+  const handleSlideImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploadingSlideImg(true);
+    const fd = new FormData();
+    fd.append("file", file);
+    try {
+      const res = await uploadImage(fd);
+      if (res?.url) {
+        setSlideImage(res.url);
+        toast.success("Slide image uploaded to Cloudinary!");
+      } else {
+        toast.error(res?.error || "Upload failed");
+      }
+    } catch {
+      toast.error("Upload error");
+    } finally {
+      setIsUploadingSlideImg(false);
+    }
+  };
+
+  // Delete Slide
+  const handleDeleteSlide = async (id: string) => {
+    toast.warning("Delete this hero slide?", {
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          await deleteHeroSlide(id);
+          setSlideList(slideList.filter((s) => s.id !== id));
+          toast.success("Slide removed");
+        },
+      },
+      cancel: { label: "Cancel", onClick: () => {} },
+    });
+  };
+
+  // Save Slide (Add or Edit)
+  const handleSaveSlideSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("id", editingSlide?.id || "new");
+    formData.append("image_url", slideImage);
+    formData.append("heading", slideHeading);
+    formData.append("eyebrow", slideEyebrow);
+    formData.append("description", slideDesc);
+    formData.append("is_active", "true");
+    formData.append("sort_order", String(editingSlide?.sort_order || slideList.length));
+
+    const res = await saveHeroSlide(formData);
+    if (res?.error) {
+      toast.error("Failed to save slide", { description: res.error });
+    } else {
+      toast.success(editingSlide ? "Slide updated!" : "New slide added!");
+      setIsAddingSlide(false);
+      setEditingSlide(null);
+      // Refresh local slides list
+      if (editingSlide) {
+        setSlideList(
+          slideList.map((s) =>
+            s.id === editingSlide.id
+              ? { ...s, image_url: slideImage, heading: slideHeading, eyebrow: slideEyebrow, description: slideDesc }
+              : s
+          )
+        );
+      } else {
+        setSlideList([
+          ...slideList,
+          {
+            id: `slide-${Date.now()}`,
+            image_url: slideImage,
+            heading: slideHeading,
+            eyebrow: slideEyebrow,
+            description: slideDesc,
+            sort_order: slideList.length,
+            is_active: true,
+            mobile_image_url: null,
+            alt_text: slideHeading,
+          },
+        ]);
+      }
+      onSaveSuccess();
     }
   };
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Top Header & Mode Toggle */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#8A572A] block mb-1">HOMEPAGE HERO</span>
-          <h3 className="text-xl font-bold font-cinzel text-slate-900">Hero Carousel & Banners</h3>
-          <p className="text-xs text-slate-500 mt-1">Manage video banners and cinematic slide cards.</p>
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8A572A] mb-1">
+            <Sparkles size={14} />
+            <span>HOMEPAGE HERO CONTROLLER</span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-bold font-cinzel text-slate-900">
+            Hero Showcase Manager
+          </h3>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Choose whether the homepage displays a cinematic background video or a multi-image carousel slideshow.
+          </p>
         </div>
+
+        {/* Live Mode Badge */}
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Live Mode:</span>
+          <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+            (heroSection?.mobile_image_url === "carousel" || heroSection?.mobile_image_url === "image_carousel")
+              ? "bg-amber-100 text-amber-900 border border-amber-300"
+              : "bg-emerald-100 text-emerald-900 border border-emerald-300"
+          }`}>
+            {(heroSection?.mobile_image_url === "carousel" || heroSection?.mobile_image_url === "image_carousel")
+              ? "🖼️ Image Carousel"
+              : "📹 Video Loop"}
+          </span>
+        </div>
+      </div>
+
+      {/* 2 Main Mode Tabs */}
+      <div className="grid grid-cols-2 gap-3 p-1.5 bg-[#FAF9F7] rounded-2xl border border-slate-200 max-w-xl">
         <button
-          onClick={() => {
-            setHeroImage("/images/og-datas/IMG_0600.PNG");
-            setIsAdding(true);
-          }}
-          className="bg-[#8A572A] hover:bg-[#1C130D] text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer self-start sm:self-auto"
+          type="button"
+          onClick={() => setHeroMode("video")}
+          className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+            heroMode === "video"
+              ? "bg-[#1C130D] text-white shadow-md"
+              : "text-slate-600 hover:text-slate-950 hover:bg-white/60"
+          }`}
         >
-          <Plus size={15} />
-          <span>Add Hero Slide</span>
+          <Film size={16} className={heroMode === "video" ? "text-amber-400" : "text-slate-400"} />
+          <span>1. Video Background</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setHeroMode("carousel")}
+          className={`flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+            heroMode === "carousel"
+              ? "bg-[#1C130D] text-white shadow-md"
+              : "text-slate-600 hover:text-slate-950 hover:bg-white/60"
+          }`}
+        >
+          <Layers size={16} className={heroMode === "carousel" ? "text-amber-400" : "text-slate-400"} />
+          <span>2. Image Carousel ({slideList.length})</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {slideList.map((slide) => (
-          <div key={slide.id} className="bg-[#FAF9F7] p-5 rounded-2xl border border-slate-200 flex flex-col justify-between group">
-            <div>
-              <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-slate-200 mb-3 border border-slate-200">
-                <Image src={slide.image_url} alt={slide.heading} fill className="object-cover" />
-              </div>
-              <h4 className="text-base font-bold text-slate-900">{slide.heading}</h4>
-              <p className="text-xs text-slate-500 mt-1 line-clamp-1">{slide.description || slide.eyebrow}</p>
+      {/* ═════════════════════════════════════════════════════════ */}
+      {/* MODE 1: VIDEO BACKGROUND HERO (Video Only) */}
+      {/* ═════════════════════════════════════════════════════════ */}
+      {heroMode === "video" && (
+        <form onSubmit={handleSaveVideoMode} className="space-y-6">
+          <div className="bg-[#FAF9F7] p-5 sm:p-7 rounded-2xl border border-slate-200 space-y-6">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                <Film size={16} className="text-[#8A572A]" />
+                <span>Cinematic Video Loop Settings</span>
+              </h4>
+              <span className="text-[11px] text-slate-400">Plays muted loop on homepage</span>
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-slate-200 mt-4">
-              <button
-                onClick={() => {
-                  setHeroImage(slide.image_url);
-                  setEditingSlide(slide);
-                }}
-                className="text-xs font-bold text-[#8A572A] hover:underline cursor-pointer"
-              >
-                Edit Slide
-              </button>
-              <button
-                onClick={() => handleDelete(slide.id)}
-                className="text-slate-400 hover:text-red-600 p-1 cursor-pointer"
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+            {/* Video URL & Live Player Preview */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+              <div className="md:col-span-6 space-y-3">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                  Video File Path or Direct URL
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={videoUrl}
+                  onChange={(e) => setVideoUrl(e.target.value)}
+                  placeholder="/video/hero-video.mp4 or https://..."
+                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900 focus:outline-none focus:border-[#8A572A]"
+                />
+                <p className="text-[10px] text-slate-500">
+                  Tip: Put your video file in <code className="font-mono bg-slate-100 px-1 py-0.5 rounded">public/video/hero-video.mp4</code> or enter a Cloudinary/CDN video link.
+                </p>
 
-      {/* Slide Modal */}
-      {(isAdding || editingSlide) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white p-8 max-w-2xl w-full rounded-3xl animate-in zoom-in-95 duration-200 my-8 shadow-2xl border border-slate-200">
-            <h4 className="text-xl font-cinzel font-bold text-slate-900 mb-6">
-              {editingSlide ? "Edit Hero Slide" : "Add Hero Slide"}
-            </h4>
-            
-            <form onSubmit={async (e) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget);
-              await saveHeroSlide(formData);
-              setIsAdding(false);
-              setEditingSlide(null);
-              onSaveSuccess();
-            }} className="space-y-5">
-              <input type="hidden" name="id" value={editingSlide?.id || "new"} />
-              
-              <div className="space-y-4">
-                <div>
-                  <div className="flex items-center justify-between mb-1">
+                {/* Poster / Fallback Image */}
+                <div className="pt-3">
+                  <div className="flex items-center justify-between mb-1.5">
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
-                      Image / Poster URL
+                      Poster / Fallback Image
                     </label>
                     <input
-                      ref={heroFileInputRef}
+                      ref={posterFileInputRef}
                       type="file"
                       accept="image/*"
                       className="hidden"
-                      onChange={handleHeroFileUpload}
+                      onChange={handlePosterUpload}
                     />
                     <button
                       type="button"
-                      onClick={() => heroFileInputRef.current?.click()}
-                      disabled={isUploading}
+                      onClick={() => posterFileInputRef.current?.click()}
+                      disabled={isUploadingPoster}
                       className="text-[11px] font-bold uppercase tracking-wider text-[#8A572A] hover:underline inline-flex items-center gap-1 cursor-pointer"
                     >
-                      {isUploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
-                      <span>{isUploading ? "Uploading..." : "Upload from Device"}</span>
+                      {isUploadingPoster ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+                      <span>{isUploadingPoster ? "Uploading..." : "Upload Poster"}</span>
                     </button>
                   </div>
                   <input
-                    name="image_url"
+                    type="text"
                     required
-                    value={heroImage}
-                    onChange={(e) => setHeroImage(e.target.value)}
-                    className="w-full bg-[#FAF9F7] border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Heading
-                  </label>
-                  <input
-                    name="heading"
-                    required
-                    defaultValue={editingSlide?.heading || "Comfort, Refined"}
-                    className="w-full bg-[#FAF9F7] border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    name="description"
-                    rows={2}
-                    defaultValue={editingSlide?.description || ""}
-                    className="w-full bg-[#FAF9F7] border border-slate-200 rounded-xl px-4 py-2.5 text-xs resize-none"
+                    value={posterUrl}
+                    onChange={(e) => setPosterUrl(e.target.value)}
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900 focus:outline-none focus:border-[#8A572A]"
                   />
                 </div>
               </div>
 
-              <input type="hidden" name="is_active" value="true" />
-              <input type="hidden" name="sort_order" value="0" />
+              {/* Video Live Preview Box */}
+              <div className="md:col-span-6 space-y-2">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                  Live Video Preview
+                </label>
+                <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-black border border-slate-200 shadow-sm">
+                  {videoUrl ? (
+                    <video
+                      key={videoUrl}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      poster={posterUrl}
+                      className="w-full h-full object-cover"
+                    >
+                      <source src={videoUrl} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-slate-500 text-xs">
+                      No video URL provided
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
 
+            {/* Heading, Eyebrow & Description Inputs */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Eyebrow Badge Text
+                </label>
+                <input
+                  type="text"
+                  value={videoEyebrow}
+                  onChange={(e) => setVideoEyebrow(e.target.value)}
+                  placeholder="EXPERIENCE THE PINNACLE OF COMFORT"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-[#8A572A]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Main Headline
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={videoHeading}
+                  onChange={(e) => setVideoHeading(e.target.value)}
+                  placeholder="Comfort, Refined"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-bold text-slate-900 focus:outline-none focus:border-[#8A572A]"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Description Text
+                </label>
+                <textarea
+                  rows={2}
+                  value={videoDescription}
+                  onChange={(e) => setVideoDescription(e.target.value)}
+                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-900 resize-none focus:outline-none focus:border-[#8A572A]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  Primary Button Text & URL
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={ctaText}
+                    onChange={(e) => setCtaText(e.target.value)}
+                    className="w-1/2 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900"
+                  />
+                  <input
+                    type="text"
+                    value={ctaUrl}
+                    onChange={(e) => setCtaUrl(e.target.value)}
+                    className="w-1/2 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-900"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSavingVideo}
+            className="w-full sm:w-auto bg-[#8A572A] hover:bg-[#1C130D] text-white px-8 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            <CheckCircle2 size={16} />
+            <span>{isSavingVideo ? "Saving..." : "Save & Activate Video Hero on Homepage"}</span>
+          </button>
+        </form>
+      )}
+
+      {/* ═════════════════════════════════════════════════════════ */}
+      {/* MODE 2: MULTIPLE IMAGE CAROUSEL SLIDESHOW */}
+      {/* ═════════════════════════════════════════════════════════ */}
+      {heroMode === "carousel" && (
+        <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-amber-50/70 p-5 rounded-2xl border border-amber-200/80">
+            <div>
+              <h4 className="text-sm font-bold text-amber-950">Multi-Image Carousel Slideshow</h4>
+              <p className="text-xs text-amber-800/80 mt-0.5">
+                The homepage cycles through these slides every 6 seconds with smooth crossfades and indicator dots.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={handleActivateCarouselMode}
+                className="bg-[#1C130D] hover:bg-black text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
+              >
+                Set Carousel as Live Hero
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingSlide(null);
+                  setSlideImage("/images/og-datas/IMG_0600.PNG");
+                  setSlideHeading("Comfort, Refined");
+                  setSlideEyebrow("EXPERIENCE THE PINNACLE OF COMFORT");
+                  setSlideDesc("Discover premium handcrafted teak furniture crafted with care, character and timeless design.");
+                  setIsAddingSlide(true);
+                }}
+                className="bg-[#8A572A] hover:bg-[#6E3F18] text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
+              >
+                <Plus size={15} />
+                <span>Add Image Slide</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Grid of Current Slides */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {slideList.map((slide, idx) => (
+              <div
+                key={slide.id || idx}
+                className="bg-[#FAF9F7] p-4 rounded-2xl border border-slate-200 flex flex-col justify-between group hover:shadow-md transition-shadow relative"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-2.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-amber-100 text-amber-900">
+                      Slide #{idx + 1}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingSlide(slide);
+                          setSlideImage(slide.image_url);
+                          setSlideHeading(slide.heading);
+                          setSlideEyebrow(slide.eyebrow || "EXPERIENCE THE PINNACLE OF COMFORT");
+                          setSlideDesc(slide.description || "");
+                          setIsAddingSlide(true);
+                        }}
+                        className="text-slate-400 hover:text-[#8A572A] p-1 cursor-pointer"
+                        title="Edit Slide"
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteSlide(slide.id)}
+                        className="text-slate-400 hover:text-red-600 p-1 cursor-pointer"
+                        title="Delete Slide"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-slate-200 mb-3 border border-slate-200">
+                    <Image src={slide.image_url} alt={slide.heading} fill className="object-cover" />
+                  </div>
+
+                  <h4 className="text-sm font-bold text-slate-900 line-clamp-1">{slide.heading}</h4>
+                  <p className="text-[11px] text-slate-500 line-clamp-2 mt-1 leading-snug">
+                    {slide.description || slide.eyebrow}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {slideList.length === 0 && (
+            <div className="p-12 text-center bg-[#FAF9F7] rounded-2xl border border-slate-200">
+              <p className="text-xs text-slate-500 mb-3">No slides in image carousel yet.</p>
+              <button
+                type="button"
+                onClick={() => setIsAddingSlide(true)}
+                className="bg-[#8A572A] text-white px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider"
+              >
+                Create First Slide
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Slide Add/Edit Modal ── */}
+      {isAddingSlide && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white p-6 sm:p-8 max-w-2xl w-full rounded-3xl animate-in zoom-in-95 duration-200 my-8 shadow-2xl border border-slate-200">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+              <h4 className="text-lg font-cinzel font-bold text-slate-900">
+                {editingSlide ? "Edit Carousel Slide" : "Add New Carousel Slide"}
+              </h4>
+              <button
+                type="button"
+                onClick={() => { setIsAddingSlide(false); setEditingSlide(null); }}
+                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-md"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveSlideSubmit} className="space-y-5">
+              {/* Quick Gallery Presets */}
+              <div className="space-y-2">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                  1. Quick Pick Real Teak Photo
+                </label>
+                <div className="grid grid-cols-6 gap-2">
+                  {sampleImages.map((s, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setSlideImage(s.path)}
+                      className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
+                        slideImage === s.path ? "border-[#8A572A] ring-2 ring-[#8A572A]/30 scale-95" : "border-slate-200 opacity-80"
+                      }`}
+                    >
+                      <Image src={s.path} alt={s.label} fill className="object-cover" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Image URL / Device Upload */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                    Slide Image URL or Device Upload
+                  </label>
+                  <input
+                    ref={slideFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleSlideImageUpload}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => slideFileInputRef.current?.click()}
+                    disabled={isUploadingSlideImg}
+                    className="text-[11px] font-bold uppercase tracking-wider text-[#8A572A] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    {isUploadingSlideImg ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+                    <span>{isUploadingSlideImg ? "Uploading..." : "Upload from Device"}</span>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  required
+                  value={slideImage}
+                  onChange={(e) => setSlideImage(e.target.value)}
+                  className="w-full bg-[#FAF9F7] border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono"
+                />
+              </div>
+
+              {/* Slide Heading & Eyebrow */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
+                    Eyebrow Text
+                  </label>
+                  <input
+                    type="text"
+                    value={slideEyebrow}
+                    onChange={(e) => setSlideEyebrow(e.target.value)}
+                    className="w-full bg-[#FAF9F7] border border-slate-200 rounded-xl px-4 py-2 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
+                    Main Heading
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={slideHeading}
+                    onChange={(e) => setSlideHeading(e.target.value)}
+                    className="w-full bg-[#FAF9F7] border border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-900"
+                  />
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  rows={2}
+                  value={slideDesc}
+                  onChange={(e) => setSlideDesc(e.target.value)}
+                  className="w-full bg-[#FAF9F7] border border-slate-200 rounded-xl px-4 py-2 text-xs resize-none"
+                />
+              </div>
+
+              {/* Modal Buttons */}
               <div className="flex gap-3 pt-4 border-t border-slate-100">
                 <button
                   type="submit"
                   className="flex-1 bg-[#8A572A] hover:bg-[#1C130D] text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md cursor-pointer"
                 >
-                  Save Slide
+                  {editingSlide ? "Update Slide" : "Save & Add Slide"}
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setIsAdding(false); setEditingSlide(null); }}
+                  onClick={() => { setIsAddingSlide(false); setEditingSlide(null); }}
                   className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold uppercase tracking-wider"
                 >
                   Cancel
