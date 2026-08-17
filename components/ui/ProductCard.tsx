@@ -53,30 +53,31 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
         </div>
 
         {/* ── Details ── */}
-        <div className={`flex flex-col flex-1 justify-between ${compact ? "p-4" : "p-5 md:p-6"}`}>
+        <div className={`flex flex-col flex-1 justify-between ${compact ? "p-3.5" : "p-4 sm:p-5 md:p-6"}`}>
           <div>
-            <span className="text-[10px] md:text-[11px] font-sans font-semibold tracking-[0.15em] uppercase text-[#777777] block mb-1.5">
+            <span className="text-[10px] sm:text-[11px] font-sans font-bold tracking-[0.15em] uppercase text-[#8A572A] block mb-1.5 leading-normal">
               {displayCategory}
             </span>
 
-            <h3 className="text-lg md:text-xl font-serif font-bold text-[#141414] group-hover:text-[#7A4E2D] transition-colors line-clamp-1">
+            <h3 className="font-serif text-base sm:text-lg md:text-xl font-bold text-[#141414] group-hover:text-[#8A572A] transition-colors duration-300 line-clamp-1 mb-1.5 leading-snug">
               {name}
             </h3>
 
             {displayDescription && (
-              <p className="text-xs md:text-sm text-[#666666] font-light line-clamp-2 mt-1.5 leading-relaxed">
+              <p className="text-[#666666] text-xs font-light line-clamp-2 leading-relaxed hidden sm:block mb-3">
                 {displayDescription}
               </p>
             )}
           </div>
 
-          <div className="mt-5 pt-3 border-t border-[#F0F0EE] flex items-center justify-between">
-            <span className="text-xs md:text-sm font-semibold text-[#141414]">
-              {price || "Custom Quote"}
+          <div className="pt-2 sm:pt-3 border-t border-[#F0F0EE] flex items-center justify-between mt-auto">
+            <span className="text-[10px] sm:text-[11px] font-medium text-slate-500 tracking-wide">
+              Custom Made
             </span>
 
-            <span className="text-xs font-semibold tracking-wider uppercase text-[#141414] group-hover:text-[#7A4E2D] flex items-center gap-1 transition-colors">
-              View <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
+            <span className="inline-flex items-center gap-1 text-[9px] sm:text-[10px] font-bold tracking-wider uppercase text-[#8A572A] group-hover:translate-x-1 transition-transform">
+              <span>View Details</span>
+              <ArrowRight size={11} />
             </span>
           </div>
         </div>

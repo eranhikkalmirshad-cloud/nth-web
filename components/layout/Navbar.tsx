@@ -18,11 +18,11 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useFavorites } from "@/lib/context/FavoritesContext";
 import { SITE_CONFIG } from "@/config/site";
-import { PRODUCT_CATEGORIES, ROOM_CATEGORIES } from "@/lib/constants/categories";
-
-const featuredExploreCategories = PRODUCT_CATEGORIES.slice(0, 6);
+import { PRODUCT_CATEGORIES, ROOM_CATEGORIES, CategoryItem } from "@/lib/constants/categories";
+import { createClient } from "@/lib/supabase";
 
 export default function Navbar() {
+  const [categories, setCategories] = useState<CategoryItem[]>(PRODUCT_CATEGORIES);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [mobileExploreOpen, setMobileExploreOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -30,6 +30,38 @@ export default function Navbar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { favoritesCount, setDrawerOpen } = useFavorites();
+
+  // Dynamically sync latest categories and image URLs from Supabase DB
+  useEffect(() => {
+    try {
+      const supabase = createClient();
+      supabase
+        .from("categories")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .then(({ data }) => {
+          if (data && data.length > 0) {
+            setCategories(
+              data.map((c) => ({
+                name: c.name,
+                slug: c.slug,
+                href: `/products?category=${c.slug}`,
+                image: c.image_url || "/images/placeholder-furniture.jpg",
+                description: c.description || c.name,
+                isPopular: c.is_featured,
+              }))
+            );
+          }
+        });
+    } catch (e) {
+      // Fallback to updated PRODUCT_CATEGORIES
+    }
+  }, []);
+
+  const featuredExploreCategories =
+    categories.filter((c) => c.isPopular).length >= 6
+      ? categories.filter((c) => c.isPopular).slice(0, 6)
+      : categories.slice(0, 6);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -129,9 +161,9 @@ export default function Navbar() {
                         </span>
                         <Link 
                           href="/products" 
-                          className="text-[10px] font-bold uppercase tracking-wider text-[#8B5E3C] hover:underline"
+                          className="text-[10px] font-bold uppercase tracking-wider text-[#8A572A] hover:underline"
                         >
-                          View All ({PRODUCT_CATEGORIES.length}) →
+                          View All ({categories.length}) →
                         </Link>
                       </div>
 

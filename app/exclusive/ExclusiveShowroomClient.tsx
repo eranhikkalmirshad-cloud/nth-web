@@ -65,7 +65,7 @@ export default function ExclusiveShowroomClient({ products }: ExclusiveShowroomC
                   <h3 className="text-lg font-bold font-playfair text-[#F5ECD7] group-hover:text-[#E8B84B] transition-colors">
                     {product.name}
                   </h3>
-                  <span className="text-xs font-bold text-[#E8B84B]">{product.price || "Price on Request"}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#E8B84B] bg-[#2A2018] px-2.5 py-1 rounded-md border border-[#E8B84B]/30">VIP Private Access</span>
                 </div>
                 <p className="text-[#EAD5B0]/70 text-xs line-clamp-2 leading-relaxed font-lato">
                   {product.description || "A masterfully crafted piece for the luxury estate, available only through private invitation."}

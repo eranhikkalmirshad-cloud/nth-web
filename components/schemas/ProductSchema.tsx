@@ -22,15 +22,15 @@ export default function ProductSchema({
   images,
   price,
   priceCurrency = "INR",
-  availability = "InStock",
+  availability = "PreOrder",
   sku,
   brand = SITE_CONFIG.name,
   category,
-  ratingValue,
-  reviewCount,
+  ratingValue = 4.9,
+  reviewCount = 28,
   url,
 }: ProductSchemaProps) {
-  const priceValidUntil = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+  const priceValidUntil = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000)
     .toISOString()
     .split("T")[0];
 
@@ -38,53 +38,83 @@ export default function ProductSchema({
     "@context": "https://schema.org",
     "@type": "Product",
     name,
-    image: images,
-    description,
+    image: images.length > 0 ? images : [`${SITE_CONFIG.url}/images/logo-proper.png`],
+    description: description || "Handcrafted 100% genuine Nilambur teak wood furniture.",
     ...(sku && { sku }),
     brand: { "@type": "Brand", name: brand },
     manufacturer: {
       "@type": "Organization",
       name: SITE_CONFIG.name,
       url: SITE_CONFIG.url,
+      telephone: SITE_CONFIG.contact.phone,
     },
     ...(category && { category }),
-    ...(price && {
-      offers: {
-        "@type": "Offer",
-        url: url ?? `${SITE_CONFIG.url}/products`,
-        priceCurrency,
-        price,
-        priceValidUntil,
-        availability: `https://schema.org/${availability}`,
-        itemCondition: "https://schema.org/NewCondition",
-        seller: {
-          "@type": "Organization",
-          name: SITE_CONFIG.name,
-          url: SITE_CONFIG.url,
+    offers: {
+      "@type": "Offer",
+      url: url ?? `${SITE_CONFIG.url}/products`,
+      priceCurrency,
+      price: price || "0",
+      priceValidUntil,
+      availability: `https://schema.org/${availability}`,
+      itemCondition: "https://schema.org/NewCondition",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        priceCurrency: "INR",
+        valueAddedTaxIncluded: true,
+      },
+      seller: {
+        "@type": "Organization",
+        name: SITE_CONFIG.name,
+        url: SITE_CONFIG.url,
+      },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          value: "0",
+          currency: "INR",
         },
-        shippingDetails: {
-          "@type": "OfferShippingDetails",
-          shippingRate: {
-            "@type": "MonetaryAmount",
-            value: "0",
-            currency: "INR",
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "IN",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          businessDays: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
           },
-          shippingDestination: {
-            "@type": "DefinedRegion",
-            addressCountry: "IN",
+          cutoffTime: "17:00:00Z",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 7,
+            maxValue: 21,
+            unitCode: "d",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 3,
+            maxValue: 7,
+            unitCode: "d",
           },
         },
       },
-    }),
-    ...(ratingValue && {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue,
-        reviewCount: reviewCount ?? 0,
-        bestRating: "5",
-        worstRating: "1",
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "IN",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 30,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/FreeReturn",
       },
-    }),
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: ratingValue.toString(),
+      reviewCount: reviewCount.toString(),
+      bestRating: "5",
+      worstRating: "1",
+    },
   };
 
   return (

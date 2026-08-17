@@ -149,8 +149,8 @@ export default function FavoritesDrawer() {
                         >
                           {product.name}
                         </Link>
-                        <p className="text-[#8B5E3C] text-[12px] font-bold mt-1">
-                          {product.price}
+                        <p className="text-[#8A572A] text-[11px] font-bold uppercase tracking-wider mt-1">
+                          Bespoke Made-to-Order
                         </p>
 
                         <button

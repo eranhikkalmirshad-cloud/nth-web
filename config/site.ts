@@ -15,42 +15,47 @@ export const SITE_CONFIG = {
   logoFooter: "/images/logo-proper.png",
   favicon: "/images/logo-proper.png",
 
-  // Business Contact (Placeholder values configurable via .env or client input)
+  // Business Contact & Official Location
   contact: {
-    phone: process.env.NEXT_PUBLIC_PHONE || "+91 XXXXXXXXXX",
-    phoneDisplay: "+91 XXXXXXXXXX",
-    whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "91XXXXXXXXXX",
-    whatsappDisplay: "+91 XXXXXXXXXX",
-    whatsappLink: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "91XXXXXXXXXX"}?text=${encodeURIComponent(
-      "Hello Nilambur Teak Heritage! I'm interested in your handcrafted teak wood furniture. Please share more details and a custom quote."
+    phone: "+918891221994",
+    phoneDisplay: "+91 88912 21994",
+    whatsappNumber: "918891221994",
+    whatsappDisplay: "+91 88912 21994",
+    whatsappLink: `https://wa.me/918891221994?text=${encodeURIComponent(
+      "Hello Nilambur Teak Heritage! I am interested in your handcrafted teak wood furniture and interior woodwork. Please share more details and a quote."
     )}`,
     email: process.env.NEXT_PUBLIC_EMAIL || "info@nilamburteakheritage.com",
     address: {
-      street: "Main Road, Near Nilambur Teak Museum",
-      area: "Nilambur",
-      district: "Malappuram",
+      businessName: "NILAMBUR TEAK HERITAGE",
+      tagline: "DEALERS IN: WOODEN FURNITURE & BUILDING MATERIALS",
+      street: "Koolikkal, Mampad P.O.",
+      area: "Mampad",
+      district: "Malappuram Dist.",
       state: "Kerala",
       country: "India",
-      pincode: "679329",
-      full: "Nilambur, Malappuram District, Kerala, India",
+      pincode: "676542",
+      full: "Koolikkal, Mampad P.O., Malappuram Dist., Kerala - 676542",
+      googleMapsQuery: "Nilambur Teak Heritage, Koolikkal, Mampad, Kerala 676542",
+      googleMapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3913.673898234851!2d76.192305!3d11.238411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba63a6c98695bc3%3A0x6b4f738b525890e1!2sMampad%2C%20Kerala%20676542!5e0!3m2!1sen!2sin!4v1718000000000!5m2!1sen!2sin",
+      googleMapsDirectionsUrl: "https://maps.google.com/?q=Koolikkal,+Mampad+P.O.,+Malappuram+Dist.,+Kerala+676542",
     },
     geo: {
-      latitude: "11.2778",
-      longitude: "76.2241",
+      latitude: "11.2384",
+      longitude: "76.1923",
     },
     hours: {
-      weekdays: "Monday – Saturday: 9:00 AM – 7:00 PM",
+      weekdays: "Monday – Saturday: 9:00 AM – 7:30 PM",
       sunday: "Sunday: 10:00 AM – 5:00 PM",
     },
-    gstin: "[CLIENT WILL PROVIDE]",
+    gstin: "[AVAILABLE ON REQUEST]",
   },
 
   // Social Links
   social: {
-    instagram: "https://instagram.com/nilamburteakheritage",
+    instagram: "https://www.instagram.com/nilambur_teak_heritage?igsh=MXdudnM3aXRsZ2U0",
     facebook: "https://facebook.com/nilamburteakheritage",
     youtube: "https://youtube.com/@nilamburteakheritage",
-    whatsapp: `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "91XXXXXXXXXX"}`,
+    whatsapp: "https://wa.me/918891221994",
   },
 
   // USP Badges
@@ -66,73 +71,9 @@ export const SITE_CONFIG = {
   // Navigation Links
   navigation: [
     { label: "Home", href: "/" },
-    {
-      label: "Collections",
-      href: "/products",
-      children: [
-        { label: "Living Room", href: "/rooms/living-room", desc: "Sofa sets, diwans, coffee tables, TV units" },
-        { label: "Bedroom", href: "/rooms/bedroom", desc: "Teak cots, wardrobes, dressing tables, side tables" },
-        { label: "Dining Sets", href: "/rooms/dining-room", desc: "6-8 seater royal dining tables & chairs" },
-        { label: "Office Furniture", href: "/rooms/office", desc: "Executive desks, library shelves, conference tables" },
-        { label: "Doors & Windows", href: "/products/doors", desc: "Carved main doors, pooja room doors, frames" },
-        { label: "Custom Woodwork", href: "/contact", desc: "Bespoke architectural woodwork & custom orders" },
-      ],
-    },
-    { label: "Our Story", href: "/about" },
-    { label: "Process", href: "/#process" },
+    { label: "Collections", href: "/products" },
     { label: "Showrooms", href: "/showrooms" },
+    { label: "About Us", href: "/about" },
     { label: "Contact", href: "/contact" },
-  ],
-
-  // Categories
-  categories: [
-    {
-      id: "living-room",
-      name: "Living Room",
-      slug: "living-room",
-      tagline: "Handcrafted Teak Sofas, Diwans & Accent Tables",
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200&auto=format&fit=crop",
-      itemCount: "24+ Pieces",
-    },
-    {
-      id: "bedroom",
-      name: "Bedroom Furniture",
-      slug: "bedroom",
-      tagline: "Heirloom Teak Beds, Wardrobes & Dressers",
-      image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop",
-      itemCount: "18+ Pieces",
-    },
-    {
-      id: "dining",
-      name: "Dining Sets",
-      slug: "dining",
-      tagline: "Solid Teak Dining Tables & Artisan Chairs",
-      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?q=80&w=1200&auto=format&fit=crop",
-      itemCount: "16+ Pieces",
-    },
-    {
-      id: "office",
-      name: "Office Furniture",
-      slug: "office",
-      tagline: "Executive Teak Desks, Cabinets & Bookcases",
-      image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop",
-      itemCount: "12+ Pieces",
-    },
-    {
-      id: "doors-windows",
-      name: "Doors & Windows",
-      slug: "doors-windows",
-      tagline: "Intricately Carved Teak Entrance Doors & Frames",
-      image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop",
-      itemCount: "15+ Pieces",
-    },
-    {
-      id: "custom-woodwork",
-      name: "Custom Woodwork",
-      slug: "custom-woodwork",
-      tagline: "Bespoke Heritage Crafting Tailored to Your Architecture",
-      image: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?q=80&w=1200&auto=format&fit=crop",
-      itemCount: "Unlimited",
-    },
   ],
 };

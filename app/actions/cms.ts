@@ -261,6 +261,24 @@ export async function saveCategory(formData: FormData) {
   return { success: true };
 }
 
+export async function toggleCategoryFeatured(id: string, isFeatured: boolean) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("categories")
+    .update({ is_featured: isFeatured })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error toggling category featured status:", error);
+    return { error: error.message };
+  }
+
+  revalidatePath("/admin/categories");
+  revalidatePath("/");
+  return { success: true };
+}
+
 /**
  * Delete a category
  */
@@ -448,36 +466,49 @@ export async function updateFeaturedCategories(categoryIds: string[]) {
 /**
  * Save or update an Instagram post
  */
-export async function saveInstagramPost(formData: FormData) {
-  const supabase = await createClient();
-  const id = formData.get("id") as string;
-  const postData = {
-    image_url: formData.get("image_url") as string,
-    post_url: formData.get("post_url") as string,
-    caption: formData.get("caption") as string,
-    is_active: true,
-  };
+export async function saveInstagramPost(formData: FormData): Promise<{ success?: boolean; error?: string }> {
+  try {
+    const supabase = await createClient();
+    const id = formData.get("id") as string;
+    const postData = {
+      image_url: formData.get("image_url") as string,
+      post_url: formData.get("post_url") as string,
+      caption: formData.get("caption") as string,
+      is_active: true,
+    };
 
-  if (id && id !== "new") {
-    await supabase.from("instagram_posts").update(postData).eq("id", id);
-  } else {
-    await supabase.from("instagram_posts").insert([postData]);
+    if (id && id !== "new") {
+      const { error } = await supabase.from("instagram_posts").update(postData).eq("id", id);
+      if (error) throw error;
+    } else {
+      const { error } = await supabase.from("instagram_posts").insert([postData]);
+      if (error) throw error;
+    }
+
+    revalidatePath("/");
+    revalidatePath("/admin/home");
+    revalidatePath("/admin/instagram");
+    return { success: true };
+  } catch (err: any) {
+    return { error: err.message || "Failed to save Instagram post" };
   }
-
-  revalidatePath("/");
-  revalidatePath("/admin/home");
-  return { success: true };
 }
 
 /**
  * Delete an Instagram post
  */
-export async function deleteInstagramPost(id: string) {
-  const supabase = await createClient();
-  await supabase.from("instagram_posts").delete().eq("id", id);
-  revalidatePath("/");
-  revalidatePath("/admin/home");
-  return { success: true };
+export async function deleteInstagramPost(id: string): Promise<{ success?: boolean; error?: string }> {
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from("instagram_posts").delete().eq("id", id);
+    if (error) throw error;
+    revalidatePath("/");
+    revalidatePath("/admin/home");
+    revalidatePath("/admin/instagram");
+    return { success: true };
+  } catch (err: any) {
+    return { error: err.message || "Failed to delete Instagram post" };
+  }
 }
 
 /**

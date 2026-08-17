@@ -111,7 +111,10 @@ export default function ProductClientPage({
 
             {/* Thumbnails */}
             {images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2">
+              <div
+                className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
                 {images.map((img: string, i: number) => (
                   <button
                     key={i}
@@ -156,8 +159,8 @@ export default function ProductClientPage({
                   {product.name}
                 </h1>
 
-                <div className="text-xl font-sans font-semibold text-[#141414]">
-                  {product.price || "Price on Request"}
+                <div className="inline-block text-xs font-bold uppercase tracking-[0.2em] text-[#8A572A] bg-amber-50/80 px-3.5 py-1.5 rounded-full border border-amber-200/80">
+                  Bespoke Made to Order
                 </div>
               </div>
 
@@ -259,7 +262,7 @@ export default function ProductClientPage({
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
               {relatedProducts.slice(0, 4).map((p) => (
                 <ProductCard key={p.slug} product={p} />
               ))}

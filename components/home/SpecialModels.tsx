@@ -143,8 +143,8 @@ export default function SpecialModels({
         {/* 3. Carousel */}
         <div
           ref={scrollRef}
-          className="flex gap-8 overflow-x-auto pb-12 scrollbar-hide snap-x pt-2"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="flex gap-8 overflow-x-auto pb-12 hide-scrollbar snap-x pt-2"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {displayItems.map((cat) => (
             <div key={cat.id} className="snap-start flex-shrink-0">

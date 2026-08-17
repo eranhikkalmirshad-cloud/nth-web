@@ -29,13 +29,13 @@ export default function SectionHeading({
         </FadeInView>
       )}
       <FadeInView delay={0.2}>
-        <h2 className={`text-3xl md:text-5xl font-bold leading-tight ${light ? "text-[#FCFCFC]" : "text-[#111]"}`}>
+        <h2 className={`text-3xl md:text-5xl font-sans font-extrabold leading-tight ${light ? "text-[#FCFCFC]" : "text-[#111]"}`}>
           {title ? (
             title
           ) : (
             <>
               {titlePart1}{" "}
-              <span className="text-[#8A572A] italic">{titlePart2}</span>
+              <span className="text-[#8A572A] italic font-sans font-extrabold ml-1">{titlePart2}</span>
             </>
           )}
         </h2>

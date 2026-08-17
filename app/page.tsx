@@ -18,11 +18,29 @@ import OrganizationSchema from "@/components/schemas/OrganizationSchema";
 import LocalBusinessSchema from "@/components/schemas/LocalBusinessSchema";
 import FAQSchema, { HOMEPAGE_FAQS } from "@/components/schemas/FAQSchema";
 
+import { createClient } from "@/lib/supabase-server";
+
 export default async function HomePage() {
-  const [products, heroSlides] = await Promise.all([
+  const supabase = await createClient();
+
+  const [products, heroSlides, { data: dbCategories }, { data: dbInstagramPosts }, { data: dbHomepageSections }] = await Promise.all([
     getProducts(),
     getHeroSlides(),
+    supabase
+      .from("categories")
+      .select("*")
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("instagram_posts")
+      .select("*")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("homepage_sections")
+      .select("*"),
   ]);
+
+  const legacyHeritage = dbHomepageSections?.find((s) => s.section_key === "legacy_heritage");
 
   return (
     <main className="min-h-screen bg-white text-[#111111]">
@@ -35,22 +53,22 @@ export default async function HomePage() {
       <HomeHero slides={heroSlides} />
 
       {/* 2. "A Legacy of Excellence" Intro Section with 4 Stats */}
-      <HeritageStatsSection />
+      <HeritageStatsSection section={legacyHeritage} />
 
-      {/* 3. "Elite Home Collections" 4-Card Carousel */}
-      <EliteCollections />
+      {/* 3. "Elite Home Collections" Category Carousel */}
+      <EliteCollections categories={dbCategories || []} />
 
       {/* 4. "The Signature Selection" Elevated Product Cards */}
       <SignatureSelection products={products} />
 
       {/* 5. "Custom Woodwork & Heritage Doors" 2 Large Cards + Consultation Banner */}
-      <CustomWoodworkSection />
+      <CustomWoodworkSection sections={dbHomepageSections || []} />
 
       {/* 6. "How It Works" 4-Step Process Section */}
       <HowItWorksSection />
 
       {/* 7. "We're on Instagram" 5-Photo Feed */}
-      <InstagramSection />
+      <InstagramSection initialPosts={dbInstagramPosts || []} />
     </main>
   );
 }

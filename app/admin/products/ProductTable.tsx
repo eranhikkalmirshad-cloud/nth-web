@@ -155,9 +155,6 @@ export default function ProductTable({ products }: ProductTableProps) {
                   Category / Room
                 </th>
                 <th className="py-3.5 px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-[#7A6E65]">
-                  Price
-                </th>
-                <th className="py-3.5 px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-[#7A6E65]">
                   Badges
                 </th>
                 <th className="py-3.5 px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-[#7A6E65]">
@@ -209,10 +206,6 @@ export default function ProductTable({ products }: ProductTableProps) {
                       <span className="text-[10px] font-bold uppercase tracking-wider text-[#1C130D] bg-[#F7F4F0] border border-[#EAE8E2] px-2.5 py-1 rounded-md whitespace-nowrap">
                         {product.categories?.name || product.room || "Solid Teak"}
                       </span>
-                    </td>
-
-                    <td className="py-4 px-4 text-xs font-bold text-[#1C130D] whitespace-nowrap">
-                      {product.price || "Contact Quote"}
                     </td>
 
                     <td className="py-4 px-4">
@@ -322,7 +315,7 @@ export default function ProductTable({ products }: ProductTableProps) {
         {filteredProducts.length === 0 && (
           <div className="py-16 text-center">
             <p className="text-xs font-bold uppercase tracking-wider text-[#999999]">
-              No teak products found matching your search.
+              No products found matching your search.
             </p>
           </div>
         )}

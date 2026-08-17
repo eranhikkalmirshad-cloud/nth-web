@@ -38,13 +38,13 @@ export default function HowItWorksSection() {
         
         {/* Eyebrow & Heading */}
         <FadeInView>
-          <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase text-[#8B5E3C] block mb-2 font-sans">
+          <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.2em] uppercase text-[#8A572A] block mb-2 font-sans">
             Our Process
           </span>
 
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#111111] tracking-tight mb-2 sm:mb-3">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-sans font-extrabold text-[#111111] tracking-tight mb-2 sm:mb-3">
             How It{" "}
-            <span className="text-[#8B5E3C] italic font-serif font-normal">
+            <span className="text-[#8A572A] italic font-sans font-extrabold ml-1">
               Works
             </span>
           </h2>

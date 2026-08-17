@@ -116,7 +116,6 @@ export default function ExclusiveTable({ products }: ExclusiveTableProps) {
             <tr className="border-b border-[#eeeeee] text-left">
               <th className="pb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#666] pl-4">Exclusive Product</th>
               <th className="pb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#666]">Access Token</th>
-              <th className="pb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#666]">Price</th>
               <th className="pb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#666]">Source</th>
               <th className="pb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#666] text-right pr-4">Sharing Actions</th>
             </tr>
@@ -137,25 +136,22 @@ export default function ExclusiveTable({ products }: ExclusiveTableProps) {
                         {product.images?.[0] ? (
                           <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-[#C0001A] font-bold text-[9px] uppercase tracking-widest">No Img</div>
+                          <div className="w-full h-full flex items-center justify-center text-[#8A572A] font-bold text-[9px] uppercase tracking-widest">No Img</div>
                         )}
-                        <div className="absolute top-0 left-0 bg-[#C0001A] text-white p-1">
+                        <div className="absolute top-0 left-0 bg-[#8A572A] text-white p-1">
                           <Lock size={10} />
                         </div>
                       </div>
                       <div>
-                        <h4 className="text-[14px] font-bold text-[#111] group-hover:text-[#C0001A] transition-colors">{product.name}</h4>
+                        <h4 className="text-[14px] font-bold text-[#111] group-hover:text-[#8A572A] transition-colors">{product.name}</h4>
                         <p className="text-[11px] text-[#666] font-medium truncate max-w-[200px] Tracking-wide mt-1 uppercase tracking-widest">{product.slug}</p>
                       </div>
                     </div>
                   </td>
                   <td className="py-6">
-                    <code className="text-[10px] bg-white border border-[#eeeeee] px-2 py-1 text-[#C0001A] font-mono">
+                    <code className="text-[10px] bg-white border border-[#eeeeee] px-2 py-1 text-[#8A572A] font-mono">
                       {product.access_token || "no-token"}
                     </code>
-                  </td>
-                  <td className="py-6 text-sm font-bold text-[#111] whitespace-nowrap">
-                    {product.price || "Custom Quote"}
                   </td>
                   <td className="py-6">
                     <div className={`inline-flex items-center gap-2 px-3 py-1.5 border ${isLocal ? 'bg-[#F7F4F0] border-[#eeeeee] text-[#111]' : 'border-[#111] bg-white text-[#111]'}`}>

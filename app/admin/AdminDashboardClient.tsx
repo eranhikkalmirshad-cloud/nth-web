@@ -295,7 +295,7 @@ export default function AdminDashboardClient({
                 </div>
                 <div>
                   <h4 className="text-xs font-bold text-slate-900 !text-slate-900">Add New Product</h4>
-                  <p className="text-[11px] text-slate-500">Upload photos, specs, & prices</p>
+                  <p className="text-[11px] text-slate-500">Upload photos, specs, & details</p>
                 </div>
               </div>
               <ChevronRight size={16} className="text-slate-400 group-hover:translate-x-1 transition-transform" />

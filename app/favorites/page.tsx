@@ -126,8 +126,8 @@ export default function FavoritesPage() {
                     </div>
 
                     <div className="mt-4 flex items-center justify-between pt-2 border-t border-[#D4A96A]/20">
-                      <span className="text-sm font-bold text-[#8B5E3C]">
-                        {product.price || "Price on Request"}
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#8A572A]">
+                        Custom Made
                       </span>
                       <Link
                         href={`/products/${product.slug}`}

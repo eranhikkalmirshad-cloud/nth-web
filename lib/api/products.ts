@@ -84,13 +84,13 @@ export async function getProducts(includePrivate: boolean = false): Promise<Prod
 
     const { data, error } = await query.order("sort_order", { ascending: true });
 
-    if (error || !data || data.length === 0) {
-      return fallbackProducts.map(mapFallbackProduct);
+    if (error || !data) {
+      return [];
     }
 
     return data.map(mapProduct);
   } catch (err) {
-    return fallbackProducts.map(mapFallbackProduct);
+    return [];
   }
 }
 
@@ -105,56 +105,12 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
       .single();
 
     if (error || !data) {
-      const fallback = fallbackProducts.find((p) => p.slug === slug);
-      if (fallback) return mapFallbackProduct(fallback);
-
-      const formattedName = slug
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
-
-      return {
-        id: slug,
-        slug,
-        name: formattedName,
-        category_id: "Nilambur Teak Collection",
-        description: `Handcrafted ${formattedName} created from 100% genuine Nilambur teak wood. Built to last generations with traditional Kerala joinery.`,
-        short_description: `Handcrafted ${formattedName} from mature Nilambur teak.`,
-        images: [
-          "/images/placeholder-furniture.jpg",
-          "https://images.unsplash.com/photo-1540574163026-643ea20ade25?q=80&w=1200&auto=format&fit=crop",
-        ],
-        price: "Custom Quote",
-        delivery_time: "4-8 weeks",
-        material: "100% Nilambur Teak",
-        badge: "Heirloom Edition",
-        room: "Living Room",
-        is_new: true,
-        is_bestseller: false,
-        is_active: true,
-        is_featured: false,
-        is_private: false,
-        access_token: null,
-        type: null,
-        features: [
-          "100% Genuine Nilambur Teak Wood",
-          "Traditional Mortise-and-Tenon Joinery",
-          "Natural Grain High-Lustre Finish",
-          "Lifetime Craftsmanship Warranty",
-        ],
-        specifications: [
-          { label: "Timber", value: "Nilambur Mature Teak" },
-          { label: "Delivery", value: "Pan-India Insured" },
-        ],
-        sort_order: 0,
-        created_at: new Date().toISOString(),
-      };
+      return null;
     }
 
     return mapProduct(data);
   } catch (err) {
-    const fallback = fallbackProducts.find((p) => p.slug === slug);
-    return fallback ? mapFallbackProduct(fallback) : null;
+    return null;
   }
 }
 

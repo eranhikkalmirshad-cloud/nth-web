@@ -50,14 +50,14 @@ export default function CategoryForm({ category }: CategoryFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="bg-[#111111] text-white px-8 py-3 rounded-none flex items-center gap-2 font-bold text-xs uppercase tracking-widest hover:bg-[#C0001A] transition-all disabled:opacity-50"
+          className="bg-[#111111] text-white px-8 py-3 rounded-xl flex items-center gap-2 font-bold text-xs uppercase tracking-widest hover:bg-[#8A572A] transition-all disabled:opacity-50 cursor-pointer shadow-md"
         >
-          <Save size={16} /> {loading ? "Saving..." : "Save Collection"}
+          <Save size={16} /> {loading ? "Saving..." : "Save Category"}
         </button>
       </div>
 
       {error && (
-        <div className="p-4 bg-[#C0001A]/5 border border-[#C0001A]/20 text-[#C0001A] rounded-none text-sm font-medium">
+        <div className="p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm font-medium">
           {error}
         </div>
       )}
@@ -84,12 +84,18 @@ export default function CategoryForm({ category }: CategoryFormProps) {
                     if (baseSelect) {
                       if (name.includes('chair')) baseSelect.value = 'chairs';
                       else if (name.includes('sofa')) baseSelect.value = 'sofas';
+                      else if (name.includes('dining')) baseSelect.value = 'dining';
                       else if (name.includes('table')) baseSelect.value = 'tables';
-                      else if (name.includes('curtain') || name.includes('drapery')) baseSelect.value = 'curtains';
                       else if (name.includes('bed')) baseSelect.value = 'beds';
+                      else if (name.includes('wardrobe') || name.includes('almirah')) baseSelect.value = 'wardrobes';
+                      else if (name.includes('bench')) baseSelect.value = 'benches';
+                      else if (name.includes('shoe')) baseSelect.value = 'shoes-racks';
+                      else if (name.includes('tv')) baseSelect.value = 'tv-units';
+                      else if (name.includes('cabinet')) baseSelect.value = 'cabinet';
+                      else if (name.includes('book')) baseSelect.value = 'bookshelves';
                     }
                   }}
-                  className="w-full px-4 py-3 bg-[#F9F9F9] border border-[#eeeeee] rounded-none focus:outline-none focus:border-[#C0001A] transition-all text-sm"
+                  className="w-full px-4 py-3 bg-[#F9F9F9] border border-[#eeeeee] rounded-xl focus:outline-none focus:border-[#8A572A] transition-all text-sm"
                 />
               </div>
 
@@ -99,15 +105,28 @@ export default function CategoryForm({ category }: CategoryFormProps) {
                   name="base_category"
                   defaultValue={category?.base_category || ""}
                   required
-                  className="w-full px-4 py-3 bg-[#F9F9F9] border border-[#eeeeee] rounded-none focus:outline-none focus:border-[#C0001A] transition-all text-sm appearance-none"
+                  className="w-full px-4 py-3 bg-[#F9F9F9] border border-[#eeeeee] rounded-xl focus:outline-none focus:border-[#8A572A] transition-all text-sm appearance-none"
                 >
                   <option value="" disabled>Select Base Category</option>
-                  <option value="chairs">Chairs</option>
                   <option value="sofas">Sofas</option>
-                  <option value="curtains">Curtains</option>
-
+                  <option value="chairs">Chairs</option>
+                  <option value="tables">Tables</option>
                   <option value="dining">Dining</option>
-                  <option value="bedroom">Bedroom</option>
+                  <option value="lounge-chairs">Lounge Chairs</option>
+                  <option value="sitout">Sitout</option>
+                  <option value="study-and-office">Study and Office</option>
+                  <option value="beds">Beds</option>
+                  <option value="tv-units">TV Units</option>
+                  <option value="coffee-tables">Coffee Tables</option>
+                  <option value="cabinet">Cabinet</option>
+                  <option value="bookshelves">Bookshelves</option>
+                  <option value="diwan-beds">Diwan Beds</option>
+                  <option value="wardrobes">Wardrobes</option>
+                  <option value="benches">Benches</option>
+                  <option value="shoes-racks">Shoes Racks</option>
+                  <option value="outdoor-furniture">Outdoor Furniture</option>
+                  <option value="bedside-table">Bedside Table</option>
+                  <option value="wall-decors">Wall Decors</option>
                 </select>
               </div>
             </div>

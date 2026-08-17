@@ -425,16 +425,6 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-[0.65rem] font-bold uppercase tracking-widest text-body/60 pl-1">Base Price</label>
-                <input
-                  name="price"
-                  defaultValue={product?.price || ""}
-                  placeholder="e.g. ₹85,000 or Start from..."
-                  className="w-full bg-[#F9F9F9] border border-[#eeeeee] rounded-none px-4 py-3 text-sm focus:outline-none focus:border-[#C0001A]"
-                />
-              </div>
-
-              <div className="space-y-2">
                 <label className="text-[0.65rem] font-bold uppercase tracking-widest text-body/60 pl-1">Badge / Tag</label>
                 <input
                   name="badge"
@@ -445,38 +435,38 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
               </div>
 
               {/* ── Signature Collection Toggle ── */}
-              <div className="pt-4 pb-2 border-t border-[#eeeeee]">
+              <div className="pt-4 pb-2 border-t border-slate-100">
                 <div className="flex items-center gap-3">
-                  <input type="checkbox" name="is_featured" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} value="true" className="w-4 h-4 accent-[#C0001A]" />
+                  <input type="checkbox" name="is_featured" checked={isFeatured} onChange={(e) => setIsFeatured(e.target.checked)} value="true" className="w-4 h-4 accent-[#8A572A]" />
                   <div>
-                    <label className="text-[0.65rem] font-bold uppercase tracking-widest text-[#111111]">Signature Collection</label>
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-900">Feature in Signature Selection</label>
                   </div>
                 </div>
               </div>
 
               {/* ── Badges (Best Seller & New Arrival) — Mutually Exclusive ── */}
-              <div className="pt-4 pb-2 border-t border-[#eeeeee] space-y-3">
-                <p className="text-[9px] font-bold uppercase tracking-widest text-[#999]">Badge type (pick one)</p>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    name="badge_selection"
-                    checked={badgeType === "bestseller"}
-                    onChange={() => setBadgeType("bestseller")}
-                    className="w-3.5 h-3.5 accent-[#C0001A]"
-                  />
-                  <label className="text-[0.65rem] font-bold uppercase tracking-widest text-[#111111]">Best Seller</label>
-                </div>
-
+              <div className="pt-4 pb-2 border-t border-slate-100 space-y-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Badge Type</p>
                 <div className="flex items-center gap-3">
                   <input
                     type="radio"
                     name="badge_selection"
                     checked={badgeType === "new"}
                     onChange={() => setBadgeType("new")}
-                    className="w-3.5 h-3.5 accent-[#C0001A]"
+                    className="w-4 h-4 accent-[#8A572A]"
                   />
-                  <label className="text-[0.65rem] font-bold uppercase tracking-widest text-[#111111]">New Arrival</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-800">New Arrival</label>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <input
+                    type="radio"
+                    name="badge_selection"
+                    checked={badgeType === "bestseller"}
+                    onChange={() => setBadgeType("bestseller")}
+                    className="w-4 h-4 accent-[#8A572A]"
+                  />
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-800">Best Seller</label>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -485,9 +475,9 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                     name="badge_selection"
                     checked={badgeType === "none"}
                     onChange={() => setBadgeType("none")}
-                    className="w-3.5 h-3.5 accent-[#C0001A]"
+                    className="w-4 h-4 accent-slate-400"
                   />
-                  <label className="text-[0.65rem] font-bold uppercase tracking-widest text-[#999]">No Badge</label>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">No Badge</label>
                 </div>
 
                 {/* Hidden inputs to pass booleans to the server action */}
@@ -495,9 +485,9 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                 <input type="hidden" name="is_new" value={badgeType === "new" ? "true" : "false"} />
               </div>
 
-              <div className="flex items-center gap-3 pt-2 border-t border-[#eeeeee]">
-                <input type="checkbox" name="is_active" defaultChecked={product?.is_active ?? true} value="true" className="w-4 h-4 accent-[#C0001A]" />
-                <label className="text-[0.65rem] font-bold uppercase tracking-widest text-[#111111]">Published / Live</label>
+              <div className="flex items-center gap-3 pt-2 border-t border-slate-100">
+                <input type="checkbox" name="is_active" defaultChecked={product?.is_active ?? true} value="true" className="w-4 h-4 accent-[#8A572A]" />
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-900">Published / Live on Site</label>
               </div>
             </div>
           </section>

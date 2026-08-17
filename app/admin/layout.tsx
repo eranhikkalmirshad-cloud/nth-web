@@ -21,6 +21,7 @@ import {
   Bell,
   ChevronRight,
   TrendingUp,
+  Instagram,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { handleLogout } from "@/app/actions/auth";
@@ -29,9 +30,10 @@ import { SITE_CONFIG } from "@/config/site";
 const adminNavItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard, badge: null },
   { label: "Home Showcase", href: "/admin/home", icon: Sparkles, badge: "Hero" },
-  { label: "Teak Products", href: "/admin/products", icon: Package, badge: "19" },
+  { label: "Products", href: "/admin/products", icon: Package, badge: null },
   { label: "Exclusive Catalog", href: "/admin/exclusive", icon: ShieldCheck, badge: "VIP" },
   { label: "Categories", href: "/admin/categories", icon: ListTree, badge: "19" },
+  { label: "Instagram Feed", href: "/admin/instagram", icon: Instagram, badge: "Social" },
   { label: "Customer Inquiries", href: "/admin/inquiries", icon: MessageSquare, badge: "CRM" },
   { label: "Client Reviews", href: "/admin/testimonials", icon: Users, badge: null },
   { label: "Cloudinary Media", href: "/admin/media", icon: ImageIcon, badge: null },

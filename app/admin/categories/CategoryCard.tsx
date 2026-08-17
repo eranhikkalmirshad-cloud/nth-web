@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Edit2, Trash2, ListTree, ExternalLink } from "lucide-react";
-import { deleteCategory } from "@/app/actions/cms";
+import { deleteCategory, toggleCategoryFeatured } from "@/app/actions/cms";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { Categories } from "@/lib/types";
@@ -73,13 +73,28 @@ export default function CategoryCard({ category }: CategoryCardProps) {
           </span>
         </div>
 
-        {category.is_featured && (
-          <div className="absolute top-3 right-3">
-            <span className="bg-[#8A572A] text-white text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-xs">
-              ★ Featured
-            </span>
-          </div>
-        )}
+        <div className="absolute top-3 right-3">
+          <button
+            type="button"
+            onClick={async () => {
+              const newStatus = !category.is_featured;
+              const res = await toggleCategoryFeatured(category.id, newStatus);
+              if (res?.error) {
+                toast.error("Failed to update status");
+              } else {
+                toast.success(newStatus ? "Featured on Home" : "Removed from Featured");
+              }
+            }}
+            className={`text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-xs transition-all cursor-pointer ${
+              category.is_featured
+                ? "bg-[#8A572A] text-white hover:bg-slate-900"
+                : "bg-white/90 text-slate-600 hover:bg-[#8A572A] hover:text-white border border-slate-200"
+            }`}
+            title="Click to toggle featured status on homepage"
+          >
+            {category.is_featured ? "★ Featured" : "+ Feature"}
+          </button>
+        </div>
       </div>
 
       <div className="p-5 flex flex-col flex-1">

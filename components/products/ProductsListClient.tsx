@@ -56,7 +56,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     "Dining Room",
     "Bedroom",
   ];
-  const sortOptions = ["Featured", "Newest First", "Price: Low to High", "Price: High to Low"];
+  const sortOptions = ["Featured", "Newest First", "Alphabetical (A-Z)"];
 
   const filteredProducts = initialProducts.filter((p) => {
     const term = activeCategory.toLowerCase();
@@ -74,19 +74,12 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     return matchesCategory && matchesSearch;
   });
 
-  const parsePrice = (price: string | null | undefined): number => {
-    if (!price) return 0;
-    return parseFloat(price.replace(/[^\d.]/g, "")) || 0;
-  };
-
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case "Newest First":
         return (b.created_at || "").localeCompare(a.created_at || "");
-      case "Price: Low to High":
-        return parsePrice(a.price) - parsePrice(b.price);
-      case "Price: High to Low":
-        return parsePrice(b.price) - parsePrice(a.price);
+      case "Alphabetical (A-Z)":
+        return a.name.localeCompare(b.name);
       default:
         return 0;
     }
@@ -94,10 +87,10 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
   return (
     <>
-      {/* ── Search & Category Filter Bar (Sticky) ── */}
-      <section className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md border-b border-[#EBEBEA]">
+      {/* ── Search & Category Filter Bar ── */}
+      <section className="bg-white border-b border-[#EBEBEA] shadow-xs">
         <div className="max-container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-3 border-b border-[#F0F0EE]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-4 border-b border-[#F0F0EE]">
             {/* Search Input */}
             <div className="relative w-full md:w-80">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#888888]" size={16} />
@@ -106,7 +99,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
                 placeholder="Search teak furniture pieces..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#FAFAF9] border border-[#E0E0DE] rounded-xs text-xs md:text-sm text-[#141414] focus:outline-none focus:border-[#141414] transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#FAFAF9] border border-[#E0E0DE] rounded-xl text-xs md:text-sm text-[#141414] focus:outline-none focus:border-[#8A572A] transition-colors"
               />
             </div>
 
@@ -115,7 +108,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 bg-[#FAFAF9] border border-[#E0E0DE] rounded-xs text-xs font-semibold uppercase tracking-wider text-[#141414] focus:outline-none cursor-pointer"
+                className="px-3 py-2.5 bg-[#FAFAF9] border border-[#E0E0DE] rounded-xl text-xs font-semibold uppercase tracking-wider text-[#141414] focus:outline-none cursor-pointer"
               >
                 {sortOptions.map((option) => (
                   <option key={option} value={option}>
@@ -157,7 +150,10 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
           {/* Categories Tab Strip */}
           <div className={`${showFilters ? "block" : "hidden md:block"}`}>
-            <div className="flex items-center gap-6 py-3 overflow-x-auto no-scrollbar">
+            <div
+              className="flex items-center gap-6 py-3 overflow-x-auto hide-scrollbar"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
               {categoryNames.map((cat) => (
                 <button
                   key={cat}
@@ -193,10 +189,10 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className={`grid gap-6 md:gap-8 ${
+              className={`grid gap-3 sm:gap-6 md:gap-8 ${
                 viewMode === "grid"
-                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                  ? "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                  : "grid-cols-2 sm:grid-cols-2 lg:grid-cols-4"
               }`}
             >
               {sortedProducts.map((product, index) => (

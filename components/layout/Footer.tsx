@@ -142,8 +142,12 @@ export default function Footer() {
               Connect
             </h4>
             <div className="space-y-2 text-[#999999]">
-              <p>📍 {SITE_CONFIG.contact.address.full}</p>
-              <p>📞 <a href={`tel:${SITE_CONFIG.contact.phone}`} className="hover:text-white">{SITE_CONFIG.contact.phoneDisplay}</a></p>
+              <div>
+                <p className="font-bold text-white tracking-wide">NILAMBUR TEAK HERITAGE</p>
+                <p className="text-[10px] text-[#888888] uppercase tracking-wider mt-0.5">Dealers In: Wooden Furniture & Building Materials</p>
+                <p className="text-[#AAAAAA] mt-1">📍 Koolikkal, Mampad P.O., Malappuram Dist., Kerala - 676542</p>
+              </div>
+              <p className="pt-1">📞 <a href={`tel:${SITE_CONFIG.contact.phone}`} className="hover:text-white font-medium text-white">{SITE_CONFIG.contact.phoneDisplay}</a></p>
               <p>✉️ <a href={`mailto:${SITE_CONFIG.contact.email}`} className="hover:text-white">{SITE_CONFIG.contact.email}</a></p>
             </div>
 
@@ -163,8 +167,22 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#666666]">
-          <p>© {new Date().getFullYear()} {SITE_CONFIG.name}. All Rights Reserved.</p>
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#777777]">
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2.5">
+            <p>© {new Date().getFullYear()} {SITE_CONFIG.name}. All Rights Reserved.</p>
+            <span className="hidden sm:inline text-[#444444]">•</span>
+            <p>
+              Crafted by{" "}
+              <a
+                href="https://ekodrix.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#C9922A] hover:text-white font-semibold transition-colors underline-offset-2 hover:underline"
+              >
+                ekodrix
+              </a>
+            </p>
+          </div>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <span>•</span>

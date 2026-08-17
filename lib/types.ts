@@ -98,6 +98,7 @@ export interface HomepageSection {
   subtitle: string | null;
   description: string | null;
   image_url: string | null;
+  video_url?: string | null;
   mobile_image_url: string | null;
   cta_text: string | null;
   cta_url: string | null;
