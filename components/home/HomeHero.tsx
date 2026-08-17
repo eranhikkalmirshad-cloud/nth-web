@@ -68,7 +68,7 @@ export default function HomeHero({
     <section className="bg-white pt-2 sm:pt-3 pb-8 sm:pb-16 px-3 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* ── Inset Rounded Hero Card ── */}
-        <div className="relative w-full h-[480px] sm:h-[540px] lg:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden bg-[#1A1816] shadow-sm">
+        <div className="relative w-full h-[540px] sm:h-[540px] lg:h-[600px] rounded-[24px] sm:rounded-[32px] overflow-hidden bg-[#120E0A] shadow-lg">
           
           {/* Background Layer: Video Mode OR Image Carousel Mode */}
           <div className="absolute inset-0 w-full h-full">
@@ -79,7 +79,7 @@ export default function HomeHero({
                 loop
                 muted
                 playsInline
-                preload="metadata"
+                preload="auto"
                 poster={currentPoster}
                 className="w-full h-full object-cover object-center"
               >
@@ -98,7 +98,7 @@ export default function HomeHero({
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentPoster}
-                  initial={{ opacity: 0, scale: 1.05 }}
+                  initial={{ opacity: 0, scale: 1.04 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.8 }}
@@ -117,12 +117,11 @@ export default function HomeHero({
             )}
           </div>
 
-          {/* Deep High-Contrast Overlay Gradient For Ultra-Crisp Mobile & Desktop Text Visibility */}
-          <div className="absolute inset-0 bg-black/40 z-10 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30 sm:bg-gradient-to-r sm:from-black/90 sm:via-black/65 sm:to-black/10 sm:w-3/4 z-10 pointer-events-none" />
+          {/* ── Crystal Clear Scrim: Darkened only at bottom on mobile so video remains 100% visible ── */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 via-50% to-transparent sm:bg-gradient-to-r sm:from-black/90 sm:via-black/45 sm:to-transparent sm:w-2/3 z-10 pointer-events-none" />
 
-          {/* Text Content Aligned Left with Generous Mobile Touch Space */}
-          <div className="relative z-20 h-full flex flex-col justify-center px-6 sm:px-12 lg:px-16 max-w-xl">
+          {/* Text Content: Positioned at bottom on mobile to let the video shine, left-aligned on desktop */}
+          <div className="relative z-20 h-full flex flex-col justify-end sm:justify-center p-5 sm:px-12 lg:px-16 pb-7 sm:pb-0 max-w-xl">
             <AnimatePresence mode="wait">
               <motion.div
                 key={isCarouselMode ? (activeSlide?.id || currentSlideIndex) : "video-hero"}
@@ -130,38 +129,38 @@ export default function HomeHero({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.5 }}
-                className="space-y-3.5 sm:space-y-5 text-left"
+                className="space-y-2.5 sm:space-y-5 text-left"
               >
                 {/* Eyebrow in Radiant Gold */}
                 <div className="inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#E5B56E]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E5B56E] animate-pulse" />
                   <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] uppercase text-[#E5B56E] font-sans drop-shadow-md">
                     {currentEyebrow}
                   </span>
                 </div>
 
                 {/* Main Heading */}
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold !text-white leading-[1.12] tracking-tight drop-shadow-[0_3px_12px_rgba(0,0,0,0.9)]">
+                <h1 className="text-2xl sm:text-5xl lg:text-6xl font-serif font-bold text-white leading-[1.12] tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]">
                   {currentHeading}
                 </h1>
 
                 {/* Description Body */}
-                <p className="text-xs sm:text-sm md:text-base text-white/95 font-normal leading-relaxed max-w-md drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+                <p className="text-xs sm:text-sm md:text-base text-white/95 font-light leading-relaxed max-w-md drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] line-clamp-2 sm:line-clamp-none">
                   {currentDescription}
                 </p>
 
                 {/* Dual High-Contrast Buttons */}
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+                <div className="flex items-center gap-2.5 sm:gap-3 pt-1.5 sm:pt-2">
                   <Link
                     href={exploreUrl}
-                    className="inline-flex items-center justify-center bg-[#8A572A] hover:bg-[#6E3F18] text-white text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase px-6 sm:px-7 py-3 sm:py-3.5 rounded-full transition-all shadow-[0_4px_16px_rgba(0,0,0,0.4)] active:scale-95 border border-[#B37B47]/60"
+                    className="inline-flex items-center justify-center bg-[#8A572A] hover:bg-[#A36C38] text-white text-[10px] sm:text-xs font-bold tracking-[0.14em] uppercase px-5 sm:px-7 py-3 sm:py-3.5 rounded-full transition-all shadow-[0_4px_16px_rgba(0,0,0,0.4)] active:scale-95 border border-[#B37B47]/60"
                   >
                     {exploreText}
                   </Link>
 
                   <Link
                     href="/contact"
-                    className="inline-flex items-center justify-center bg-black/45 hover:bg-white hover:text-[#111111] text-white border border-white/80 text-[11px] sm:text-xs font-bold tracking-[0.14em] uppercase px-6 sm:px-7 py-3 sm:py-3.5 rounded-full backdrop-blur-md transition-all shadow-[0_4px_16px_rgba(0,0,0,0.3)] active:scale-95"
+                    className="inline-flex items-center justify-center bg-black/40 hover:bg-white hover:text-[#111111] text-white border border-white/70 text-[10px] sm:text-xs font-bold tracking-[0.14em] uppercase px-5 sm:px-7 py-3 sm:py-3.5 rounded-full backdrop-blur-md transition-all shadow-[0_4px_16px_rgba(0,0,0,0.3)] active:scale-95"
                   >
                     Contact Us
                   </Link>
@@ -172,7 +171,7 @@ export default function HomeHero({
 
           {/* Carousel Dots (Active when in Image Carousel mode with multiple slides) */}
           {isCarouselMode && slides.length > 1 && (
-            <div className="absolute bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+            <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
               {slides.map((_, idx) => (
                 <button
                   key={idx}
