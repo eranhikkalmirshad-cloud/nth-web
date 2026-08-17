@@ -167,25 +167,47 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 pl-1">Category</label>
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 pl-1">
+                  Category / Sub-Category
+                </label>
                 <select
                   name="category_id"
                   defaultValue={product?.category_id || ""}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-600 focus:bg-white transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-600 focus:bg-white transition-all font-semibold"
                 >
-                  <option value="">Select Category (19 Master Collections)</option>
-                  {categories && categories.length > 0
-                    ? categories.map(cat => (
-                        <option key={cat.id} value={cat.id}>{cat.name || cat.base_category}</option>
-                      ))
-                    : [
-                        "Sofas", "Chairs", "Tables", "Dining", "Lounge Chairs", "Sitout", "Study and Office",
-                        "Beds", "TV Units", "Coffee Tables", "Cabinet", "Bookshelves", "Diwan Beds",
-                        "Wardrobes", "Benches", "Shoes Racks", "Outdoor Furniture", "Bedside Table", "Wall Decors"
-                      ].map(name => (
-                        <option key={name} value={name}>{name}</option>
-                      ))
-                  }
+                  <option value="">-- Select Category or Sub-Category --</option>
+                  {categories && categories.length > 0 ? (
+                    <>
+                      <optgroup label="📁 Main Collections">
+                        {categories
+                          .filter(c => !c.base_category || c.base_category === "main" || c.base_category === "none" || c.base_category === c.slug)
+                          .map(cat => (
+                            <option key={cat.id} value={cat.id}>
+                              {cat.name}
+                            </option>
+                          ))}
+                      </optgroup>
+                      {categories.some(c => c.base_category && c.base_category !== "main" && c.base_category !== "none" && c.base_category !== c.slug) && (
+                        <optgroup label="↳ Sub-Categories">
+                          {categories
+                            .filter(c => c.base_category && c.base_category !== "main" && c.base_category !== "none" && c.base_category !== c.slug)
+                            .map(cat => (
+                              <option key={cat.id} value={cat.id}>
+                                ↳ {cat.name} (under {cat.base_category})
+                              </option>
+                            ))}
+                        </optgroup>
+                      )}
+                    </>
+                  ) : (
+                    [
+                      "Sofas", "Chairs", "Tables", "Dining", "Lounge Chairs", "Sitout", "Study and Office",
+                      "Beds", "TV Units", "Coffee Tables", "Cabinet", "Bookshelves", "Diwan Beds",
+                      "Wardrobes", "Benches", "Shoes Racks", "Outdoor Furniture", "Bedside Table", "Wall Decors"
+                    ].map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))
+                  )}
                 </select>
               </div>
 

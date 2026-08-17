@@ -218,14 +218,14 @@ export async function saveCategory(formData: FormData) {
   
   const id = formData.get("id") as string;
   const name = formData.get("name") as string;
-  const base_category = formData.get("base_category") as string;
+  const base_category = (formData.get("base_category") as string) || "main";
   const image_url = formData.get("image_url") as string;
   const description = formData.get("description") as string;
   const sort_order = parseInt(formData.get("sort_order") as string || "0");
   const is_featured = formData.get("is_featured") === "true";
 
-  if (!name || !base_category) {
-    return { error: "Name and Base Category are required." };
+  if (!name) {
+    return { error: "Category name is required." };
   }
 
   // Auto-generate slug from name
