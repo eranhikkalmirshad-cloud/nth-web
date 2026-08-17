@@ -36,41 +36,41 @@ const statCardsData = [
     icon: ShoppingBag,
     label: "Active Teak Pieces",
     valueIndex: 0,
-    color: "amber",
-    tag: "19 Categories",
+    tag: "Catalog",
+    href: "/admin/products",
     bg: "bg-amber-50",
-    text: "text-amber-700",
-    border: "border-amber-100 hover:border-amber-300",
+    text: "text-[#8A572A]",
+    border: "border-amber-100 hover:border-amber-400",
+  },
+  {
+    icon: FolderTree,
+    label: "Master Categories",
+    valueIndex: 1,
+    tag: "Taxonomy",
+    href: "/admin/categories",
+    bg: "bg-emerald-50",
+    text: "text-emerald-700",
+    border: "border-emerald-100 hover:border-emerald-400",
   },
   {
     icon: MessageSquare,
     label: "Customer Inquiries",
-    valueIndex: 1,
-    color: "blue",
+    valueIndex: 2,
     tag: "Live CRM",
+    href: "/admin/inquiries",
     bg: "bg-blue-50",
     text: "text-blue-700",
-    border: "border-blue-100 hover:border-blue-300",
-  },
-  {
-    icon: Eye,
-    label: "Client Catalog Views",
-    valueIndex: 2,
-    color: "emerald",
-    tag: "Analytics",
-    bg: "bg-emerald-50",
-    text: "text-emerald-700",
-    border: "border-emerald-100 hover:border-emerald-300",
+    border: "border-blue-100 hover:border-blue-400",
   },
   {
     icon: Users,
-    label: "Client Reviews",
+    label: "Client Testimonials",
     valueIndex: 3,
-    color: "purple",
     tag: "Verified",
+    href: "/admin/testimonials",
     bg: "bg-purple-50",
     text: "text-purple-700",
-    border: "border-purple-100 hover:border-purple-300",
+    border: "border-purple-100 hover:border-purple-400",
   },
 ];
 
@@ -123,37 +123,42 @@ export default function AdminDashboardClient({
         </div>
       </div>
 
-      {/* ── STATS CARDS ── */}
+      {/* ── STATS CARDS (Clickable Real Metrics) ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {statCardsData.map((card, i) => {
           const Icon = card.icon;
           const statValue = stats[card.valueIndex]?.value ?? 0;
 
           return (
-            <motion.div
+            <Link
               key={card.label}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className={`bg-white rounded-2xl p-6 border shadow-xs transition-all hover:shadow-md ${card.border}`}
+              href={card.href}
+              className="block group"
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${card.bg} ${card.text} shadow-xs`}>
-                  <Icon size={20} strokeWidth={2} />
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                className={`bg-white rounded-2xl p-6 border shadow-xs transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-0.5 ${card.border}`}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${card.bg} ${card.text} shadow-xs`}>
+                    <Icon size={20} strokeWidth={2} />
+                  </div>
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase text-slate-700 bg-slate-100 group-hover:bg-[#8A572A] group-hover:text-white px-2.5 py-0.5 rounded-full border border-slate-200 group-hover:border-[#8A572A] transition-colors">
+                    <ArrowUpRight size={11} />
+                    <span>{card.tag}</span>
+                  </span>
                 </div>
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                  <ArrowUpRight size={11} />
-                  <span>{card.tag}</span>
-                </span>
-              </div>
 
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                {card.label}
-              </p>
-              <h3 className="text-3xl font-black text-slate-900 tracking-tight mt-1 font-sans !text-slate-900">
-                {statValue}
-              </h3>
-            </motion.div>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  {card.label}
+                </p>
+                <h3 className="text-3xl font-black text-slate-900 tracking-tight mt-1 font-sans !text-slate-900 group-hover:text-[#8A572A] transition-colors">
+                  {statValue}
+                </h3>
+              </motion.div>
+            </Link>
           );
         })}
       </div>
