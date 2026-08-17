@@ -234,7 +234,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Page Inner Canvas */}
-        <div className="p-6 lg:p-8 flex-1 max-w-7xl w-full mx-auto">{children}</div>
+        <div className="p-3.5 sm:p-6 lg:p-8 flex-1 max-w-7xl w-full mx-auto">{children}</div>
       </main>
     </div>
   );

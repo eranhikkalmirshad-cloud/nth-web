@@ -85,7 +85,7 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
           {/* Carousel Scroll Area (Scrollbars 100% hidden) */}
           <div
             ref={scrollRef}
-            className="flex gap-4 sm:gap-7 overflow-x-auto scroll-smooth py-4 sm:py-6 px-3 sm:px-4 hide-scrollbar snap-x snap-mandatory justify-center"
+            className="flex gap-4 sm:gap-7 overflow-x-auto scroll-smooth py-4 sm:py-6 px-3 sm:px-4 hide-scrollbar snap-x snap-mandatory justify-start md:justify-center"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {items.map((item: any, idx: number) => {

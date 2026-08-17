@@ -1,12 +1,20 @@
 // app/admin/instagram/InstagramFeedClient.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
-import { Instagram, Plus, Trash2, ExternalLink, Sparkles, Upload, Link as LinkIcon, RefreshCw, CheckCircle2 } from "lucide-react";
+import { 
+  Instagram, 
+  Plus, 
+  Trash2, 
+  ExternalLink, 
+  Sparkles, 
+  Upload, 
+  Loader2, 
+  CheckCircle2 
+} from "lucide-react";
 import { toast } from "sonner";
-import { saveInstagramPost, deleteInstagramPost } from "@/app/actions/cms";
-import ImageUploadField from "@/components/ui/ImageUploadField";
+import { saveInstagramPost, deleteInstagramPost, uploadImage } from "@/app/actions/cms";
 import { InstagramPost } from "@/lib/types";
 
 interface InstagramFeedClientProps {
@@ -17,9 +25,11 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
   const [posts, setPosts] = useState<InstagramPost[]>(initialPosts);
   const [isAdding, setIsAdding] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState("/images/og-datas/IMG_0600.PNG");
   const [caption, setCaption] = useState("");
   const [postUrl, setPostUrl] = useState("https://www.instagram.com/nilambur_teak_heritage?igsh=MXdudnM3aXRsZ2U0");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const sampleOgImages = [
     { label: "Living Suite", path: "/images/og-datas/IMG_0600.PNG" },
@@ -31,6 +41,29 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
     { label: "Coffee Table", path: "/images/og-datas/IMG_0501.PNG" },
     { label: "Bookshelf", path: "/images/og-datas/IMG_0514.PNG" },
   ];
+
+  const handleDeviceUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const fd = new FormData();
+    fd.append("file", file);
+
+    try {
+      const res = await uploadImage(fd);
+      if (res?.error) {
+        toast.error(res.error);
+      } else if (res?.url) {
+        setImageUrl(res.url);
+        toast.success("Image uploaded to Cloudinary successfully!");
+      }
+    } catch {
+      toast.error("Upload failed");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleAddPost = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,9 +121,9 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-xs">
         <div>
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#8A572A] mb-1">
             <Instagram size={15} />
@@ -104,12 +137,12 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
           <a
             href="https://www.instagram.com/nilambur_teak_heritage?igsh=MXdudnM3aXRsZ2U0"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-[#8A572A] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 hover:text-[#8A572A] transition-colors"
           >
             <Instagram size={14} />
             <span>@nilambur_teak_heritage</span>
@@ -119,9 +152,9 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
           <button
             type="button"
             onClick={() => setIsAdding(!isAdding)}
-            className="inline-flex items-center gap-2 bg-[#8A572A] hover:bg-[#1C130D] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-[#8A572A] hover:bg-[#1C130D] text-white px-4 py-2 sm:px-5 sm:py-2.5 text-xs font-bold uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 cursor-pointer"
           >
-            <Plus size={16} />
+            <Plus size={15} />
             <span>{isAdding ? "Cancel" : "Add Feed Photo"}</span>
           </button>
         </div>
@@ -131,17 +164,17 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
       {isAdding && (
         <form
           onSubmit={handleAddPost}
-          className="bg-white p-6 sm:p-8 rounded-2xl border-2 border-[#8A572A]/30 shadow-lg space-y-6"
+          className="bg-white p-5 sm:p-8 rounded-2xl border-2 border-[#8A572A]/30 shadow-lg space-y-6"
         >
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100">
+            <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
               <Sparkles size={16} className="text-[#8A572A]" />
               <span>Add New Instagram Showcase Photo</span>
             </h3>
-            <span className="text-xs text-slate-400 font-medium">Auto-synced to Homepage</span>
+            <span className="text-[11px] text-slate-400 font-medium">Auto-synced to Homepage</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start">
             {/* Left: Quick Pick from Authentic Assets */}
             <div className="md:col-span-5 space-y-3">
               <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
@@ -169,16 +202,34 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
             {/* Right: Custom Upload or URL + Details */}
             <div className="md:col-span-7 space-y-4">
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  Selected Image Path / Cloudinary URL
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                    Image Path or Device Upload
+                  </label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleDeviceUpload}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="text-[11px] font-bold uppercase tracking-wider text-[#8A572A] hover:underline inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    {isUploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+                    <span>{isUploading ? "Uploading..." : "Upload from Device"}</span>
+                  </button>
+                </div>
                 <input
                   type="text"
                   required
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                   placeholder="/images/og-datas/IMG_0600.PNG or https://..."
-                  className="w-full bg-[#FBFBFA] border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 font-mono text-xs focus:outline-none focus:border-[#8A572A]"
+                  className="w-full bg-[#FBFBFA] border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 font-mono text-xs focus:outline-none focus:border-[#8A572A]"
                 />
               </div>
 
@@ -204,7 +255,7 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
                   value={postUrl}
                   onChange={(e) => setPostUrl(e.target.value)}
                   placeholder="https://www.instagram.com/nilambur_teak_heritage?igsh=..."
-                  className="w-full bg-[#FBFBFA] border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 text-xs font-mono focus:outline-none focus:border-[#8A572A]"
+                  className="w-full bg-[#FBFBFA] border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 text-xs font-mono focus:outline-none focus:border-[#8A572A]"
                 />
               </div>
 
@@ -212,14 +263,14 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
                 <button
                   type="button"
                   onClick={() => setIsAdding(false)}
-                  className="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50"
+                  className="px-4 sm:px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2.5 bg-[#8A572A] hover:bg-[#1C130D] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
+                  className="px-5 sm:px-6 py-2.5 bg-[#8A572A] hover:bg-[#1C130D] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
                 >
                   {loading ? "Publishing..." : "Publish to Feed"}
                 </button>
@@ -230,11 +281,11 @@ export default function InstagramFeedClient({ initialPosts }: InstagramFeedClien
       )}
 
       {/* Grid of Current Posts */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
         {posts.map((post, idx) => (
           <div
             key={post.id || idx}
-            className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between group hover:shadow-md transition-shadow relative"
+            className="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-xs flex flex-col justify-between group hover:shadow-md transition-shadow relative"
           >
             <div>
               {/* Header Preview */}

@@ -84,10 +84,10 @@ export default function WhatsAppFloating() {
         )}
       </AnimatePresence>
 
-      {/* Main Floating Button */}
+      {/* Main Floating Button (Lifted above mobile bottom bar so it never blocks Saved button) */}
       <motion.button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="fixed bottom-6 right-4 sm:right-6 z-[95] group"
+        className="fixed bottom-20 right-3.5 sm:bottom-6 sm:right-6 z-[85] group cursor-pointer"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}

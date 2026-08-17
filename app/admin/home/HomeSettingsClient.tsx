@@ -67,33 +67,33 @@ export default function HomeSettingsClient({
   return (
     <div className="bg-white border border-slate-200 rounded-2xl shadow-xs min-h-[600px] flex flex-col md:flex-row overflow-hidden">
       
-      {/* Sidebar Tabs */}
-      <div className="w-full md:w-64 bg-[#FAF9F7] border-r border-slate-200 py-6 flex flex-col">
-        <div className="px-6 mb-6">
+      {/* Sidebar Tabs (Horizontal Scroll on Mobile, Vertical on Desktop) */}
+      <div className="w-full md:w-64 bg-[#FAF9F7] border-b md:border-b-0 md:border-r border-slate-200 p-3 sm:p-4 md:py-6 flex flex-col">
+        <div className="hidden md:block px-4 mb-4">
           <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Content Sections</span>
         </div>
         
-        <div className="flex-1 space-y-1">
+        <div className="flex flex-row md:flex-col gap-1.5 overflow-x-auto md:overflow-x-visible pb-1 md:pb-0 scrollbar-none">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3.5 px-6 py-3.5 transition-all relative text-left cursor-pointer ${
+                className={`flex items-center gap-2.5 sm:gap-3.5 px-3.5 py-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-none transition-all text-left cursor-pointer whitespace-nowrap shrink-0 ${
                   isActive 
-                    ? "bg-white text-[#1C130D] font-bold border-y border-slate-200 shadow-[4px_0_0_#8A572A_inset]" 
+                    ? "bg-white text-[#1C130D] font-bold border border-slate-200 md:border-y md:border-x-0 shadow-xs md:shadow-[4px_0_0_#8A572A_inset]" 
                     : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/60"
                 }`}
               >
-                <tab.icon size={17} className={isActive ? "text-[#8A572A]" : "text-slate-400"} />
-                <span className="text-[11px] font-bold uppercase tracking-wider">{tab.label}</span>
+                <tab.icon size={16} className={isActive ? "text-[#8A572A]" : "text-slate-400"} />
+                <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">{tab.label}</span>
               </button>
             );
           })}
         </div>
 
-        <div className="p-6 mt-auto border-t border-slate-200/60">
+        <div className="hidden md:block p-4 mt-auto border-t border-slate-200/60">
           <Link 
             href="/" 
             target="_blank"
@@ -106,7 +106,7 @@ export default function HomeSettingsClient({
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 p-6 md:p-10 bg-white">
+      <div className="flex-1 p-4 sm:p-6 md:p-10 bg-white">
         <AnimatePresence mode="wait">
           {activeTab === "hero" && (
             <motion.div
