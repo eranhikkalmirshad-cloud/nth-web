@@ -1259,8 +1259,8 @@ function HeroManagement({
               : "bg-emerald-100 text-emerald-900 border border-emerald-300"
           }`}>
             {(heroSection?.mobile_image_url === "carousel" || heroSection?.mobile_image_url === "image_carousel")
-              ? "🖼️ Image Carousel"
-              : "📹 Video Loop"}
+              ? "Image Carousel"
+              : "Video Loop"}
           </span>
         </div>
       </div>

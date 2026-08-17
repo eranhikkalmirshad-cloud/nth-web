@@ -45,11 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   if (isLoginPage) {
-    return (
-      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
-        {children}
-      </div>
-    );
+    return <>{children}</>;
   }
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -88,16 +84,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsMobileMenuOpen(false)}
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-40 md:hidden"
+            className="fixed inset-0 bg-slate-950/50 backdrop-blur-xs z-40 md:hidden"
           />
         )}
       </AnimatePresence>
 
-      {/* ── MODERN SLEEK SIDEBAR ── */}
+      {/* ── MODERN SLEEK SIDEBAR / DRAWER ── */}
       <aside
-        className={`w-68 bg-white border-r border-slate-200/80 flex flex-col fixed inset-y-0 z-50 transition-transform duration-300 ease-in-out shadow-xs ${
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0`}
+        className={`w-72 max-w-[85vw] md:w-68 bg-white border-l md:border-l-0 md:border-r border-slate-200/80 flex flex-col fixed inset-y-0 right-0 md:right-auto md:left-0 z-50 transition-transform duration-300 ease-in-out shadow-2xl md:shadow-xs ${
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"
+        }`}
       >
         {/* Brand Header */}
         <div className="p-5 pb-4 border-b border-slate-100 flex items-center justify-between">
@@ -202,21 +198,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* ── MAIN CONTENT AREA ── */}
       <main className="flex-1 md:ml-68 pt-16 md:pt-0 min-w-0 flex flex-col min-h-screen">
         {/* Top Header */}
-        <header className="h-16 px-6 lg:px-8 bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30 flex items-center justify-between shadow-2xs">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-              <span className="text-slate-900 font-bold font-cinzel">Nilambur Teak Heritage</span>
-              <span>/</span>
-              <span className="text-slate-700 font-semibold capitalize">
-                {pathname === "/admin"
-                  ? "Dashboard"
-                  : pathname.replace("/admin/", "").replace("-", " ")}
-              </span>
-            </div>
+        <header className="h-14 sm:h-16 px-4 sm:px-6 lg:px-8 bg-white/90 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30 flex items-center justify-between shadow-2xs">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-500 truncate max-w-[55%] sm:max-w-none">
+            <span className="text-slate-900 font-bold font-cinzel hidden sm:inline">Nilambur Teak Heritage</span>
+            <span className="hidden sm:inline">/</span>
+            <span className="text-slate-900 sm:text-slate-700 font-bold sm:font-semibold capitalize truncate">
+              {pathname === "/admin"
+                ? "Dashboard"
+                : pathname.replace("/admin/", "").replace("-", " ")}
+            </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200/60 rounded-full">
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-emerald-50 border border-emerald-200/60 rounded-full">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider">
                 Supabase Connected
@@ -225,7 +219,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
             <Link
               href="/admin/products/new"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-amber-700 text-white text-xs font-bold rounded-lg transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 bg-slate-900 hover:bg-amber-700 text-white text-[11px] sm:text-xs font-bold rounded-xl transition-colors shadow-xs active:scale-95"
             >
               <Package size={13} />
               <span>New Piece</span>

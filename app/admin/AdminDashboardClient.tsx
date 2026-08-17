@@ -87,37 +87,37 @@ export default function AdminDashboardClient({
   return (
     <div className="space-y-8 font-sans">
       {/* ── TOP HERO BANNER ── */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
-        <div className="absolute right-0 top-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#120E0A] p-5 sm:p-8 text-white shadow-xl border border-[#2B221B]">
+        <div className="absolute right-0 top-0 w-96 h-96 bg-[#8A572A]/15 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold">
-              <Sparkles size={13} className="text-amber-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2A1E14] border border-[#8A572A]/40 text-[#E5B56E] text-[10px] sm:text-xs font-bold uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E5B56E] animate-pulse" />
               <span>Nilambur Teak Heritage • Studio Management</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight !text-white">
+            <h1 className="text-xl sm:text-3xl font-cinzel font-bold text-white tracking-tight !text-white">
               Furniture Management Portal
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-              Manage your solid Nilambur teak catalog, customize hero video banners, and respond to incoming bespoke quotation inquiries in real-time.
+            <p className="text-xs sm:text-sm text-[#C8BFB5] leading-relaxed font-light">
+              Manage your solid Nilambur teak catalog, customize hero video & image showcases, and respond to incoming customer quote inquiries.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 shrink-0 pt-2 sm:pt-0">
             <Link
               href="/admin/products/new"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md shadow-amber-500/20"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#8A572A] hover:bg-[#A36C38] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md active:scale-95 text-center"
             >
               <Plus size={15} />
               <span>Add Teak Piece</span>
             </Link>
             <Link
               href="/admin/home"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl backdrop-blur-md border border-white/10 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-xl backdrop-blur-md border border-white/15 transition-colors text-center active:scale-95"
             >
-              <Video size={14} className="text-amber-400" />
-              <span>Edit Hero Video</span>
+              <Video size={14} className="text-[#E5B56E]" />
+              <span>Hero Showcase</span>
             </Link>
           </div>
         </div>

@@ -30,15 +30,15 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
 
   return (
     <Link href={`/products/${slug}`} className="block h-full group no-underline">
-      <article className="bg-white border border-[#EBEBEA] rounded-xs overflow-hidden flex flex-col h-full product-card-hover">
+      <article className="bg-white border border-[#EAE6DF] rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col h-full shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(138,87,42,0.12)] hover:border-[#8A572A]/40 transition-all duration-500">
         {/* ── Image Container ── */}
-        <div className="relative w-full aspect-[4/3] bg-[#F5F5F3] overflow-hidden">
+        <div className="relative w-full aspect-[4/3] bg-[#FAF8F5] overflow-hidden flex items-center justify-center p-2">
           <Image
             src={mainImage}
             alt={name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className="object-contain p-2 transition-transform duration-700 ease-out group-hover:scale-105"
           />
 
           {hoverImage && (

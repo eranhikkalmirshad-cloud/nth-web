@@ -217,17 +217,27 @@ export default function Navbar() {
           </div>
 
           <Link
-            href="/showrooms"
-            className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#111111] hover:text-[#8B5E3C] transition-colors"
+            href="/about"
+            className={`text-[11px] font-bold tracking-[0.15em] uppercase transition-colors relative py-1 ${
+              pathname === "/about" ? "text-[#8A572A]" : "text-[#111111] hover:text-[#8B5E3C]"
+            }`}
           >
-            Showrooms
+            <span>About Us</span>
+            {pathname === "/about" && (
+              <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#8A572A]" />
+            )}
           </Link>
 
           <Link
-            href="/about"
-            className="text-[11px] font-bold tracking-[0.15em] uppercase text-[#111111] hover:text-[#8B5E3C] transition-colors"
+            href="/contact"
+            className={`text-[11px] font-bold tracking-[0.15em] uppercase transition-colors relative py-1 ${
+              pathname === "/contact" ? "text-[#8A572A]" : "text-[#111111] hover:text-[#8B5E3C]"
+            }`}
           >
-            About Us
+            <span>Contact</span>
+            {pathname === "/contact" && (
+              <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#8A572A]" />
+            )}
           </Link>
         </nav>
 
@@ -376,14 +386,6 @@ export default function Navbar() {
                     )}
                   </div>
 
-                  <Link
-                    href="/showrooms"
-                    onClick={() => setMobileOpen(false)}
-                    className="text-xs font-bold tracking-[0.15em] uppercase text-[#111111] py-2.5 border-b border-[#F9F9F8] flex items-center justify-between"
-                  >
-                    <span>Showrooms</span>
-                    <ArrowRight size={13} className="text-[#AAAAAA]" />
-                  </Link>
 
                   <Link
                     href="/about"

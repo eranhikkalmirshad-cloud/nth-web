@@ -60,7 +60,7 @@ export default function Footer() {
       title: "THE BRAND",
       links: [
         { label: "About Nilambur Heritage", href: "/about" },
-        { label: "Nilambur Showroom & Studio", href: "/showrooms" },
+        { label: "Workshop & Atelier Visits", href: "/contact" },
         { label: "Bespoke Custom Enquiries", href: "/contact" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms of Service", href: "/terms" },
