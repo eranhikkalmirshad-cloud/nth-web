@@ -118,7 +118,8 @@ export default function EliteCollections({ categories = [] }: EliteCollectionsPr
                     src={cat.image}
                     alt={cat.name}
                     fill
-                    sizes="(max-width: 640px) 200px, 280px"
+                    quality={95}
+                    sizes="(max-width: 640px) 80vw, (max-width: 1024px) 50vw, 450px"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 </div>

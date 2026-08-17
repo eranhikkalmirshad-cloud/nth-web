@@ -113,7 +113,8 @@ export default function InstagramSection({ initialPosts = [] }: InstagramSection
                     src={post.image_url || "/images/og-datas/IMG_0600.PNG"}
                     alt={post.caption || "Nilambur Teak Woodcraft"}
                     fill
-                    sizes="(max-width: 640px) 240px, 280px"
+                    quality={95}
+                    sizes="(max-width: 640px) 90vw, 400px"
                     className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-105"
                   />
                 </div>

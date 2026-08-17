@@ -149,7 +149,8 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
                           src={image}
                           alt={title}
                           fill
-                          sizes="(max-width: 768px) 300px, 340px"
+                          quality={95}
+                          sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 500px"
                           className="object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.15)]"
                         />
                       </div>

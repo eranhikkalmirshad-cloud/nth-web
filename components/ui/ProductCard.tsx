@@ -37,7 +37,8 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
             src={mainImage}
             alt={name}
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            quality={95}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
             className="object-contain p-2 transition-transform duration-700 ease-out group-hover:scale-105"
           />
 
@@ -46,7 +47,8 @@ export default function ProductCard({ product, compact = false }: ProductCardPro
               src={hoverImage}
               alt={`${name} alternative view`}
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              quality={95}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
               className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out"
             />
           )}
