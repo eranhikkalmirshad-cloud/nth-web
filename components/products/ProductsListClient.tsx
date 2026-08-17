@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import ProductCard from "@/components/ui/ProductCard";
 import FadeInView from "@/components/ui/FadeInView";
-import { Search, SlidersHorizontal, Grid3x3, LayoutGrid, CornerDownRight, Sparkles } from "lucide-react";
+import { Search, SlidersHorizontal, CornerDownRight, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { Categories, Product } from "@/lib/types";
@@ -20,7 +20,6 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [activeSubCategory, setActiveSubCategory] = useState<string>("all");
-  const [viewMode, setViewMode] = useState<"grid" | "compact">("grid");
   const [sortBy, setSortBy] = useState("Featured");
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -192,27 +191,6 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
                 ))}
               </select>
 
-              <div className="flex items-center gap-1 p-1 bg-[#FAFAF9] rounded-lg border border-[#E0E0DE]">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                    viewMode === "grid" ? "bg-white shadow-xs text-[#141414]" : "text-[#888888] hover:text-[#141414]"
-                  }`}
-                  aria-label="Standard grid view"
-                >
-                  <LayoutGrid size={15} />
-                </button>
-                <button
-                  onClick={() => setViewMode("compact")}
-                  className={`p-1.5 rounded-md transition-colors cursor-pointer ${
-                    viewMode === "compact" ? "bg-white shadow-xs text-[#141414]" : "text-[#888888] hover:text-[#141414]"
-                  }`}
-                  aria-label="Compact view"
-                >
-                  <Grid3x3 size={15} />
-                </button>
-              </div>
-
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className="md:hidden p-2 bg-[#FAFAF9] border border-[#E0E0DE] rounded-lg text-[#141414] cursor-pointer"
@@ -308,20 +286,16 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeCategory + activeSubCategory + searchTerm + viewMode}
+              key={activeCategory + activeSubCategory + searchTerm}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className={`grid gap-3 sm:gap-6 md:gap-8 ${
-                viewMode === "grid"
-                  ? "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                  : "grid-cols-2 sm:grid-cols-2 lg:grid-cols-4"
-              }`}
+              className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 md:gap-8"
             >
               {sortedProducts.map((product, index) => (
                 <FadeInView key={product.slug} delay={index * 0.03}>
-                  <ProductCard product={product} compact={viewMode === "compact"} />
+                  <ProductCard product={product} />
                 </FadeInView>
               ))}
             </motion.div>
