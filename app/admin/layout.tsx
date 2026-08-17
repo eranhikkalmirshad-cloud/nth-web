@@ -22,6 +22,7 @@ import {
   ChevronRight,
   TrendingUp,
   Instagram,
+  Phone,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { handleLogout } from "@/app/actions/auth";
@@ -34,6 +35,7 @@ const adminNavItems = [
   { label: "Exclusive Catalog", href: "/admin/exclusive", icon: ShieldCheck, badge: "VIP" },
   { label: "Categories", href: "/admin/categories", icon: ListTree, badge: "19" },
   { label: "Instagram Feed", href: "/admin/instagram", icon: Instagram, badge: "Social" },
+  { label: "Footer & Contact", href: "/admin/footer", icon: Phone, badge: "CMS" },
   { label: "Customer Inquiries", href: "/admin/inquiries", icon: MessageSquare, badge: "CRM" },
   { label: "Client Reviews", href: "/admin/testimonials", icon: Users, badge: null },
   { label: "Cloudinary Media", href: "/admin/media", icon: ImageIcon, badge: null },

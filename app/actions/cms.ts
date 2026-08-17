@@ -444,6 +444,77 @@ export async function saveHomepageSection(formData: FormData) {
 }
 
 /**
+ * Save or update full footer settings
+ */
+export async function saveFooterSettings(formData: FormData) {
+  const supabase = await createClient();
+
+  const footerPayload = {
+    brand_name: (formData.get("brand_name") as string) || "Nilambur Teak Heritage",
+    brand_tagline: (formData.get("brand_tagline") as string) || "Dealers In: Wooden Furniture & Building Materials",
+    phone: (formData.get("phone") as string) || "+91 85912 21994",
+    phone_display: (formData.get("phone_display") as string) || "+91 85912 21994",
+    whatsapp: (formData.get("whatsapp") as string) || "+918591221994",
+    email: (formData.get("email") as string) || "info@nilamburteakheritage.com",
+    address: (formData.get("address") as string) || "Koolikkal, Mampad P.O., Malappuram Dist., Kerala - 676542",
+    timing_weekdays: (formData.get("timing_weekdays") as string) || "Mon – Sat: 9:00 AM – 7:30 PM",
+    timing_sunday: (formData.get("timing_sunday") as string) || "Sunday: By Prior Appointment",
+    instagram_url: (formData.get("instagram_url") as string) || "https://instagram.com/nilambur_teak_heritage",
+    facebook_url: (formData.get("facebook_url") as string) || "https://facebook.com/nilamburteakheritage",
+    youtube_url: (formData.get("youtube_url") as string) || "https://youtube.com/@nilamburteakheritage",
+    pinterest_url: (formData.get("pinterest_url") as string) || "https://pinterest.com/nilamburteakheritage",
+    copyright_text: (formData.get("copyright_text") as string) || "© 2026 Nilambur Teak Heritage™. All Rights Reserved.",
+    badge_text: (formData.get("badge_text") as string) || "Crafted in Kerala, Delivered Across India",
+  };
+
+  const sectionData = {
+    section_key: "footer",
+    title: footerPayload.brand_name,
+    subtitle: footerPayload.phone,
+    description: JSON.stringify(footerPayload),
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = await supabase
+    .from("homepage_sections")
+    .upsert(sectionData, { onConflict: "section_key" });
+
+  if (error) {
+    console.error("Error saving footer settings:", error);
+    return { error: error.message };
+  }
+
+  revalidatePath("/");
+  revalidatePath("/about");
+  revalidatePath("/products");
+  revalidatePath("/contact");
+  revalidatePath("/admin/footer");
+  return { success: true };
+}
+
+/**
+ * Fetch footer settings
+ */
+export async function getFooterSettings() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("homepage_sections")
+    .select("*")
+    .eq("section_key", "footer")
+    .single();
+
+  if (data?.description) {
+    try {
+      return JSON.parse(data.description);
+    } catch (e) {
+      return null;
+    }
+  }
+  return null;
+}
+
+
+/**
  * Update which categories are featured on the homepage
  */
 export async function updateFeaturedCategories(categoryIds: string[]) {

@@ -108,7 +108,7 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
               const image = item.images?.[0] || "/images/placeholder-furniture.jpg";
               const title = item.name;
               const category =
-                item.categories?.name || item.room || item.category || "Solid Teak";
+                item.categories?.name || item.room || (item as any).category || "Solid Teak";
               const desc =
                 item.short_description || "Handcrafted Nilambur teak masterpiece.";
               const badge = item.badge || (item.is_bestseller ? "BEST SELLER" : item.is_new ? "NEW ARRIVAL" : null);
