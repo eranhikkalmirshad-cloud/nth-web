@@ -4,7 +4,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "@/lib/types";
 
 interface SignatureSelectionProps {
@@ -13,20 +14,22 @@ interface SignatureSelectionProps {
 
 export default function SignatureSelection({ products = [] }: SignatureSelectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState<"left" | "right">("right");
+  const [isHovered, setIsHovered] = useState(false);
 
-  const items = products || [];
+  // Ensure minimum items for continuous smooth looping
+  let items = products || [];
+  if (items.length > 0 && items.length < 5) {
+    items = [...items, ...items, ...items];
+  }
   const total = items.length;
 
   const handleNext = () => {
     if (total === 0) return;
-    setDirection("right");
     setCurrentIndex((prev) => (prev + 1) % total);
   };
 
   const handlePrev = () => {
     if (total === 0) return;
-    setDirection("left");
     setCurrentIndex((prev) => (prev - 1 + total) % total);
   };
 
@@ -40,26 +43,28 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [total]);
 
+  // Subtle auto-scroll every 5.5 seconds (paused on hover)
+  useEffect(() => {
+    if (isHovered || total <= 1) return;
+    const timer = setInterval(() => {
+      handleNext();
+    }, 5500);
+    return () => clearInterval(timer);
+  }, [currentIndex, isHovered, total]);
+
   if (!items || total === 0) {
     return null;
   }
 
-  // Get the 3 items for desktop coverflow (Left, Center Elevated, Right)
-  const leftItem = items[(currentIndex - 1 + total) % total];
-  const centerItem = items[currentIndex];
-  const rightItem = items[(currentIndex + 1) % total];
-
-  const visibleCards = [
-    { item: leftItem, position: "left", isCenter: false },
-    { item: centerItem, position: "center", isCenter: true },
-    { item: rightItem, position: "right", isCenter: false },
-  ];
-
   return (
-    <section className="py-16 sm:py-24 bg-white overflow-hidden select-none">
+    <section 
+      className="py-16 sm:py-24 bg-[#FAF9F7] overflow-hidden select-none font-sans"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         
-        {/* ── HEADER ── */}
+        {/* ── SECTION HEADER ── */}
         <div className="max-w-3xl mx-auto mb-14 sm:mb-18 space-y-3">
           <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#8A572A] block font-sans">
             FEATURED MASTERPIECES
@@ -77,33 +82,98 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
           </p>
         </div>
 
-        {/* ── 3-CARD DESKTOP ELEVATED COVERFLOW SLIDER ── */}
-        <div className="relative max-w-6xl mx-auto flex items-center justify-center min-h-[500px]">
+        {/* ── 3D COVERFLOW PERSPECTIVE STAGE ── */}
+        <div className="relative max-w-6xl mx-auto flex items-center justify-center min-h-[540px] sm:min-h-[580px]">
           
-          {/* Left Arrow Button */}
+          {/* Left Arrow Navigation Button */}
           <button
             type="button"
             onClick={handlePrev}
-            className="absolute left-0 sm:left-2 lg:-left-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#F7EFE8] hover:bg-[#EEDFD2] text-[#8A572A] flex items-center justify-center shadow-md transition-all cursor-pointer hover:scale-105 active:scale-95 border border-[#EAD7C7]"
+            className="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full bg-[#8A572A] hover:bg-[#6E3F18] text-white flex items-center justify-center shadow-xl transition-all duration-300 cursor-pointer hover:scale-110 active:scale-95 border border-[#8A572A]"
             aria-label="Previous product"
           >
-            <ChevronLeft size={22} />
+            <ChevronLeft size={22} strokeWidth={2.5} />
           </button>
 
-          {/* Right Arrow Button */}
+          {/* Right Arrow Navigation Button */}
           <button
             type="button"
             onClick={handleNext}
-            className="absolute right-0 sm:right-2 lg:-right-2 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#8A572A] hover:bg-[#1C130D] text-white flex items-center justify-center shadow-lg transition-all cursor-pointer hover:scale-105 active:scale-95 border border-[#8A572A]"
+            className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full bg-[#8A572A] hover:bg-[#6E3F18] text-white flex items-center justify-center shadow-xl transition-all duration-300 cursor-pointer hover:scale-110 active:scale-95 border border-[#8A572A]"
             aria-label="Next product"
           >
-            <ChevronRight size={22} />
+            <ChevronRight size={22} strokeWidth={2.5} />
           </button>
 
-          {/* 3 Visible Cards Grid (Desktop: 3 Cards, Mobile: Center Focus Card) */}
-          <div className="w-full flex items-center justify-center gap-4 sm:gap-6 lg:gap-8 px-6 sm:px-12">
-            {visibleCards.map(({ item, position, isCenter }) => {
-              if (!item) return null;
+          {/* 3D Perspective Stage */}
+          <div 
+            className="relative w-full h-[500px] sm:h-[530px] flex items-center justify-center"
+            style={{ perspective: 1200, transformStyle: "preserve-3d" }}
+          >
+            {items.map((item, index) => {
+              // Calculate signed offset relative to currentIndex
+              let diff = index - currentIndex;
+              if (diff > total / 2) diff -= total;
+              if (diff < -total / 2) diff += total;
+
+              // Visible range [-2, -1, 0, 1, 2]
+              const isVisible = Math.abs(diff) <= 2;
+              if (!isVisible) return null;
+
+              const isCenter = diff === 0;
+              const isLeft = diff === -1;
+              const isRight = diff === 1;
+
+              // Calculate exact 3D positioning metrics matching the Magnat reference
+              let xOffset = 0;
+              let yOffset = 0;
+              let zOffset = 0;
+              let rotateY = 0;
+              let scale = 1;
+              let opacity = 1;
+              let zIndex = 30;
+
+              if (isCenter) {
+                xOffset = 0;
+                yOffset = -24;
+                zOffset = 40;
+                rotateY = 0;
+                scale = 1.08;
+                opacity = 1;
+                zIndex = 30;
+              } else if (isLeft) {
+                xOffset = -320;
+                yOffset = 10;
+                zOffset = -60;
+                rotateY = 12;
+                scale = 0.88;
+                opacity = 0.72;
+                zIndex = 20;
+              } else if (isRight) {
+                xOffset = 320;
+                yOffset = 10;
+                zOffset = -60;
+                rotateY = -12;
+                scale = 0.88;
+                opacity = 0.72;
+                zIndex = 20;
+              } else if (diff === -2) {
+                xOffset = -540;
+                yOffset = 20;
+                zOffset = -150;
+                rotateY = 24;
+                scale = 0.75;
+                opacity = 0;
+                zIndex = 10;
+              } else if (diff === 2) {
+                xOffset = 540;
+                yOffset = 20;
+                zOffset = -150;
+                rotateY = -24;
+                scale = 0.75;
+                opacity = 0;
+                zIndex = 10;
+              }
 
               const image = item.images?.[0] || "/images/placeholder-furniture.jpg";
               const title = item.name;
@@ -111,91 +181,115 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
                 item.categories?.name || item.room || (item as any).category || "Solid Teak";
               const desc =
                 item.short_description || "Handcrafted Nilambur teak masterpiece.";
-              const badge = item.badge || (item.is_bestseller ? "BEST SELLER" : item.is_new ? "NEW ARRIVAL" : null);
+              const badge = item.badge || (item.is_bestseller ? "BEST SELLER" : item.is_new ? "NEW ARRIVAL" : "BEST SELLER");
 
               return (
-                <div
-                  key={`${item.id || item.slug}-${position}`}
-                  onClick={() => {
-                    if (position === "left") handlePrev();
-                    if (position === "right") handleNext();
+                <motion.div
+                  key={`${item.id || item.slug}-${index}`}
+                  initial={false}
+                  animate={{
+                    x: xOffset,
+                    y: yOffset,
+                    z: zOffset,
+                    rotateY: rotateY,
+                    scale: scale,
+                    opacity: opacity,
                   }}
-                  className={`transition-all duration-500 ease-out flex flex-col justify-between items-center text-center relative ${
-                    isCenter
-                      ? "w-full max-w-[320px] sm:max-w-[340px] z-20 md:-translate-y-6 scale-100 sm:scale-105 opacity-100"
-                      : "hidden md:flex md:w-[280px] lg:w-[300px] z-10 scale-95 opacity-70 hover:opacity-90 cursor-pointer"
+                  transition={{
+                    type: "spring",
+                    stiffness: 260,
+                    damping: 26,
+                    mass: 0.8,
+                  }}
+                  style={{
+                    zIndex,
+                    transformStyle: "preserve-3d",
+                  }}
+                  onClick={() => {
+                    if (isLeft) handlePrev();
+                    if (isRight) handleNext();
+                  }}
+                  className={`absolute w-[300px] sm:w-[340px] md:w-[360px] transition-all duration-300 ${
+                    !isCenter ? "cursor-pointer hover:opacity-90" : "cursor-default"
                   }`}
                 >
-                  {/* Card Container Box */}
-                  <div className={`w-full bg-white rounded-3xl p-6 sm:p-7 border transition-all duration-500 flex flex-col justify-between min-h-[440px] relative ${
-                    isCenter
-                      ? "border-[#8A572A]/30 shadow-[0_20px_50px_rgba(138,87,42,0.12)]"
-                      : "border-slate-100 shadow-[0_8px_30px_rgba(0,0,0,0.05)]"
-                  }`}>
-                    
-                    {/* Top Golden Badge */}
-                    {badge && (
-                      <div className="absolute top-4 left-4 z-20">
-                        <span className="bg-[#8A572A] text-white text-[8px] sm:text-[9px] font-bold tracking-wider uppercase px-3 py-1 rounded-sm shadow-xs font-sans">
-                          {badge}
-                        </span>
-                      </div>
-                    )}
+                  {/* Magnat Card Container */}
+                  <div
+                    className={`w-full bg-white rounded-[2rem] p-6 sm:p-7 border transition-all duration-300 flex flex-col justify-between min-h-[460px] sm:min-h-[490px] relative ${
+                      isCenter
+                        ? "border-[#8A572A]/30 shadow-[0_20px_50px_rgba(138,87,42,0.15)] ring-1 ring-[#8A572A]/20"
+                        : "border-slate-200/70 shadow-[0_10px_30px_rgba(0,0,0,0.05)]"
+                    }`}
+                  >
+                    {/* Top Left Badge (Magnat Style) */}
+                    <div className="absolute top-5 left-5 z-20">
+                      <span className="bg-[#8A572A] text-white text-[9px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-md shadow-xs font-sans">
+                        {badge}
+                      </span>
+                    </div>
 
-                    {/* Pop-Out Product Image Stage */}
-                    <div className="relative w-full aspect-[4/3] flex items-center justify-center my-2">
-                      <div className="relative w-full h-full transform transition-transform duration-500 group-hover:scale-105">
+                    {/* Product Image Stage */}
+                    <div className="relative w-full aspect-[4/3] flex items-center justify-center my-3 pt-4">
+                      <div className="relative w-full h-full transform transition-transform duration-500 hover:scale-105">
                         <Image
                           src={image}
                           alt={title}
                           fill
                           quality={95}
                           sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 500px"
-                          className="object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.15)]"
+                          className="object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.10)]"
                         />
                       </div>
                     </div>
 
-                    {/* Product Typography */}
-                    <div className="space-y-1.5 my-3 flex-1 flex flex-col justify-center">
+                    {/* Product Details (Centered) */}
+                    <div className="space-y-1.5 my-2 flex-1 flex flex-col justify-center text-center">
                       <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#8A572A] block font-sans">
                         {category}
                       </span>
 
-                      <h3 className="text-base sm:text-lg font-serif font-bold text-[#111111] uppercase tracking-wide line-clamp-1 group-hover:text-[#8A572A] transition-colors">
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug line-clamp-1">
                         {title}
                       </h3>
 
-                      <p className="text-xs text-slate-400 font-normal line-clamp-2 leading-relaxed px-1 font-sans">
+                      <p className="text-xs text-slate-500 font-normal line-clamp-2 leading-relaxed px-2 font-sans">
                         {desc}
                       </p>
                     </div>
 
-                    {/* Black Pill Action Button */}
-                    <Link
-                      href={`/products/${item.slug || ""}`}
-                      className="w-full max-w-[220px] mx-auto inline-flex items-center justify-center bg-[#111111] hover:bg-[#8A572A] text-white text-[10px] sm:text-[11px] font-bold tracking-[0.15em] uppercase py-3.5 px-6 rounded-full transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
-                    >
-                      VIEW PRODUCT
-                    </Link>
+                    {/* Black Pill Action Button (Magnat Style) */}
+                    <div className="pt-3">
+                      <Link
+                        href={`/products/${item.slug || ""}`}
+                        className={`w-full inline-flex items-center justify-center text-[10px] sm:text-[11px] font-bold tracking-[0.15em] uppercase py-3.5 px-8 rounded-full transition-all duration-300 shadow-md active:scale-95 text-center ${
+                          isCenter
+                            ? "bg-[#111111] hover:bg-[#8A572A] text-white hover:shadow-lg"
+                            : "bg-[#111111]/90 hover:bg-[#111111] text-white"
+                        }`}
+                      >
+                        VIEW PRODUCT
+                      </Link>
+                    </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
 
         </div>
 
-        {/* ── Slide Indicator Dots ── */}
+        {/* ── Slide Indicator Dots (Magnat Style) ── */}
         {total > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-10">
-            {items.map((_, i) => (
+          <div className="flex items-center justify-center gap-2 mt-8">
+            {products.map((_, i) => (
               <button
                 key={i}
                 type="button"
                 onClick={() => setCurrentIndex(i)}
                 className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  currentIndex === i ? "w-6 bg-[#8A572A]" : "w-2 bg-slate-200"
+                  currentIndex % products.length === i
+                    ? "w-6 bg-[#8A572A]"
+                    : "w-2 bg-slate-300 hover:bg-slate-400"
                 }`}
                 aria-label={`Go to slide ${i + 1}`}
               />
