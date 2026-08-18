@@ -35,11 +35,19 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
   // State for dynamic lists
   const [images, setImages] = useState<string[]>(product?.images || [""]);
   const [features, setFeatures] = useState<string[]>(product?.features || [""]);
-  const [specifications, setSpecifications] = useState<{ label: string; value: string }[]>(
-    product?.specifications?.length 
-      ? product.specifications 
-      : [{ label: "Dimensions", value: "" }, { label: "Weight", value: "" }]
-  );
+  const [specifications, setSpecifications] = useState<{ label: string; value: string }[]>(() => {
+    const specs = Array.isArray(product?.specifications) ? [...product.specifications] : [];
+    const hasDimensions = specs.some(s => s.label?.toLowerCase() === "dimensions");
+    const hasWeight = specs.some(s => s.label?.toLowerCase() === "weight");
+    
+    if (!hasDimensions) {
+      specs.unshift({ label: "Dimensions", value: "" });
+    }
+    if (!hasWeight) {
+      specs.push({ label: "Weight", value: "" });
+    }
+    return specs;
+  });
 
   // Featured & badge state
   const [isFeatured, setIsFeatured] = useState(product?.is_featured ?? false);
