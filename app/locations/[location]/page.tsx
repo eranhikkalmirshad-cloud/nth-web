@@ -82,8 +82,8 @@ export default async function LocationPage({
       answer: `Yes! ${SITE_CONFIG.name} provides insured white-glove delivery directly from our Nilambur workshop to ${loc.name} and surrounding areas.`,
     },
     {
-      question: `Is the teak wood government certified?`,
-      answer: `Every log used at ${SITE_CONFIG.name} is purchased through legal Kerala Forest Department auctions and comes with provenance certification.`,
+      question: `Is the furniture made of genuine Nilambur teak?`,
+      answer: `Every piece created at ${SITE_CONFIG.name} is handcrafted from 100% genuine mature Nilambur teak wood with lifetime structural integrity.`,
     },
     {
       question: `Can I customize the dimensions and finish for my home in ${loc.name}?`,

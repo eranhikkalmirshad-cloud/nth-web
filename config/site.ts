@@ -60,11 +60,11 @@ export const SITE_CONFIG = {
 
   // USP Badges
   usps: [
-    { title: "100% Nilambur Teak", desc: "Genuine legal teak sourced directly from Nilambur forests", icon: "Tree" },
-    { title: "Govt. Certified", desc: "Legally sourced with full government transit authorization", icon: "Award" },
+    { title: "100% Nilambur Teak", desc: "Genuine mature teak wood handcrafted in Nilambur", icon: "Tree" },
+    { title: "Master Craftsmanship", desc: "Hand-rubbed organic finishes & traditional joinery", icon: "Award" },
     { title: "Pan-India Delivery", desc: "Safe, insured, and white-glove delivery across all Indian cities", icon: "Truck" },
-    { title: "25+ Years Craftsmanship", desc: "Generational master woodworkers and artisan joinery", icon: "Shield" },
-    { title: "Lifetime Guarantee", desc: "Unmatched durability backed by heirloom-grade warranty", icon: "CheckCircle" },
+    { title: "25+ Years Mastery", desc: "Generational master woodworkers and artisan joinery", icon: "Shield" },
+    { title: "5-Year Warranty", desc: "Unmatched durability backed by structural warranty", icon: "CheckCircle" },
     { title: "Custom Orders", desc: "Bespoke dimensions, wood finishes, and carved details", icon: "Sparkles" },
   ],
 

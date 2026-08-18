@@ -38,7 +38,7 @@ export default async function ProductsPage() {
               </h1>
 
               <p className="text-base text-[#555555] font-light leading-relaxed">
-                Handcrafted from mature, legally sourced Nilambur teak. Explore solid dining suites, living room suites, carved cots, and architectural doors built for generations.
+                Handcrafted from mature, seasoned solid Nilambur teak. Explore luxury dining suites, living room sets, carved cots, and architectural doors built for generations.
               </p>
 
               <div className="flex items-center gap-6 pt-2 text-xs font-medium text-[#777777]">

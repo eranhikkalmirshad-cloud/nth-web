@@ -43,9 +43,9 @@ export const HOMEPAGE_FAQS: FAQItem[] = [
       "Nilambur teak is globally celebrated for its unmatched grain density, rich golden-brown hue, natural oil content preventing termites, and generational durability. It was used historically in global shipping and royal palaces.",
   },
   {
-    question: "Is your teak wood government certified and legally sourced?",
+    question: "Is your teak wood 100% genuine Nilambur teak?",
     answer:
-      "Yes! 100% of our teak wood is legally sourced through authorized Kerala Forest Department channels with complete transit permits and certification.",
+      "Yes! 100% of our furniture is crafted exclusively from mature, genuine Nilambur teak wood with dense natural grain, rich oil content, and traditional joinery.",
   },
   {
     question: "Do you deliver teak furniture across India?",

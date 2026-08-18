@@ -19,8 +19,8 @@ const pillars = [
   },
   {
     num: "03",
-    title: "Government Certified",
-    desc: "All timber is legally procured through authorized Kerala Forest Department auctions with official transit passes and certificates.",
+    title: "100% Solid Teak Selection",
+    desc: "All timber is carefully selected from mature, seasoned Nilambur teak logs with dense golden grain and natural oil preservation.",
   },
   {
     num: "04",
