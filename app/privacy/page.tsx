@@ -1,57 +1,96 @@
-import SectionHeading from "@/components/ui/SectionHeading";
-import FadeInView from "@/components/ui/FadeInView";
+import { Shield, Lock, Eye, FileText, CheckCircle2 } from "lucide-react";
 import { SITE_CONFIG } from "@/config/site";
+import Link from "next/link";
 
 export const metadata = {
-  title: "Privacy Policy",
-  description: `Learn how ${SITE_CONFIG.name} collects, uses, and protects your personal information.`,
+  title: "Privacy Policy | Nilambur Teak Heritage",
+  description: `Learn how ${SITE_CONFIG.name} collects, uses, and safeguards your personal data during orders and inquiries.`,
 };
 
-const sections = [
+const privacySections = [
   {
+    num: "1",
     title: "Information We Collect",
-    content: `When you visit our website or Nilambur showroom, we may collect personal information such as your name, email address, phone number, and delivery address. This information is collected when you submit a custom quote inquiry form, place an order, or contact us directly. We never sell, trade, or share your data.`,
+    content: `When you visit our website, consult with our workshop, or place an order with ${SITE_CONFIG.name}, we may collect personal information including your full name, contact phone number, email address, physical delivery address, and architectural room specifications. This data is collected solely when you submit an inquiry, request a quotation, or place an order. We never sell, rent, or trade your personal data to third parties.`,
   },
   {
+    num: "2",
     title: "How We Use Your Information",
-    content: "Your personal information is used strictly to process and fulfill your bespoke teak furniture orders, provide architectural design consultation, send delivery updates, and offer customer support.",
+    content: "Your information is used strictly to: (a) Provide design consultation and architectural woodworking blueprints; (b) Process custom orders, invoices, and payments; (c) Coordinate white-glove transport and installation logistics; and (d) Provide post-delivery customer support and warranty services.",
   },
   {
-    title: "Data Protection & Security",
-    content: "We implement rigorous security standards to safeguard your contact and order data across all electronic and physical records.",
+    num: "3",
+    title: "Data Security & Protection",
+    content: "We implement industry-standard administrative, technical, and physical security measures to protect your personal details against unauthorized access, loss, or misuse across all electronic records and cloud infrastructure.",
   },
   {
-    title: "Contact Us About Privacy",
-    content: `For any questions regarding your privacy, contact our team at ${SITE_CONFIG.contact.email} or call ${SITE_CONFIG.contact.phoneDisplay}.`,
+    num: "4",
+    title: "Third-Party Logistics & Payment Providers",
+    content: "We only share necessary delivery information (such as recipient name, contact number, and delivery address) with trusted transportation and logistics partners to ensure safe doorstep delivery of your furniture.",
+  },
+  {
+    num: "5",
+    title: "Cookies & Analytics",
+    content: "Our website uses standard security and performance cookies to maintain user session integrity, provide responsive browsing, and improve website performance. You may disable cookies in your browser settings if desired.",
+  },
+  {
+    num: "6",
+    title: "Your Data Rights & Inquiries",
+    content: `You have the right to request access to, correction of, or deletion of your personal data stored with us. For any privacy-related inquiries, please contact our data team at ${SITE_CONFIG.contact.email} or call ${SITE_CONFIG.contact.phoneDisplay}.`,
   },
 ];
 
 export default function PrivacyPage() {
   return (
-    <div className="pt-24 pb-32 bg-[#FDFAF5] min-h-screen">
-      <div className="max-container px-4 md:px-8">
-        <SectionHeading
-          label="Legal & Trust"
-          title="Privacy Policy"
-          subtitle={`Your privacy and trust are paramount at ${SITE_CONFIG.name}.`}
-          className="mb-16 max-w-3xl"
-        />
+    <main className="min-h-screen bg-[#FAF8F5] py-14 sm:py-20 font-sans">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Header */}
+        <div className="text-center space-y-3 mb-12">
+          <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#8A572A] block font-sans">
+            LEGAL & TRUST
+          </span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#141414]">
+            Privacy Policy
+          </h1>
+          <p className="text-xs sm:text-sm text-[#665E56] max-w-xl mx-auto leading-relaxed">
+            Your privacy and trust are paramount at {SITE_CONFIG.name}. Learn how we safeguard your information.
+          </p>
+        </div>
 
-        <div className="max-w-3xl space-y-12">
-          {sections.map((section, i) => (
-            <FadeInView key={i} delay={i * 0.05}>
-              <div className="border-l-2 border-[#C9922A] pl-6 bg-white p-6 rounded-r-xl border-y border-r border-[#D4A96A]/20">
-                <h3 className="text-xl font-bold text-[#2C1810] font-playfair mb-3">
-                  {section.title}
-                </h3>
-                <p className="text-[#6B4226] font-light leading-relaxed text-sm font-lato">
-                  {section.content}
-                </p>
+        {/* Policy Points */}
+        <div className="space-y-6">
+          {privacySections.map((sec) => (
+            <div
+              key={sec.num}
+              className="bg-white rounded-2xl p-6 sm:p-8 border border-[#EAE4DC] shadow-xs space-y-2 hover:border-[#8A572A]/40 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <span className="w-7 h-7 rounded-lg bg-[#FAF4ED] text-[#8A572A] font-serif font-bold text-sm flex items-center justify-center border border-[#8A572A]/20 shrink-0">
+                  {sec.num}
+                </span>
+                <h2 className="text-base sm:text-lg font-serif font-bold text-[#141414]">
+                  {sec.title}
+                </h2>
               </div>
-            </FadeInView>
+              <p className="text-xs sm:text-sm text-[#554D46] leading-relaxed pl-10">
+                {sec.content}
+              </p>
+            </div>
           ))}
         </div>
+
+        {/* Contact Support Note */}
+        <div className="mt-12 p-6 sm:p-8 rounded-2xl bg-[#120E0A] text-white border border-[#2B221B] text-center space-y-3">
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-[#E5B56E]">
+            Have Privacy Questions?
+          </h3>
+          <p className="text-xs text-[#C8BFB5] max-w-lg mx-auto leading-relaxed">
+            Reach out directly to our privacy officer at {SITE_CONFIG.contact.email}.
+          </p>
+        </div>
+
       </div>
-    </div>
+    </main>
   );
 }

@@ -83,13 +83,16 @@ export default function Footer() {
     },
     {
       id: "brand",
-      title: "THE BRAND",
+      title: "THE BRAND & POLICIES",
       links: [
         { label: "About Nilambur Heritage", href: "/about" },
-        { label: "Workshop & Atelier Visits", href: "/contact" },
-        { label: "Bespoke Custom Enquiries", href: "/contact" },
+        { label: "Shipping Policy", href: "/shipping-policy" },
+        { label: "Return & Cancellation", href: "/return-policy" },
+        { label: "5-Year Warranty Policy", href: "/warranty" },
+        { label: "Custom Order Policy", href: "/custom-orders" },
         { label: "Privacy Policy", href: "/privacy" },
-        { label: "Terms of Service", href: "/terms" },
+        { label: "Terms and Conditions", href: "/terms" },
+        { label: "Workshop & Atelier Visits", href: "/contact" },
       ],
     },
   ];
