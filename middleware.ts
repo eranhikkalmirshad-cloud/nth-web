@@ -41,7 +41,7 @@ export async function middleware(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    const adminEmail = (process.env.ADMIN_EMAIL || "admin@nilamburteakheritage.com").toLowerCase();
+    const adminEmail = (process.env.ADMIN_EMAIL || "nilambur.teak.heritage@gmail.com").toLowerCase();
     if (user && user.email?.toLowerCase() === adminEmail) {
       isUserAuthenticated = true;
     }

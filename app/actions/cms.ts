@@ -455,7 +455,7 @@ export async function saveFooterSettings(formData: FormData) {
     phone: (formData.get("phone") as string) || "+91 85912 21994",
     phone_display: (formData.get("phone_display") as string) || "+91 85912 21994",
     whatsapp: (formData.get("whatsapp") as string) || "+918591221994",
-    email: (formData.get("email") as string) || "info@nilamburteakheritage.com",
+    email: (formData.get("email") as string) || "nilambur.teak.heritage@gmail.com",
     address: (formData.get("address") as string) || "Koolikkal, Mampad P.O., Malappuram Dist., Kerala - 676542",
     timing_weekdays: (formData.get("timing_weekdays") as string) || "Mon – Sat: 9:00 AM – 7:30 PM",
     timing_sunday: (formData.get("timing_sunday") as string) || "Sunday: By Prior Appointment",

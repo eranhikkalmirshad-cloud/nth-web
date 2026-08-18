@@ -172,7 +172,7 @@ export default function FooterSettingsClient({ initialSettings }: FooterSettings
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="info@nilamburteakheritage.com"
+                  placeholder="nilambur.teak.heritage@gmail.com"
                   className="w-full bg-[#FAF9F7] border border-slate-200 px-4 py-2.5 text-xs text-slate-900 font-medium rounded-xl focus:outline-none focus:border-[#8A572A] focus:bg-white transition-all"
                 />
               </div>

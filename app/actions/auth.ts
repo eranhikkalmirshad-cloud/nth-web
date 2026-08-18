@@ -10,7 +10,7 @@ export async function loginAction(prevState: any, formData: FormData) {
   const password = formData.get("password") as string;
   const cookieStore = await cookies();
 
-  const adminEmail = process.env.ADMIN_EMAIL || "admin@nilamburteakheritage.com";
+  const adminEmail = process.env.ADMIN_EMAIL || "nilambur.teak.heritage@gmail.com";
   const adminPassword = process.env.ADMIN_PASSWORD || "admin@nilambur2026";
 
   if (email.trim().toLowerCase() !== adminEmail.trim().toLowerCase() || password !== adminPassword) {

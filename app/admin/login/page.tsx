@@ -72,8 +72,8 @@ export default function AdminLoginPage() {
                   type="email"
                   required
                   autoComplete="email"
-                  defaultValue="admin@nilamburteakheritage.com"
-                  placeholder="admin@nilamburteakheritage.com"
+                  defaultValue="nilambur.teak.heritage@gmail.com"
+                  placeholder="nilambur.teak.heritage@gmail.com"
                   className="w-full bg-[#FAF9F7] border border-slate-200 pl-10 pr-4 py-3 text-slate-900 text-xs sm:text-sm font-medium focus:outline-none focus:border-[#8A572A] focus:bg-white transition-all rounded-xl shadow-2xs"
                 />
               </div>

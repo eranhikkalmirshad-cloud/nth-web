@@ -24,7 +24,7 @@ export const SITE_CONFIG = {
     whatsappLink: `https://wa.me/918891221994?text=${encodeURIComponent(
       "Hello Nilambur Teak Heritage! I am interested in your handcrafted teak wood furniture and interior woodwork. Please share more details and a quote."
     )}`,
-    email: process.env.NEXT_PUBLIC_EMAIL || "info@nilamburteakheritage.com",
+    email: process.env.NEXT_PUBLIC_EMAIL || "nilambur.teak.heritage@gmail.com",
     address: {
       businessName: "NILAMBUR TEAK HERITAGE",
       tagline: "DEALERS IN: WOODEN FURNITURE & BUILDING MATERIALS",

@@ -216,6 +216,22 @@ export default function ContactPage() {
                   </div>
                 </div>
 
+                {/* Email Address */}
+                <div className="flex items-start gap-3.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/60 text-[#8A572A] flex items-center justify-center shrink-0 mt-0.5">
+                    <Mail size={16} />
+                  </div>
+                  <div>
+                    <strong className="text-slate-900 block font-semibold mb-0.5">Email Support</strong>
+                    <a
+                      href={`mailto:${SITE_CONFIG.contact.email}`}
+                      className="text-xs font-bold text-[#8A572A] hover:underline"
+                    >
+                      {SITE_CONFIG.contact.email}
+                    </a>
+                  </div>
+                </div>
+
                 {/* Instagram */}
                 <div className="flex items-start gap-3.5">
                   <div className="w-8 h-8 rounded-lg bg-rose-50 border border-rose-200/60 text-[#E1306C] flex items-center justify-center shrink-0 mt-0.5">
