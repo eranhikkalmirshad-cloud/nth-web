@@ -2,9 +2,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "@/lib/types";
 
@@ -15,6 +15,7 @@ interface SignatureSelectionProps {
 export default function SignatureSelection({ products = [] }: SignatureSelectionProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
 
   // Ensure minimum items for continuous smooth looping
   let items = products || [];
@@ -43,12 +44,12 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [total]);
 
-  // Subtle auto-scroll every 5.5 seconds (paused on hover)
+  // Subtle auto-scroll every 6 seconds (paused on hover)
   useEffect(() => {
     if (isHovered || total <= 1) return;
     const timer = setInterval(() => {
       handleNext();
-    }, 5500);
+    }, 6000);
     return () => clearInterval(timer);
   }, [currentIndex, isHovered, total]);
 
@@ -56,9 +57,17 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
     return null;
   }
 
+  const handleProductNavigate = (slug?: string) => {
+    if (slug) {
+      router.push(`/products/${slug}`);
+    } else {
+      router.push("/products");
+    }
+  };
+
   return (
     <section 
-      className="py-16 sm:py-24 bg-[#FAF9F7] overflow-hidden select-none font-sans"
+      className="py-16 sm:py-24 bg-[#FAF9F7] overflow-hidden font-sans"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -124,7 +133,7 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
               const isLeft = diff === -1;
               const isRight = diff === 1;
 
-              // Calculate exact 3D positioning metrics matching the Magnat reference
+              // 3D positioning metrics
               let xOffset = 0;
               let yOffset = 0;
               let zOffset = 0;
@@ -140,7 +149,7 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
                 rotateY = 0;
                 scale = 1.08;
                 opacity = 1;
-                zIndex = 30;
+                zIndex = 35;
               } else if (isLeft) {
                 xOffset = -320;
                 yOffset = 10;
@@ -207,10 +216,11 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
                   }}
                   onClick={() => {
                     if (isLeft) handlePrev();
-                    if (isRight) handleNext();
+                    else if (isRight) handleNext();
+                    else if (isCenter) handleProductNavigate(item.slug);
                   }}
-                  className={`absolute w-[300px] sm:w-[340px] md:w-[360px] transition-all duration-300 ${
-                    !isCenter ? "cursor-pointer hover:opacity-90" : "cursor-default"
+                  className={`absolute w-[300px] sm:w-[340px] md:w-[360px] transition-all duration-300 cursor-pointer ${
+                    !isCenter ? "hover:opacity-90" : ""
                   }`}
                 >
                   {/* Magnat Card Container */}
@@ -221,7 +231,7 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
                         : "border-slate-200/70 shadow-[0_10px_30px_rgba(0,0,0,0.05)]"
                     }`}
                   >
-                    {/* Top Left Badge (Magnat Style) */}
+                    {/* Top Left Badge */}
                     <div className="absolute top-5 left-5 z-20">
                       <span className="bg-[#8A572A] text-white text-[9px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-md shadow-xs font-sans">
                         {badge}
@@ -257,18 +267,28 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
                       </p>
                     </div>
 
-                    {/* Black Pill Action Button (Magnat Style) */}
-                    <div className="pt-3">
-                      <Link
-                        href={`/products/${item.slug || ""}`}
-                        className={`w-full inline-flex items-center justify-center text-[10px] sm:text-[11px] font-bold tracking-[0.15em] uppercase py-3.5 px-8 rounded-full transition-all duration-300 shadow-md active:scale-95 text-center ${
+                    {/* Black Pill Action Button */}
+                    <div className="pt-3 relative z-30">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isCenter) {
+                            handleProductNavigate(item.slug);
+                          } else if (isLeft) {
+                            handlePrev();
+                          } else if (isRight) {
+                            handleNext();
+                          }
+                        }}
+                        className={`w-full inline-flex items-center justify-center text-[10px] sm:text-[11px] font-bold tracking-[0.15em] uppercase py-3.5 px-8 rounded-full transition-all duration-300 shadow-md active:scale-95 text-center cursor-pointer pointer-events-auto ${
                           isCenter
                             ? "bg-[#111111] hover:bg-[#8A572A] text-white hover:shadow-lg"
                             : "bg-[#111111]/90 hover:bg-[#111111] text-white"
                         }`}
                       >
                         VIEW PRODUCT
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </motion.div>
@@ -278,7 +298,7 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
 
         </div>
 
-        {/* ── Slide Indicator Dots (Magnat Style) ── */}
+        {/* ── Slide Indicator Dots ── */}
         {total > 1 && (
           <div className="flex items-center justify-center gap-2 mt-8">
             {products.map((_, i) => (
