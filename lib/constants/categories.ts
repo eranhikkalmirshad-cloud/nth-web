@@ -152,11 +152,19 @@ export const PRODUCT_CATEGORIES: CategoryItem[] = [
     description: "Nightstands with soft-close drawers and brass handles.",
   },
   {
-    name: "Wall Decors",
-    slug: "wall-decors",
-    href: "/products?category=wall-decors",
-    image: "https://res.cloudinary.com/xwpjhogd/image/upload/v1786800398/nilambur-teak-heritage/nfa9rdmxusioqd1ozo98.png",
-    description: "Carved teak wood wall panels, mirror frames, and jali art.",
+    name: "Carved Teak Doors",
+    slug: "doors",
+    href: "/products?category=doors",
+    image: "/images/og-datas/IMG_0558.PNG",
+    description: "Traditional Kerala main entrance doors, pooja room panels, and heavy teak frames with brass accents.",
+    isPopular: true,
+  },
+  {
+    name: "Other Furniture",
+    slug: "other-furniture",
+    href: "/products?category=other-furniture",
+    image: "/images/og-datas/IMG_0600.PNG",
+    description: "Bespoke handcrafted architectural woodwork, custom consoles, mandapams, and heritage artifacts.",
   },
 ];
 

@@ -126,7 +126,8 @@ export default function ContactPage() {
                     <option value="Bedroom (King/Queen Cots, Wardrobes)">Bedroom (King/Queen Cots, Wardrobes)</option>
                     <option value="Chairs & Lounge Seating">Chairs & Lounge Seating</option>
                     <option value="Sitout & Veranda Furniture">Sitout & Veranda Furniture</option>
-                    <option value="Doors, Frames & Building Materials">Doors, Frames & Building Materials</option>
+                    <option value="Carved Teak Doors & Frames">Carved Teak Doors & Frames</option>
+                    <option value="Other Furniture & Bespoke Enquiries">Other Furniture & Bespoke Enquiries</option>
                     <option value="Full Villa Custom Woodwork">Full Villa Custom Woodwork</option>
                   </select>
                 </div>

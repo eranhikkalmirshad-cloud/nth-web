@@ -29,7 +29,7 @@ export default function CustomWoodworkSection({ sections = [] }: CustomWoodworkS
     desc: doors?.subtitle || "Traditional Kerala main entrance doors, pooja room panels, and heavy teak frames with brass accents.",
     image: doors?.image_url || "/images/og-datas/IMG_0558.PNG",
     cta: doors?.cta_text || "Explore Door Collection",
-    url: doors?.cta_url || "/products",
+    url: doors?.cta_url && doors?.cta_url !== "/products" ? doors.cta_url : "/products?category=doors",
   };
 
   return (
