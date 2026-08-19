@@ -463,6 +463,8 @@ export async function saveFooterSettings(formData: FormData) {
     facebook_url: (formData.get("facebook_url") as string) || "https://facebook.com/nilamburteakheritage",
     youtube_url: (formData.get("youtube_url") as string) || "https://youtube.com/@nilamburteakheritage",
     pinterest_url: (formData.get("pinterest_url") as string) || "https://pinterest.com/nilamburteakheritage",
+    map_embed_url: (formData.get("map_embed_url") as string) || "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3913.4252467435276!2d76.17256707504852!3d11.230095788947576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTHCsDEzJzQ4LjMiTiA3NsKwMTAnMzAuNSJF!5e0!3m2!1sen!2sin!4v1787119850483!5m2!1sen!2sin",
+    map_directions_url: (formData.get("map_directions_url") as string) || "https://maps.google.com/?q=11.2300958,76.1725671",
     copyright_text: (formData.get("copyright_text") as string) || "© 2026 Nilambur Teak Heritage™. All Rights Reserved.",
     badge_text: (formData.get("badge_text") as string) || "Crafted in Kerala, Delivered Across India",
   };

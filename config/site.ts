@@ -36,12 +36,12 @@ export const SITE_CONFIG = {
       pincode: "676542",
       full: "Koolikkal, Mampad P.O., Malappuram Dist., Kerala - 676542",
       googleMapsQuery: "Nilambur Teak Heritage, Koolikkal, Mampad, Kerala 676542",
-      googleMapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3913.673898234851!2d76.192305!3d11.238411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba63a6c98695bc3%3A0x6b4f738b525890e1!2sMampad%2C%20Kerala%20676542!5e0!3m2!1sen!2sin!4v1718000000000!5m2!1sen!2sin",
-      googleMapsDirectionsUrl: "https://maps.google.com/?q=Koolikkal,+Mampad+P.O.,+Malappuram+Dist.,+Kerala+676542",
+      googleMapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3913.4252467435276!2d76.17256707504852!3d11.230095788947576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTHCsDEzJzQ4LjMiTiA3NsKwMTAnMzAuNSJF!5e0!3m2!1sen!2sin!4v1787119850483!5m2!1sen!2sin",
+      googleMapsDirectionsUrl: "https://maps.google.com/?q=11.2300958,76.1725671",
     },
     geo: {
-      latitude: "11.2384",
-      longitude: "76.1923",
+      latitude: "11.230096",
+      longitude: "76.172567",
     },
     hours: {
       weekdays: "Monday – Saturday: 9:00 AM – 7:30 PM",

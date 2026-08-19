@@ -40,6 +40,8 @@ export default function FooterSettingsClient({ initialSettings }: FooterSettings
     facebook_url: initialSettings?.facebook_url || SITE_CONFIG.social.facebook,
     youtube_url: initialSettings?.youtube_url || SITE_CONFIG.social.youtube,
     pinterest_url: initialSettings?.pinterest_url || "https://pinterest.com/nilamburteakheritage",
+    map_embed_url: initialSettings?.map_embed_url || SITE_CONFIG.contact.address.googleMapsEmbedUrl,
+    map_directions_url: initialSettings?.map_directions_url || SITE_CONFIG.contact.address.googleMapsDirectionsUrl,
     copyright_text: initialSettings?.copyright_text || `© ${new Date().getFullYear()} Nilambur Teak Heritage™. All Rights Reserved.`,
     badge_text: initialSettings?.badge_text || "Crafted in Kerala, Delivered Across India",
   });
@@ -234,6 +236,36 @@ export default function FooterSettingsClient({ initialSettings }: FooterSettings
                     onChange={(e) => setFormData({ ...formData, timing_sunday: e.target.value })}
                     placeholder="Sunday: By Prior Appointment"
                     className="w-full bg-[#FAF9F7] border border-slate-200 px-4 py-2.5 text-xs text-slate-900 font-medium rounded-xl focus:outline-none focus:border-[#8A572A] focus:bg-white transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Google Maps Embed & Directions */}
+              <div className="space-y-4 pt-2 border-t border-slate-100">
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Google Maps Embed URL (Iframe Src)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={formData.map_embed_url}
+                    onChange={(e) => setFormData({ ...formData, map_embed_url: e.target.value })}
+                    placeholder="https://www.google.com/maps/embed?pb=..."
+                    className="w-full bg-[#FAF9F7] border border-slate-200 p-3 text-xs text-slate-900 font-mono rounded-xl focus:outline-none focus:border-[#8A572A] focus:bg-white transition-all"
+                  />
+                  <span className="text-[10px] text-slate-400 mt-1 block">The embed iframe URL for the interactive map</span>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Google Maps Directions Link
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.map_directions_url}
+                    onChange={(e) => setFormData({ ...formData, map_directions_url: e.target.value })}
+                    placeholder="https://maps.google.com/?q=11.2300958,76.1725671"
+                    className="w-full bg-[#FAF9F7] border border-slate-200 px-4 py-2.5 text-xs text-slate-900 font-mono rounded-xl focus:outline-none focus:border-[#8A572A] focus:bg-white transition-all"
                   />
                 </div>
               </div>
