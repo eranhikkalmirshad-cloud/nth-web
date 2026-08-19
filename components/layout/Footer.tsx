@@ -88,6 +88,7 @@ export default function Footer() {
         { label: "About Nilambur Heritage", href: "/about" },
         { label: "Shipping Policy", href: "/shipping-policy" },
         { label: "Return & Cancellation", href: "/return-policy" },
+        { label: "Warranty", href: "/warranty" },
         { label: "Custom Order Policy", href: "/custom-orders" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms and Conditions", href: "/terms" },

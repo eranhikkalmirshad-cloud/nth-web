@@ -1,7 +1,7 @@
 // components/products/ProductsListClient.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import ProductCard from "@/components/ui/ProductCard";
 import FadeInView from "@/components/ui/FadeInView";
 import { Search, SlidersHorizontal, CornerDownRight, Sparkles } from "lucide-react";
@@ -14,23 +14,19 @@ interface ProductsListClientProps {
   categories: Categories[];
 }
 
+const clean = (str?: string | null) => (str || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const roomCategories = [
+  "living-room",
+  "dining-room",
+  "bedroom",
+  "sitout",
+  "study-office",
+  "study-and-office",
+];
+
 export default function ProductsListClient({ initialProducts, categories }: ProductsListClientProps) {
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category") || "All Products";
-
-  const [activeCategory, setActiveCategory] = useState(initialCategory);
-  const [activeSubCategory, setActiveSubCategory] = useState<string>("all");
-  const [sortBy, setSortBy] = useState("Featured");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
-
-  useEffect(() => {
-    const categoryParam = searchParams.get("category");
-    if (categoryParam) {
-      setActiveCategory(categoryParam);
-      setActiveSubCategory("all");
-    }
-  }, [searchParams]);
 
   // Separate Main Categories vs Sub-Categories
   const isSubcategory = (c: Categories) =>
@@ -44,120 +40,229 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
   const dbMainCategories = categories.filter((c) => !isSubcategory(c));
   const dbSubCategories = categories.filter((c) => isSubcategory(c));
 
-  // Primary navigation tabs
-  const defaultCategoryNames = [
+  // Curated category order
+  const priorityOrder = [
     "All Products",
     "Sofas",
-    "Dining",
-    "Beds",
     "Chairs",
+    "Dining",
     "Tables",
     "Lounge Chairs",
+    "Beds",
+    "Carved Teak Doors",
+    "Diwan Beds",
     "Sitout",
-    "Study and Office",
     "TV Units",
     "Coffee Tables",
+    "Study and Office",
+    "Wardrobes",
     "Cabinet",
     "Bookshelves",
-    "Diwan Beds",
-    "Wardrobes",
     "Benches",
     "Outdoor Furniture",
+    "Bedside Table",
+    "Wall Decors",
+    "Other Furniture",
     "Living Room",
     "Dining Room",
     "Bedroom",
   ];
 
-  // Combine DB main categories with fallback defaults
-  const tabNames = [
-    "All Products",
-    ...Array.from(
-      new Set([
-        ...dbMainCategories.map((c) => c.name),
-        ...defaultCategoryNames.slice(1),
-      ])
-    ),
-  ];
+  // Combine and sort tabs by priority
+  const tabNames = useMemo(() => {
+    const allSet = new Set([
+      ...priorityOrder,
+      ...dbMainCategories.map((c) => c.name),
+    ]);
+    const list = Array.from(allSet);
+    return list.sort((a, b) => {
+      const idxA = priorityOrder.indexOf(a);
+      const idxB = priorityOrder.indexOf(b);
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a.localeCompare(b);
+    });
+  }, [dbMainCategories]);
+
+  // Resolver for URL params
+  const resolveCategoryFromParam = useCallback(
+    (paramValue: string | null) => {
+      if (!paramValue || paramValue.toLowerCase() === "all" || paramValue.toLowerCase() === "all-products") {
+        return "All Products";
+      }
+      const cleanParam = clean(paramValue);
+      const exact = tabNames.find((t) => clean(t) === cleanParam);
+      if (exact) return exact;
+
+      const fuzzy = tabNames.find(
+        (t) => clean(t).includes(cleanParam) || cleanParam.includes(clean(t))
+      );
+      if (fuzzy) return fuzzy;
+
+      return paramValue;
+    },
+    [tabNames]
+  );
+
+  const [activeCategory, setActiveCategory] = useState(() => {
+    const p = searchParams.get("category") || searchParams.get("room");
+    return resolveCategoryFromParam(p);
+  });
+  const [activeSubCategory, setActiveSubCategory] = useState<string>("all");
+  const [sortBy, setSortBy] = useState("Featured");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Sync with searchParams
+  useEffect(() => {
+    const p = searchParams.get("category") || searchParams.get("room");
+    setActiveCategory(resolveCategoryFromParam(p));
+    setActiveSubCategory("all");
+  }, [searchParams, resolveCategoryFromParam]);
+
+  // Tab switch handler with URL update
+  const handleSelectCategory = (cat: string) => {
+    setActiveCategory(cat);
+    setActiveSubCategory("all");
+    setSearchTerm("");
+
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      if (cat === "All Products") {
+        url.searchParams.delete("category");
+        url.searchParams.delete("room");
+      } else {
+        const slug = cat.toLowerCase().replace(/\s+/g, "-");
+        url.searchParams.set("category", slug);
+        url.searchParams.delete("room");
+      }
+      window.history.pushState({}, "", url.toString());
+    }
+  };
 
   // Active Main Category Object (if matched in DB)
   const activeDbCategory = categories.find(
     (c) =>
-      c.name.toLowerCase() === activeCategory.toLowerCase() ||
-      c.slug.toLowerCase() === activeCategory.toLowerCase()
+      clean(c.name) === clean(activeCategory) ||
+      clean(c.slug) === clean(activeCategory)
   );
 
-  // Find Sub-Categories belonging to the currently active category
+  // Sub-Categories belonging to the active category
   const currentSubCategories = activeCategory === "All Products"
     ? []
     : dbSubCategories.filter((sub) => {
-        const parentRef = (sub.base_category || "").toLowerCase();
-        const activeName = activeCategory.toLowerCase();
-        const activeSlug = activeDbCategory?.slug?.toLowerCase() || "";
-        const activeId = activeDbCategory?.id?.toLowerCase() || "";
+        const parentClean = clean(sub.base_category);
+        const activeClean = clean(activeCategory);
+        const slugClean = clean(activeDbCategory?.slug);
+        const idClean = clean(activeDbCategory?.id);
+
         return (
-          parentRef === activeName ||
-          parentRef === activeSlug ||
-          parentRef === activeId ||
-          activeName.includes(parentRef) ||
-          parentRef.includes(activeName)
+          parentClean === activeClean ||
+          parentClean === slugClean ||
+          parentClean === idClean ||
+          activeClean.includes(parentClean) ||
+          parentClean.includes(activeClean)
         );
       });
 
   const sortOptions = ["Featured", "Newest First", "Alphabetical (A-Z)"];
 
+  // Helper to match a product to a category strictly
+  const matchProductCategory = useCallback((p: Product, catName: string) => {
+    if (!catName || clean(catName) === "allproducts" || clean(catName) === "all") return true;
+    const catClean = clean(catName);
+
+    const pCatName = clean(p.categories?.name);
+    const pCatSlug = clean(p.categories?.slug);
+    const pRoom = clean(p.room);
+
+    // 1. Direct match on Category Name or Slug
+    if (pCatName === catClean || pCatSlug === catClean) return true;
+
+    // 2. Room category check (e.g. "Dining Room", "Living Room", "Bedroom", "Sitout")
+    const isRoomFilter = roomCategories.some((r) => clean(r) === catClean) || catClean.includes("room");
+    if (isRoomFilter) {
+      if (pRoom === catClean) return true;
+      if (catClean.includes("dining") && pRoom.includes("dining")) return true;
+      if (catClean.includes("living") && pRoom.includes("living")) return true;
+      if (catClean.includes("bedroom") && pRoom.includes("bedroom")) return true;
+      if (catClean.includes("sitout") && pRoom.includes("sitout")) return true;
+      if (catClean.includes("office") && pRoom.includes("office")) return true;
+    }
+
+    // 3. For "Dining" collection tab: includes items in Dining category OR Dining Room
+    if (catClean === "dining") {
+      if (pCatName === "dining" || pCatSlug === "dining" || pRoom.includes("dining")) return true;
+    }
+
+    // 4. Doors matching (Carved Teak Doors / doors)
+    if (catClean.includes("door")) {
+      return pCatName.includes("door") || pCatSlug.includes("door");
+    }
+
+    return false;
+  }, []);
+
   // Filtered Products Logic
-  const filteredProducts = initialProducts.filter((p) => {
-    const mainTerm = activeCategory.toLowerCase();
-    const subTerm = activeSubCategory.toLowerCase();
+  const filteredProducts = useMemo(() => {
+    return initialProducts.filter((p) => {
+      const subClean = clean(activeSubCategory);
 
-    // 1. Sub-Category specific matching if a sub-category chip is selected
-    if (activeSubCategory !== "all") {
-      const matchSub =
-        p.name.toLowerCase().includes(subTerm) ||
-        p.categories?.name?.toLowerCase().includes(subTerm) ||
-        p.categories?.slug?.toLowerCase().includes(subTerm) ||
-        p.category_id?.toLowerCase().includes(subTerm) ||
-        p.type?.toLowerCase().includes(subTerm) ||
-        (p.description?.toLowerCase().includes(subTerm) || false);
+      // 1. Sub-Category specific matching
+      if (activeSubCategory !== "all" && subClean) {
+        const productFields = [
+          p.name,
+          p.categories?.name,
+          p.categories?.slug,
+          p.room,
+          p.type,
+          p.material,
+          p.short_description,
+        ].filter(Boolean) as string[];
 
+        const matchSub = productFields.some(
+          (f) => clean(f).includes(subClean) || subClean.includes(clean(f))
+        );
+        const matchesSearch =
+          !searchTerm.trim() ||
+          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (p.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
+
+        return matchSub && matchesSearch;
+      }
+
+      // 2. Main Category Strict Matching
+      const matchesCategory = matchProductCategory(p, activeCategory);
+
+      // 3. Search Term matching
       const matchesSearch =
         !searchTerm.trim() ||
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (p.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
 
-      return matchSub && matchesSearch;
-    }
+      return matchesCategory && matchesSearch;
+    });
+  }, [initialProducts, activeCategory, activeSubCategory, searchTerm, matchProductCategory]);
 
-    // 2. Main Category matching
-    const matchesCategory =
-      activeCategory === "All Products" ||
-      p.name.toLowerCase().includes(mainTerm) ||
-      p.categories?.name?.toLowerCase().includes(mainTerm) ||
-      p.categories?.slug?.toLowerCase().includes(mainTerm) ||
-      p.category_id?.toLowerCase().includes(mainTerm) ||
-      p.type?.toLowerCase().includes(mainTerm) ||
-      p.room?.toLowerCase().includes(mainTerm) ||
-      (p.description?.toLowerCase().includes(mainTerm) || false);
+  const sortedProducts = useMemo(() => {
+    return [...filteredProducts].sort((a, b) => {
+      switch (sortBy) {
+        case "Newest First":
+          return (b.created_at || "").localeCompare(a.created_at || "");
+        case "Alphabetical (A-Z)":
+          return a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    });
+  }, [filteredProducts, sortBy]);
 
-    // 3. Search Term matching
-    const matchesSearch =
-      !searchTerm.trim() ||
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (p.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
-
-    return matchesCategory && matchesSearch;
-  });
-
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortBy) {
-      case "Newest First":
-        return (b.created_at || "").localeCompare(a.created_at || "");
-      case "Alphabetical (A-Z)":
-        return a.name.localeCompare(b.name);
-      default:
-        return 0;
-    }
-  });
+  // Helper to count available items per category
+  const getCategoryCount = useCallback((catName: string) => {
+    if (catName === "All Products") return initialProducts.length;
+    return initialProducts.filter((p) => matchProductCategory(p, catName)).length;
+  }, [initialProducts, matchProductCategory]);
 
   return (
     <>
@@ -204,28 +309,38 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
           {/* ── 1. Master Categories Tab Strip ── */}
           <div className={`${showFilters ? "block" : "hidden md:block"}`}>
             <div
-              className="flex items-center gap-6 py-3 overflow-x-auto hide-scrollbar"
+              className="flex items-center gap-6 py-3.5 overflow-x-auto hide-scrollbar"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
-              {tabNames.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => {
-                    setActiveCategory(cat);
-                    setActiveSubCategory("all");
-                  }}
-                  className={`relative text-xs font-bold tracking-[0.1em] uppercase transition-all whitespace-nowrap pb-2 group cursor-pointer ${
-                    activeCategory.toLowerCase() === cat.toLowerCase()
-                      ? "text-[#141414]"
-                      : "text-[#777777] hover:text-[#141414]"
-                  }`}
-                >
-                  {cat}
-                  {activeCategory.toLowerCase() === cat.toLowerCase() && (
-                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-[#8A572A]" />
-                  )}
-                </button>
-              ))}
+              {tabNames.map((cat) => {
+                const isActive = clean(activeCategory) === clean(cat);
+                const count = getCategoryCount(cat);
+
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => handleSelectCategory(cat)}
+                    className={`relative text-xs font-bold tracking-[0.1em] uppercase transition-all whitespace-nowrap pb-2 group cursor-pointer flex items-center gap-1.5 ${
+                      isActive
+                        ? "text-[#141414]"
+                        : "text-[#777777] hover:text-[#141414]"
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    {count > 0 && (
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${
+                        isActive ? "bg-[#8A572A] text-white" : "bg-slate-100 text-slate-500"
+                      }`}>
+                        {count}
+                      </span>
+                    )}
+                    {isActive && (
+                      <span className="absolute bottom-0 left-0 w-full h-[2.5px] bg-[#8A572A]" />
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -251,20 +366,23 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
               </button>
 
               {/* Individual Sub-Category Chips */}
-              {currentSubCategories.map((sub) => (
-                <button
-                  key={sub.id}
-                  type="button"
-                  onClick={() => setActiveSubCategory(sub.name)}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                    activeSubCategory.toLowerCase() === sub.name.toLowerCase()
-                      ? "bg-[#8A572A] text-white shadow-xs ring-2 ring-[#8A572A]/20"
-                      : "bg-[#FAFAF9] text-[#666666] hover:bg-[#EAE8E2] border border-[#E0E0DE]"
-                  }`}
-                >
-                  {sub.name}
-                </button>
-              ))}
+              {currentSubCategories.map((sub) => {
+                const isSubActive = clean(activeSubCategory) === clean(sub.name);
+                return (
+                  <button
+                    key={sub.id}
+                    type="button"
+                    onClick={() => setActiveSubCategory(sub.name)}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                      isSubActive
+                        ? "bg-[#8A572A] text-white shadow-xs ring-2 ring-[#8A572A]/20"
+                        : "bg-[#FAFAF9] text-[#666666] hover:bg-[#EAE8E2] border border-[#E0E0DE]"
+                    }`}
+                  >
+                    {sub.name}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -304,19 +422,18 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
           {sortedProducts.length === 0 && (
             <div className="text-center py-20 bg-white rounded-2xl border border-[#EBEBEA] shadow-xs">
               <Sparkles className="mx-auto text-[#8A572A] mb-3" size={28} />
-              <h3 className="text-lg font-serif font-bold text-[#141414] mb-2">No Teak Pieces Found</h3>
+              <h3 className="text-lg font-serif font-bold text-[#141414] mb-2">
+                No &quot;{activeCategory}&quot; Pieces Found
+              </h3>
               <p className="text-xs text-[#777777] max-w-sm mx-auto mb-6">
-                No items match your selected filters. Try choosing a different category or clearing your search term.
+                No products are currently cataloged under {activeCategory}. You can add pieces for this category anytime in the Admin panel.
               </p>
               <button
-                onClick={() => {
-                  setActiveCategory("All Products");
-                  setActiveSubCategory("all");
-                  setSearchTerm("");
-                }}
+                type="button"
+                onClick={() => handleSelectCategory("All Products")}
                 className="bg-[#8A572A] text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#1C130D] transition-colors cursor-pointer"
               >
-                Reset Catalog Filters
+                View All {initialProducts.length} Pieces
               </button>
             </div>
           )}

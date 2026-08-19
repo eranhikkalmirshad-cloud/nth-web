@@ -30,13 +30,13 @@ export default function WhatsAppFloating() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="fixed bottom-24 md:bottom-28 right-4 md:right-6 z-[102] w-80 bg-white rounded-2xl shadow-2xl border border-[#EAEAEA] overflow-hidden"
+              className="fixed bottom-24 md:bottom-28 right-4 md:right-6 z-[102] w-80 bg-white rounded-3xl shadow-2xl border border-[#EAEAEA] overflow-hidden"
             >
               {/* Header */}
               <div className="bg-[#25D366] p-4 relative text-white">
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="absolute top-3 right-3 text-white/80 hover:text-white transition-colors"
+                  className="absolute top-3 right-3 text-white/80 hover:text-white transition-colors cursor-pointer"
                   aria-label="Close"
                 >
                   <X size={20} />
@@ -64,7 +64,7 @@ export default function WhatsAppFloating() {
                     href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1EBE5B] text-white py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors shadow-sm"
+                    className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1EBE5B] text-white py-3.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors shadow-sm cursor-pointer"
                   >
                     <MessageCircle size={16} />
                     Chat on WhatsApp
@@ -72,7 +72,7 @@ export default function WhatsAppFloating() {
 
                   <a
                     href={`tel:${SITE_CONFIG.contact.phone}`}
-                    className="flex items-center justify-center gap-2 w-full bg-[#111111] hover:bg-[#333333] text-white py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors"
+                    className="flex items-center justify-center gap-2 w-full bg-[#111111] hover:bg-[#333333] text-white py-3.5 px-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
                   >
                     <Phone size={15} />
                     Call Studio
@@ -84,22 +84,19 @@ export default function WhatsAppFloating() {
         )}
       </AnimatePresence>
 
-      {/* Main Floating Button (Lifted above mobile bottom bar so it never blocks Saved button) */}
+      {/* Clean Circular WhatsApp Floating Icon Button */}
       <motion.button
         onClick={() => setIsExpanded(!isExpanded)}
         className="fixed bottom-20 right-3.5 sm:bottom-6 sm:right-6 z-[85] group cursor-pointer"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
-        whileHover={{ scale: 1.05 }}
+        transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
+        whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         aria-label="Contact Nilambur Teak Heritage on WhatsApp"
       >
-        <div className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1EBE5B] text-white px-4 py-2.5 rounded-full shadow-xl transition-all">
-          <MessageCircle size={18} fill="currentColor" />
-          <span className="font-bold text-xs uppercase tracking-wider hidden sm:block">
-            WhatsApp Inquiry
-          </span>
+        <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#25D366] hover:bg-[#20BA5A] text-white flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.45)] transition-all">
+          <MessageCircle size={28} fill="currentColor" />
         </div>
       </motion.button>
     </>

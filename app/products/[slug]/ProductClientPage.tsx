@@ -308,6 +308,60 @@ export default function ProductClientPage({
               </div>
             </div>
 
+            {/* ── HOW IT WORKS LUXURY DARK CARD ── */}
+            <div className="bg-[#120E0A] text-white p-6 sm:p-7 rounded-3xl border border-[#2B2119] shadow-xl space-y-5">
+              <h3 className="text-sm sm:text-base font-bold uppercase tracking-wider text-white font-sans">
+                HOW IT WORKS
+              </h3>
+
+              <div className="space-y-4">
+                {/* Step 01 */}
+                <div className="flex items-start gap-3.5">
+                  <span className="text-[#E5B56E] font-bold text-sm sm:text-base font-mono shrink-0 pt-0.5">
+                    01
+                  </span>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wide text-white">
+                      SEND ENQUIRY
+                    </h4>
+                    <p className="text-[11px] sm:text-xs text-[#A89E94] leading-relaxed mt-0.5">
+                      Share your requirement via WhatsApp
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 02 */}
+                <div className="flex items-start gap-3.5">
+                  <span className="text-[#E5B56E] font-bold text-sm sm:text-base font-mono shrink-0 pt-0.5">
+                    02
+                  </span>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wide text-white">
+                      CUSTOMIZE
+                    </h4>
+                    <p className="text-[11px] sm:text-xs text-[#A89E94] leading-relaxed mt-0.5">
+                      Select fabrics, wood finishes and size
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 03 */}
+                <div className="flex items-start gap-3.5">
+                  <span className="text-[#E5B56E] font-bold text-sm sm:text-base font-mono shrink-0 pt-0.5">
+                    03
+                  </span>
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wide text-white">
+                      CONFIRM ORDER
+                    </h4>
+                    <p className="text-[11px] sm:text-xs text-[#A89E94] leading-relaxed mt-0.5">
+                      Get final quote and delivery timeline
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
         </div>
