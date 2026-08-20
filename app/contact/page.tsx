@@ -266,23 +266,28 @@ export default function ContactPage() {
             </div>
 
             {/* Live Interactive Map Preview Card */}
-            <div className="bg-white p-4 rounded-3xl border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] space-y-3">
-              <div className="flex items-center justify-between px-2 pt-1">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
-                  Location Preview (Mampad, Nilambur)
-                </span>
+            <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] space-y-3">
+              <div className="flex items-center justify-between px-1 pt-1">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-800 block">
+                    Workshop Location
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-medium">
+                    Koolikkal, Mampad (Nilambur)
+                  </span>
+                </div>
                 <a
                   href={SITE_CONFIG.contact.address.googleMapsDirectionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[11px] font-bold text-[#8A572A] hover:underline inline-flex items-center gap-1"
+                  className="text-xs font-bold text-white bg-[#8A572A] hover:bg-[#1C130D] px-3.5 py-1.5 rounded-full shadow-xs inline-flex items-center gap-1.5 transition-colors"
                 >
                   <Navigation size={12} />
                   <span>Get Directions</span>
                 </a>
               </div>
 
-              <div className="rounded-2xl overflow-hidden border border-slate-200 aspect-[16/10] relative w-full">
+              <div className="rounded-2xl overflow-hidden border border-slate-200 relative w-full h-60 sm:h-72 group">
                 <iframe
                   title="Nilambur Teak Heritage Mampad Location"
                   src={SITE_CONFIG.contact.address.googleMapsEmbedUrl}
@@ -290,6 +295,19 @@ export default function ContactPage() {
                   loading="lazy"
                   allowFullScreen
                 ></iframe>
+
+                {/* Mobile Floating Direct Action Button */}
+                <div className="absolute bottom-3 right-3 pointer-events-auto z-10">
+                  <a
+                    href={SITE_CONFIG.contact.address.googleMapsDirectionsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white/95 hover:bg-white text-slate-900 border border-slate-300 text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-md inline-flex items-center gap-1.5 backdrop-blur-xs transition-transform active:scale-95"
+                  >
+                    <ExternalLink size={12} className="text-[#8A572A]" />
+                    <span>Open in Maps</span>
+                  </a>
+                </div>
               </div>
             </div>
 
