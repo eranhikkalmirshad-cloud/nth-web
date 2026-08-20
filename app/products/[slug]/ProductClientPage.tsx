@@ -56,7 +56,7 @@ export default function ProductClientPage({
   }
 
   const whatsappMessage = encodeURIComponent(
-    `Hello ${SITE_CONFIG.name}, I am inquiring about the ${product.name} (100% Genuine Nilambur Teak). Please share pricing, custom dimensions, and delivery timeline.`
+    `Hello ${SITE_CONFIG.name}, I am enquiring about the ${product.name} (100% Genuine Nilambur Teak). Please share pricing, custom dimensions, and delivery timeline.`
   );
   const whatsappLink = `https://wa.me/${SITE_CONFIG.contact.whatsappNumber}?text=${whatsappMessage}`;
   

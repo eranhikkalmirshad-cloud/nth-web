@@ -42,7 +42,7 @@ export default function Footer() {
   const phone = settings?.phone || SITE_CONFIG.contact.phone;
   const phoneDisplay = settings?.phone_display || SITE_CONFIG.contact.phoneDisplay;
   const whatsappNumber = settings?.whatsapp || "+918591221994";
-  const whatsappLink = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Nilambur Teak Heritage, I would like to inquire about bespoke teak furniture.")}`;
+  const whatsappLink = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hello Nilambur Teak Heritage, I would like to enquire about bespoke teak furniture.")}`;
   const email = settings?.email || SITE_CONFIG.contact.email;
   const address = settings?.address || "Koolikkal, Mampad P.O., Malappuram Dist., Kerala - 676542";
   const timingWeekdays = settings?.timing_weekdays || "Mon – Sat: 9:00 AM – 7:30 PM";
@@ -387,6 +387,18 @@ export default function Footer() {
             <p>{copyrightText}</p>
             <span className="hidden sm:inline text-[#443629]">•</span>
             <p className="text-amber-200/70">{badgeText}</p>
+            <span className="hidden sm:inline text-[#443629]">•</span>
+            <p>
+              Crafted by{" "}
+              <a
+                href="https://ekodrix.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-amber-300/90 hover:text-white font-semibold underline-offset-2 hover:underline transition-colors"
+              >
+                Ekodrix
+              </a>
+            </p>
           </div>
 
           <div className="flex items-center gap-3 sm:gap-4 text-[#8C8276]">

@@ -416,7 +416,7 @@ export default function Navbar() {
                   className="w-full flex items-center justify-center gap-2 bg-[#25D366] text-white py-2.5 rounded-md text-xs font-bold uppercase tracking-wider shadow-sm"
                 >
                   <MessageCircle size={15} />
-                  <span>WhatsApp Inquiry</span>
+                  <span>WhatsApp Enquiry</span>
                 </a>
 
                 <a

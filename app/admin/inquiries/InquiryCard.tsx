@@ -20,7 +20,7 @@ export default function InquiryCard({ inquiry, onStatusChange }: InquiryCardProp
     const result = await updateInquiryStatus(inquiry.id, newStatus);
     if (result.success) {
       onStatusChange(inquiry.id, newStatus);
-      toast.success(`Inquiry marked as ${newStatus}`);
+      toast.success(`Enquiry marked as ${newStatus}`);
     } else {
       toast.error("Failed to update status");
     }
@@ -46,7 +46,7 @@ export default function InquiryCard({ inquiry, onStatusChange }: InquiryCardProp
                 {inquiry.full_name}
               </h3>
               <p className="text-[11px] text-[#8A572A] uppercase tracking-wider font-bold mt-0.5">
-                {inquiry.subject || inquiry.interest_category || "Teak Furniture Inquiry"}
+                {inquiry.subject || inquiry.interest_category || "Teak Furniture Enquiry"}
               </p>
             </div>
           </div>

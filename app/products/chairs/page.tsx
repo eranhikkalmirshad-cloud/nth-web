@@ -51,7 +51,7 @@ export default async function ChairsPage() {
               className="btn-primary flex items-center gap-2"
             >
               <MessageCircle size={15} />
-              <span>WhatsApp Inquiry</span>
+              <span>WhatsApp Enquiry</span>
             </a>
 
             <Link

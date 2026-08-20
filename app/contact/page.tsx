@@ -26,10 +26,10 @@ export default function ContactPage() {
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
-      toast.success("Inquiry sent! Opening WhatsApp to connect with our artisan...");
+      toast.success("Enquiry sent! Opening WhatsApp to connect with our artisan...");
 
       const waMsg = encodeURIComponent(
-        `*New Inquiry — Nilambur Teak Heritage*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Category:* ${formData.category}\n*Email:* ${formData.email || "Not specified"}\n*Requirements:* ${formData.message}`
+        `*New Enquiry — Nilambur Teak Heritage*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Category:* ${formData.category}\n*Email:* ${formData.email || "Not specified"}\n*Requirements:* ${formData.message}`
       );
       window.open(`https://wa.me/${SITE_CONFIG.contact.whatsappNumber}?text=${waMsg}`, "_blank");
     }, 500);
@@ -153,7 +153,7 @@ export default function ContactPage() {
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#8A572A] hover:bg-[#1C130D] text-white text-xs font-bold uppercase tracking-wider px-8 py-4 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
                 >
                   <Send size={15} />
-                  <span>{isSubmitting ? "Sending..." : "Submit Inquiry"}</span>
+                  <span>{isSubmitting ? "Sending..." : "Submit Enquiry"}</span>
                 </button>
 
                 <a

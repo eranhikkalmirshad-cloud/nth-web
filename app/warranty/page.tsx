@@ -98,7 +98,7 @@ export default function WarrantyPolicyPage() {
         {/* Contact Support Note */}
         <div className="mt-12 p-6 sm:p-8 rounded-2xl bg-[#120E0A] text-white border border-[#2B221B] text-center space-y-3">
           <h3 className="font-serif text-lg sm:text-xl font-bold text-[#E5B56E]">
-            Have a Warranty Inquiry?
+            Have a Warranty Enquiry?
           </h3>
           <p className="text-xs text-[#C8BFB5] max-w-lg mx-auto leading-relaxed">
             Reach out to our Nilambur master atelier with your invoice and photos for rapid assistance.

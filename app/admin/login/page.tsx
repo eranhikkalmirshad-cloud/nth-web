@@ -51,7 +51,7 @@ export default function AdminLoginPage() {
           <div className="mb-6">
             <h2 className="text-xl font-bold font-cinzel text-slate-900">Sign in to Console</h2>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Enter your credentials to manage products, categories, hero showcases & inquiries.
+              Enter your credentials to manage products, categories, hero showcases & enquiries.
             </p>
           </div>
 

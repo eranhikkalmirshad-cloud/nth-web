@@ -36,7 +36,7 @@ const adminNavItems = [
   { label: "Categories", href: "/admin/categories", icon: ListTree, badge: "19" },
   { label: "Instagram Feed", href: "/admin/instagram", icon: Instagram, badge: "Social" },
   { label: "Footer & Contact", href: "/admin/footer", icon: Phone, badge: "CMS" },
-  { label: "Customer Inquiries", href: "/admin/inquiries", icon: MessageSquare, badge: "CRM" },
+  { label: "Customer Enquiries", href: "/admin/inquiries", icon: MessageSquare, badge: "CRM" },
   { label: "Client Reviews", href: "/admin/testimonials", icon: Users, badge: null },
   { label: "Cloudinary Media", href: "/admin/media", icon: ImageIcon, badge: null },
 ];

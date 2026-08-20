@@ -4,14 +4,14 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Privacy Policy | Nilambur Teak Heritage",
-  description: `Learn how ${SITE_CONFIG.name} collects, uses, and safeguards your personal data during orders and inquiries.`,
+  description: `Learn how ${SITE_CONFIG.name} collects, uses, and safeguards your personal data during orders and enquiries.`,
 };
 
 const privacySections = [
   {
     num: "1",
     title: "Information We Collect",
-    content: `When you visit our website, consult with our workshop, or place an order with ${SITE_CONFIG.name}, we may collect personal information including your full name, contact phone number, email address, physical delivery address, and architectural room specifications. This data is collected solely when you submit an inquiry, request a quotation, or place an order. We never sell, rent, or trade your personal data to third parties.`,
+    content: `When you visit our website, consult with our workshop, or place an order with ${SITE_CONFIG.name}, we may collect personal information including your full name, contact phone number, email address, physical delivery address, and architectural room specifications. This data is collected solely when you submit an enquiry, request a quotation, or place an order. We never sell, rent, or trade your personal data to third parties.`,
   },
   {
     num: "2",
@@ -35,8 +35,8 @@ const privacySections = [
   },
   {
     num: "6",
-    title: "Your Data Rights & Inquiries",
-    content: `You have the right to request access to, correction of, or deletion of your personal data stored with us. For any privacy-related inquiries, please contact our data team at ${SITE_CONFIG.contact.email} or call ${SITE_CONFIG.contact.phoneDisplay}.`,
+    title: "Your Data Rights & Enquiries",
+    content: `You have the right to request access to, correction of, or deletion of your personal data stored with us. For any privacy-related enquiries, please contact our data team at ${SITE_CONFIG.contact.email} or call ${SITE_CONFIG.contact.phoneDisplay}.`,
   },
 ];
 

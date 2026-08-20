@@ -139,7 +139,7 @@ export default async function LocationPage({
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#4A7C59] hover:bg-[#3D6649] text-white px-8 py-4 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors shadow"
               >
                 <MessageCircle size={16} />
-                <span>WhatsApp Delivery Inquiry</span>
+                <span>WhatsApp Delivery Enquiry</span>
               </a>
               <Link
                 href="/contact"

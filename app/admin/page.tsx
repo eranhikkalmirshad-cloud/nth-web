@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
   const stats = [
     { label: "Active Teak Pieces", value: productCount || 0, href: "/admin/products" },
     { label: "Master Categories", value: categoryCount || 19, href: "/admin/categories" },
-    { label: "Customer Inquiries", value: inquiryCount || 0, href: "/admin/inquiries" },
+    { label: "Customer Enquiries", value: inquiryCount || 0, href: "/admin/inquiries" },
     { label: "Client Testimonials", value: testimonialCount || 0, href: "/admin/testimonials" },
   ];
 

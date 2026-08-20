@@ -16,9 +16,9 @@ export default async function AdminInquiriesPage() {
           <MessageSquare size={14} />
           <span>Customer CRM & Leads</span>
         </div>
-        <h2 className="text-xl font-bold font-cinzel text-[#1C130D]">Customer Inquiries</h2>
+        <h2 className="text-xl font-bold font-cinzel text-[#1C130D]">Customer Enquiries</h2>
         <p className="text-xs text-[#7A6E65] mt-0.5">
-          Manage product inquiries, custom teak furniture quotation requests, and client communications.
+          Manage product enquiries, custom teak furniture quotation requests, and client communications.
         </p>
       </div>
 
