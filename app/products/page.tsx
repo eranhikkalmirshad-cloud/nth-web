@@ -82,7 +82,7 @@ export default async function ProductsPage() {
           <FadeInView>
             <div className="max-w-2xl mx-auto mb-12 sm:mb-16 space-y-2.5">
               <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] uppercase text-[#8A572A] block font-sans">
-                THE NILAMBUR HERITAGE™ DIFFERENCE
+                THE NILAMBUR TEAK HERITAGE™ DIFFERENCE
               </span>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#111111] tracking-tight">
                 Why Families Trust Us

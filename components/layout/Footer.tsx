@@ -85,10 +85,10 @@ export default function Footer() {
       id: "brand",
       title: "THE BRAND & POLICIES",
       links: [
-        { label: "About Nilambur Heritage", href: "/about" },
+        { label: "About Nilambur Teak Heritage", href: "/about" },
         { label: "Shipping Policy", href: "/shipping-policy" },
         { label: "Return & Cancellation", href: "/return-policy" },
-        { label: "Warranty", href: "/warranty" },
+        { label: "Warranty Policy", href: "/warranty" },
         { label: "Custom Order Policy", href: "/custom-orders" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Terms and Conditions", href: "/terms" },
