@@ -1,10 +1,9 @@
 // components/home/SignatureSelection.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Product } from "@/lib/types";
 
@@ -17,22 +16,26 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
 
-  // Ensure minimum items for continuous smooth looping
-  let items = products || [];
-  if (items.length > 0 && items.length < 5) {
-    items = [...items, ...items, ...items];
-  }
+  // Deduplicate and ensure clean continuous loop items
+  const items = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    if (products.length < 5) {
+      return [...products, ...products, ...products];
+    }
+    return products;
+  }, [products]);
+
   const total = items.length;
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (total === 0) return;
     setCurrentIndex((prev) => (prev + 1) % total);
-  };
+  }, [total]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (total === 0) return;
     setCurrentIndex((prev) => (prev - 1 + total) % total);
-  };
+  }, [total]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -42,16 +45,16 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [total]);
+  }, [handlePrev, handleNext]);
 
-  // Subtle auto-scroll every 6 seconds (paused on hover)
+  // Smooth auto-scroll (paused on hover)
   useEffect(() => {
     if (isHovered || total <= 1) return;
     const timer = setInterval(() => {
       handleNext();
-    }, 6000);
+    }, 5500);
     return () => clearInterval(timer);
-  }, [currentIndex, isHovered, total]);
+  }, [isHovered, total, handleNext]);
 
   if (!items || total === 0) {
     return null;
@@ -67,14 +70,14 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
 
   return (
     <section 
-      className="py-16 sm:py-24 bg-[#FAF9F7] overflow-hidden font-sans"
+      className="py-14 sm:py-20 bg-[#FAF9F7] overflow-hidden font-sans"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         
         {/* ── SECTION HEADER ── */}
-        <div className="max-w-3xl mx-auto mb-14 sm:mb-18 space-y-3">
+        <div className="max-w-3xl mx-auto mb-10 sm:mb-14 space-y-2.5">
           <span className="text-[10px] sm:text-xs font-bold tracking-[0.25em] uppercase text-[#8A572A] block font-sans">
             FEATURED MASTERPIECES
           </span>
@@ -92,13 +95,13 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
         </div>
 
         {/* ── 3D COVERFLOW PERSPECTIVE STAGE ── */}
-        <div className="relative max-w-6xl mx-auto flex items-center justify-center min-h-[540px] sm:min-h-[580px]">
+        <div className="relative max-w-6xl mx-auto flex items-center justify-center min-h-[500px] sm:min-h-[540px]">
           
           {/* Left Arrow Navigation Button */}
           <button
             type="button"
             onClick={handlePrev}
-            className="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full bg-[#8A572A] hover:bg-[#6E3F18] text-white flex items-center justify-center shadow-xl transition-all duration-300 cursor-pointer hover:scale-110 active:scale-95 border border-[#8A572A]"
+            className="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#8A572A] hover:bg-[#6E3F18] text-white flex items-center justify-center shadow-xl transition-transform duration-200 cursor-pointer hover:scale-105 active:scale-95 border border-[#8A572A]"
             aria-label="Previous product"
           >
             <ChevronLeft size={22} strokeWidth={2.5} />
@@ -108,7 +111,7 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
           <button
             type="button"
             onClick={handleNext}
-            className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full bg-[#8A572A] hover:bg-[#6E3F18] text-white flex items-center justify-center shadow-xl transition-all duration-300 cursor-pointer hover:scale-110 active:scale-95 border border-[#8A572A]"
+            className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#8A572A] hover:bg-[#6E3F18] text-white flex items-center justify-center shadow-xl transition-transform duration-200 cursor-pointer hover:scale-105 active:scale-95 border border-[#8A572A]"
             aria-label="Next product"
           >
             <ChevronRight size={22} strokeWidth={2.5} />
@@ -116,8 +119,8 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
 
           {/* 3D Perspective Stage */}
           <div 
-            className="relative w-full h-[500px] sm:h-[530px] flex items-center justify-center"
-            style={{ perspective: 1200, transformStyle: "preserve-3d" }}
+            className="relative w-full h-[480px] sm:h-[510px] flex items-center justify-center"
+            style={{ perspective: "1000px" }}
           >
             {items.map((item, index) => {
               // Calculate signed offset relative to currentIndex
@@ -133,52 +136,52 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
               const isLeft = diff === -1;
               const isRight = diff === 1;
 
-              // 3D positioning metrics
-              let xOffset = 0;
-              let yOffset = 0;
-              let zOffset = 0;
+              // Ultra-smooth GPU transform values
+              let translateX = 0;
+              let translateY = 0;
+              let translateZ = 0;
               let rotateY = 0;
               let scale = 1;
               let opacity = 1;
               let zIndex = 30;
 
               if (isCenter) {
-                xOffset = 0;
-                yOffset = -24;
-                zOffset = 40;
+                translateX = 0;
+                translateY = -20;
+                translateZ = 40;
                 rotateY = 0;
-                scale = 1.08;
+                scale = 1.05;
                 opacity = 1;
                 zIndex = 35;
               } else if (isLeft) {
-                xOffset = -320;
-                yOffset = 10;
-                zOffset = -60;
-                rotateY = 12;
+                translateX = -310;
+                translateY = 10;
+                translateZ = -50;
+                rotateY = 14;
                 scale = 0.88;
-                opacity = 0.72;
+                opacity = 0.75;
                 zIndex = 20;
               } else if (isRight) {
-                xOffset = 320;
-                yOffset = 10;
-                zOffset = -60;
-                rotateY = -12;
+                translateX = 310;
+                translateY = 10;
+                translateZ = -50;
+                rotateY = -14;
                 scale = 0.88;
-                opacity = 0.72;
+                opacity = 0.75;
                 zIndex = 20;
               } else if (diff === -2) {
-                xOffset = -540;
-                yOffset = 20;
-                zOffset = -150;
-                rotateY = 24;
+                translateX = -520;
+                translateY = 20;
+                translateZ = -120;
+                rotateY = 25;
                 scale = 0.75;
                 opacity = 0;
                 zIndex = 10;
               } else if (diff === 2) {
-                xOffset = 540;
-                yOffset = 20;
-                zOffset = -150;
-                rotateY = -24;
+                translateX = 520;
+                translateY = 20;
+                translateZ = -120;
+                rotateY = -25;
                 scale = 0.75;
                 opacity = 0;
                 zIndex = 10;
@@ -193,82 +196,69 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
               const badge = item.badge || (item.is_bestseller ? "BEST SELLER" : item.is_new ? "NEW ARRIVAL" : "BEST SELLER");
 
               return (
-                <motion.div
+                <div
                   key={`${item.id || item.slug}-${index}`}
-                  initial={false}
-                  animate={{
-                    x: xOffset,
-                    y: yOffset,
-                    z: zOffset,
-                    rotateY: rotateY,
-                    scale: scale,
-                    opacity: opacity,
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 260,
-                    damping: 26,
-                    mass: 0.8,
-                  }}
                   style={{
+                    transform: `translate3d(${translateX}px, ${translateY}px, ${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+                    opacity,
                     zIndex,
-                    transformStyle: "preserve-3d",
+                    willChange: "transform, opacity",
+                    transition: "transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.42s ease-out",
                   }}
                   onClick={() => {
                     if (isLeft) handlePrev();
                     else if (isRight) handleNext();
                     else if (isCenter) handleProductNavigate(item.slug);
                   }}
-                  className={`absolute w-[300px] sm:w-[340px] md:w-[360px] transition-all duration-300 cursor-pointer ${
+                  className={`absolute w-[290px] sm:w-[330px] md:w-[350px] cursor-pointer select-none ${
                     !isCenter ? "hover:opacity-90" : ""
                   }`}
                 >
-                  {/* Magnat Card Container */}
+                  {/* Card Container */}
                   <div
-                    className={`w-full bg-white rounded-[2rem] p-6 sm:p-7 border transition-all duration-300 flex flex-col justify-between min-h-[460px] sm:min-h-[490px] relative ${
+                    className={`w-full bg-white rounded-[2rem] p-5 sm:p-6 border flex flex-col justify-between min-h-[440px] sm:min-h-[470px] relative transition-shadow duration-300 ${
                       isCenter
-                        ? "border-[#8A572A]/30 shadow-[0_20px_50px_rgba(138,87,42,0.15)] ring-1 ring-[#8A572A]/20"
-                        : "border-slate-200/70 shadow-[0_10px_30px_rgba(0,0,0,0.05)]"
+                        ? "border-[#8A572A]/30 shadow-[0_16px_40px_rgba(138,87,42,0.12)] ring-1 ring-[#8A572A]/20"
+                        : "border-slate-200/70 shadow-[0_8px_20px_rgba(0,0,0,0.04)]"
                     }`}
                   >
                     {/* Top Left Badge */}
-                    <div className="absolute top-5 left-5 z-20">
-                      <span className="bg-[#8A572A] text-white text-[9px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-md shadow-xs font-sans">
+                    <div className="absolute top-4 left-4 z-20">
+                      <span className="bg-[#8A572A] text-white text-[9px] font-bold tracking-wider uppercase px-3 py-1 rounded-md shadow-xs font-sans">
                         {badge}
                       </span>
                     </div>
 
                     {/* Product Image Stage */}
-                    <div className="relative w-full aspect-[4/3] flex items-center justify-center my-3 pt-4">
-                      <div className="relative w-full h-full transform transition-transform duration-500 hover:scale-105">
+                    <div className="relative w-full aspect-[4/3] flex items-center justify-center my-2 pt-3">
+                      <div className="relative w-full h-full transition-transform duration-300 hover:scale-105">
                         <Image
                           src={image}
                           alt={title}
                           fill
-                          quality={95}
-                          sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 500px"
-                          className="object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.10)]"
+                          sizes="(max-width: 768px) 80vw, 400px"
+                          className="object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.08)]"
                         />
                       </div>
                     </div>
 
                     {/* Product Details (Centered) */}
-                    <div className="space-y-1.5 my-2 flex-1 flex flex-col justify-center text-center">
-                      <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#8A572A] block font-sans">
+                    <div className="space-y-1 my-1.5 flex-1 flex flex-col justify-center text-center">
+                      <span className="text-[9px] font-bold tracking-[0.2em] uppercase text-[#8A572A] block font-sans">
                         {category}
                       </span>
 
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug line-clamp-1">
+                      <h3 className="text-base font-bold text-slate-900 leading-snug line-clamp-1">
                         {title}
                       </h3>
 
-                      <p className="text-xs text-slate-500 font-normal line-clamp-2 leading-relaxed px-2 font-sans">
+                      <p className="text-xs text-slate-500 font-normal line-clamp-2 leading-relaxed px-1 font-sans">
                         {desc}
                       </p>
                     </div>
 
-                    {/* Black Pill Action Button */}
-                    <div className="pt-3 relative z-30">
+                    {/* Action Button */}
+                    <div className="pt-2 relative z-30">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -281,9 +271,9 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
                             handleNext();
                           }
                         }}
-                        className={`w-full inline-flex items-center justify-center text-[10px] sm:text-[11px] font-bold tracking-[0.15em] uppercase py-3.5 px-8 rounded-full transition-all duration-300 shadow-md active:scale-95 text-center cursor-pointer pointer-events-auto ${
+                        className={`w-full inline-flex items-center justify-center text-[10px] font-bold tracking-[0.15em] uppercase py-3 px-6 rounded-full transition-all duration-200 shadow-sm active:scale-95 text-center cursor-pointer pointer-events-auto ${
                           isCenter
-                            ? "bg-[#111111] hover:bg-[#8A572A] text-white hover:shadow-lg"
+                            ? "bg-[#111111] hover:bg-[#8A572A] text-white"
                             : "bg-[#111111]/90 hover:bg-[#111111] text-white"
                         }`}
                       >
@@ -291,7 +281,7 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
                       </button>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -299,8 +289,8 @@ export default function SignatureSelection({ products = [] }: SignatureSelection
         </div>
 
         {/* ── Slide Indicator Dots ── */}
-        {total > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-8">
+        {products.length > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-6">
             {products.map((_, i) => (
               <button
                 key={i}
