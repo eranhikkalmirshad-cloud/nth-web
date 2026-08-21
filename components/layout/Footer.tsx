@@ -87,7 +87,7 @@ export default function Footer() {
       links: [
         { label: "About Nilambur Teak Heritage", href: "/about" },
         { label: "Shipping Policy", href: "/shipping-policy" },
-        { label: "Return & Cancellation", href: "/return-policy" },
+        { label: "Return & Cancellation Policy", href: "/return-policy" },
         { label: "Warranty Policy", href: "/warranty" },
         { label: "Custom Order Policy", href: "/custom-orders" },
         { label: "Privacy Policy", href: "/privacy" },
