@@ -37,7 +37,7 @@ export const SITE_CONFIG = {
       full: "Koolikkal, Mampad P.O., Malappuram Dist., Kerala - 676542",
       googleMapsQuery: "Nilambur Teak Heritage, Koolikkal, Mampad, Kerala 676542",
       googleMapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3969.4777548806683!2d76.1750874!3d11.2300344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba6390014f0897d%3A0xb2cec54cdc3f4098!2sNilambur%20Teak%20Heritage!5e1!3m2!1sen!2sin!4v1787221191207!5m2!1sen!2sin",
-      googleMapsDirectionsUrl: "https://www.google.com/maps/dir/?api=1&destination=Nilambur+Teak+Heritage&destination_place_id=ChIJfYnwFAC5pjsRmEA_3EzVzrI",
+      googleMapsDirectionsUrl: "https://maps.app.goo.gl/wfeL74GFum9aUoNz5?g_st=ic",
     },
     geo: {
       latitude: "11.2300344",
