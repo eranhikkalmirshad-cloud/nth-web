@@ -187,19 +187,31 @@ export default function ContactPage() {
               </div>
 
               <div className="space-y-4 text-xs sm:text-sm text-slate-600 border-t border-slate-100 pt-5">
-                {/* Address */}
-                <div className="flex items-start gap-3.5">
-                  <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/60 text-[#8A572A] flex items-center justify-center shrink-0 mt-0.5">
+                {/* Address (Clickable Map Link) */}
+                <a
+                  href={SITE_CONFIG.contact.address.googleMapsDirectionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3.5 group cursor-pointer"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200/60 text-[#8A572A] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#8A572A] group-hover:text-white transition-colors">
                     <MapPin size={16} />
                   </div>
                   <div>
-                    <strong className="text-slate-900 block font-semibold mb-0.5">Showroom & Workshop</strong>
-                    <span className="leading-relaxed block text-slate-600">
+                    <div className="flex items-center gap-1.5">
+                      <strong className="text-slate-900 block font-semibold mb-0.5 group-hover:text-[#8A572A] transition-colors">
+                        Showroom & Workshop
+                      </strong>
+                      <span className="text-[10px] text-[#8A572A] font-bold uppercase tracking-wider underline">
+                        View Map ↗
+                      </span>
+                    </div>
+                    <span className="leading-relaxed block text-slate-600 group-hover:text-slate-900 transition-colors">
                       KOOLIKKAL, MAMPAD P.O.,<br />
                       MALAPPURAM DIST., KERALA - 676542
                     </span>
                   </div>
-                </div>
+                </a>
 
                 {/* Direct Telephone & WhatsApp */}
                 <div className="flex items-start gap-3.5">
