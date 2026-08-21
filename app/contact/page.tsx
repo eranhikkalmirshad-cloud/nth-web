@@ -76,7 +76,7 @@ export default function ContactPage() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g., Rajesh Kumar"
+                    placeholder="Your Name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-[#FBFBFA] border border-slate-200 rounded-xl px-4 py-3.5 text-sm text-slate-900 focus:outline-none focus:border-[#8A572A] focus:bg-white transition-all"
