@@ -1,11 +1,11 @@
 // components/home/CustomWoodworkSection.tsx
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import FadeInView from "@/components/ui/FadeInView";
-import { SITE_CONFIG } from "@/config/site";
 import { HomepageSection } from "@/lib/types";
 
 interface CustomWoodworkSectionProps {
@@ -16,10 +16,17 @@ export default function CustomWoodworkSection({ sections = [] }: CustomWoodworkS
   const millwork = sections.find((s) => s.section_key === "custom_millwork");
   const doors = sections.find((s) => s.section_key === "heritage_doors");
 
+  const [millworkImg, setMillworkImg] = useState(
+    millwork?.image_url || "/images/bespoke-teak-millwork-preview.png"
+  );
+  const [doorsImg, setDoorsImg] = useState(
+    doors?.image_url || "/images/carved-teak-doors-preview.png"
+  );
+
   const card1 = {
     title: millwork?.title || "Bespoke Teak Millwork",
     desc: millwork?.subtitle || "Tailor-made solid teak dining tables, wall panels, and living suites created from your floor plans.",
-    image: millwork?.image_url || "/images/og-datas/IMG_0600.PNG",
+    image: millworkImg,
     cta: millwork?.cta_text || "Explore Custom Design",
     url: millwork?.cta_url || "/contact",
   };
@@ -27,13 +34,13 @@ export default function CustomWoodworkSection({ sections = [] }: CustomWoodworkS
   const card2 = {
     title: doors?.title || "Carved Teak Doors",
     desc: doors?.subtitle || "Traditional Kerala main entrance doors, pooja room panels, and heavy teak frames with brass accents.",
-    image: doors?.image_url || "/images/og-datas/IMG_0558.PNG",
+    image: doorsImg,
     cta: doors?.cta_text || "Explore Door Collection",
     url: doors?.cta_url && doors?.cta_url !== "/products" ? doors.cta_url : "/products?category=doors",
   };
 
   return (
-    <section className="py-12 sm:py-20 lg:py-24 bg-white overflow-hidden">
+    <section className="py-12 sm:py-20 lg:py-24 bg-white overflow-hidden font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         
         {/* Eyebrow & Heading */}
@@ -61,13 +68,15 @@ export default function CustomWoodworkSection({ sections = [] }: CustomWoodworkS
           <FadeInView direction="right">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-xs hover:shadow-xl transition-all duration-300 group flex flex-col justify-between h-full">
               <div>
-                <div className="relative aspect-[16/10] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 mb-4 sm:mb-5 border border-slate-100">
+                <div className="relative aspect-[16/10] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#FAF9F7] mb-4 sm:mb-5 border border-slate-100">
                   <Image
                     src={card1.image}
                     alt={card1.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    onError={() => setMillworkImg("/images/bespoke-teak-millwork-preview.png")}
+                    unoptimized={card1.image.startsWith("http")}
                   />
                 </div>
 
@@ -97,13 +106,15 @@ export default function CustomWoodworkSection({ sections = [] }: CustomWoodworkS
           <FadeInView direction="left">
             <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-xs hover:shadow-xl transition-all duration-300 group flex flex-col justify-between h-full">
               <div>
-                <div className="relative aspect-[16/10] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 mb-4 sm:mb-5 border border-slate-100">
+                <div className="relative aspect-[16/10] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-[#FAF9F7] mb-4 sm:mb-5 border border-slate-100">
                   <Image
                     src={card2.image}
                     alt={card2.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    onError={() => setDoorsImg("/images/carved-teak-doors-preview.png")}
+                    unoptimized={card2.image.startsWith("http")}
                   />
                 </div>
 
