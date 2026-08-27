@@ -72,8 +72,7 @@ export default function AdminLoginPage() {
                   type="email"
                   required
                   autoComplete="email"
-                  defaultValue="nilambur.teak.heritage@gmail.com"
-                  placeholder="nilambur.teak.heritage@gmail.com"
+                  placeholder="Enter your email address"
                   className="w-full bg-[#FAF9F7] border border-slate-200 pl-10 pr-4 py-3 text-slate-900 text-xs sm:text-sm font-medium focus:outline-none focus:border-[#8A572A] focus:bg-white transition-all rounded-xl shadow-2xs"
                 />
               </div>
@@ -95,8 +94,7 @@ export default function AdminLoginPage() {
                   type={showPassword ? "text" : "password"}
                   required
                   autoComplete="current-password"
-                  defaultValue="admin@nilambur2026"
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   className="w-full bg-[#FAF9F7] border border-slate-200 pl-10 pr-11 py-3 text-slate-900 text-xs sm:text-sm font-medium focus:outline-none focus:border-[#8A572A] focus:bg-white transition-all rounded-xl shadow-2xs"
                 />
                 <button

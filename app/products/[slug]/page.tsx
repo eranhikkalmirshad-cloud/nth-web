@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         images={product.images || []}
         price={numericPrice}
         category={product.categories?.name || undefined}
-        sku={product.slug}
+        sku={product.mpn || product.slug}
         url={`${SITE_CONFIG.url}/products/${product.slug}`}
       />
       <ProductClientPage product={product} relatedProducts={relatedProducts} />

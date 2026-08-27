@@ -55,8 +55,12 @@ export default function ProductClientPage({
     );
   }
 
+  const productIdentifier = product.mpn
+    ? `${product.name} (MPN: ${product.mpn})`
+    : product.name;
+
   const whatsappMessage = encodeURIComponent(
-    `Hello ${SITE_CONFIG.name}, I am enquiring about the ${product.name} (100% Genuine Nilambur Teak). Please share pricing, custom dimensions, and delivery timeline.`
+    `Hello ${SITE_CONFIG.name}, I am enquiring about the ${productIdentifier} (100% Genuine Nilambur Teak). Please share pricing and delivery timeline.`
   );
   const whatsappLink = `https://wa.me/${SITE_CONFIG.contact.whatsappNumber}?text=${whatsappMessage}`;
   
@@ -167,15 +171,22 @@ export default function ProductClientPage({
           {/* ══════ RIGHT: Magnat Style Clean Information Column ══════ */}
           <div className="lg:col-span-6 space-y-6">
             
-            {/* Category Eyebrow & Wishlist Save Button */}
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#8A572A] block">
-                {product.categories?.name || "Solid Teak Heritage"}
-              </span>
+            {/* Category Eyebrow, MPN & Wishlist Save Button */}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 flex-wrap min-w-0">
+                <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-[#8A572A] block truncate">
+                  {product.categories?.name || "Solid Teak Heritage"}
+                </span>
+                {product.mpn && (
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-700 bg-slate-100 border border-slate-200/80 px-2 py-0.5 rounded-md">
+                    MPN: {product.mpn}
+                  </span>
+                )}
+              </div>
 
               <button
                 onClick={() => toggleFavorite(product.slug)}
-                className="w-10 h-10 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-colors"
+                className="w-10 h-10 rounded-full bg-slate-50 hover:bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-colors shrink-0"
                 title={liked ? "Remove from wishlist" : "Add to wishlist"}
               >
                 <Heart
@@ -188,12 +199,12 @@ export default function ProductClientPage({
 
             {/* Big Bold Clean Title */}
             <div>
-              <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-slate-900 leading-[1.15] tracking-tight uppercase">
+              <h1 className="text-xl sm:text-2xl lg:text-[28px] xl:text-3xl font-bold text-slate-900 leading-tight tracking-tight uppercase">
                 {product.name}
               </h1>
 
               {/* Excerpt / Subtitle */}
-              <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed mt-3 max-w-xl">
+              <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed mt-2 sm:mt-2.5 max-w-xl">
                 {product.short_description || product.description || "Handcrafted from 100% mature Nilambur teak wood with generational joinery and natural satin polish."}
               </p>
             </div>

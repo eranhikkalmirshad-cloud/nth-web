@@ -66,7 +66,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             />
           </div>
           <span className="font-cinzel text-xs font-bold tracking-wider text-slate-900">
-            NILAMBUR TEAK
+            NILAMBUR TEAK HERITAGE
           </span>
         </Link>
         <button
@@ -110,7 +110,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             <div className="flex flex-col min-w-0">
               <span className="font-cinzel text-xs font-black tracking-wider text-slate-900 truncate">
-                Nilambur Teak
+                Nilambur Teak Heritage
               </span>
               <span className="text-[10px] font-semibold text-amber-700 tracking-wider uppercase">
                 Admin Studio

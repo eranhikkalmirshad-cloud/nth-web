@@ -301,8 +301,12 @@ export default function Navbar() {
               <div>
                 {/* Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-[#EAEAEA]">
-                  <div className="flex items-center gap-2">
-                    <div className="relative h-7 w-7">
+                  <Link
+                    href="/"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 min-w-0"
+                  >
+                    <div className="relative h-7 w-7 flex-shrink-0">
                       <Image
                         src="/images/logo-proper.png"
                         alt={SITE_CONFIG.name}
@@ -310,13 +314,14 @@ export default function Navbar() {
                         className="object-contain"
                       />
                     </div>
-                    <span className="font-cinzel text-xs font-bold uppercase text-[#8A572A]">
-                      Nilambur Teak
+                    <span className="font-cinzel text-xs font-bold tracking-[0.04em] uppercase text-[#8A572A] leading-tight truncate">
+                      Nilambur Teak Heritage<span className="text-[8px] align-top font-sans ml-0.5 font-normal text-[#8A572A]">™</span>
                     </span>
-                  </div>
+                  </Link>
                   <button
                     onClick={() => setMobileOpen(false)}
                     className="p-1 text-[#555555] hover:text-[#111111]"
+                    aria-label="Close menu"
                   >
                     <X size={20} />
                   </button>

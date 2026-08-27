@@ -64,8 +64,13 @@ export default function FavoritesDrawer() {
   }, [isDrawerOpen]);
 
   const inquiryMessage = encodeURIComponent(
-    `Hello ${SITE_CONFIG.name}, I have saved the following Nilambur teak pieces and would like custom quotation & dimensions:\n` +
-      favoriteProducts.map((p) => `- ${p.name} (${p.categories?.name || p.room || "Teak Furniture"})`).join("\n")
+    `Hello ${SITE_CONFIG.name}, I have saved the following Nilambur teak pieces and would like get quotation & delivery timeline:\n` +
+      favoriteProducts
+        .map((p) => {
+          const mpnTag = p.mpn ? ` (MPN: ${p.mpn})` : "";
+          return `- ${p.name}${mpnTag} (${p.categories?.name || p.room || "Teak Furniture"})`;
+        })
+        .join("\n")
   );
 
   return (
@@ -164,9 +169,16 @@ export default function FavoritesDrawer() {
                         </Link>
 
                         <div className="flex-1 flex flex-col justify-center pr-6">
-                          <span className="text-[9px] uppercase tracking-[0.2em] text-[#8A572A] font-bold block mb-0.5">
-                            {catName}
-                          </span>
+                          <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                            <span className="text-[9px] uppercase tracking-[0.2em] text-[#8A572A] font-bold block">
+                              {catName}
+                            </span>
+                            {product.mpn && (
+                              <span className="text-[8px] font-mono font-bold uppercase tracking-wider text-slate-700 bg-slate-100 border border-slate-200/80 px-1 py-0.2 rounded">
+                                MPN: {product.mpn}
+                              </span>
+                            )}
+                          </div>
                           <Link
                             href={`/products/${product.slug}`}
                             onClick={() => setDrawerOpen(false)}

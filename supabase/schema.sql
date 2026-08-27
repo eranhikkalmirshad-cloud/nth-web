@@ -34,6 +34,7 @@ create table if not exists products (
   material text,
   badge text,
   room text,                               -- Room type: Living Room, Dining Room, Bedroom, Sitout, Office
+  mpn text,                                -- Manufacturer Part Number (optional)
   is_new boolean default false,
   is_bestseller boolean default false,
   type text,

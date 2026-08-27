@@ -44,6 +44,8 @@ export async function saveProduct(formData: FormData) {
   const category_id = formData.get("category_id") as string;
   const type = formData.get("type") as string;
   const room = formData.get("room") as string;
+  const mpnRaw = formData.get("mpn") as string;
+  const mpn = mpnRaw && mpnRaw.trim() ? mpnRaw.trim() : null;
   
   const is_new = formData.get("is_new") === "true";
   const is_bestseller = formData.get("is_bestseller") === "true";
@@ -86,6 +88,7 @@ export async function saveProduct(formData: FormData) {
     material,
     badge,
     room: room || null,
+    mpn,
     category_id: category_id || null,
     type,
     is_new,

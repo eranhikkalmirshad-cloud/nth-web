@@ -17,6 +17,7 @@ export interface Product {
   material: string | null | undefined;
   badge: string | null | undefined;
   room: string | null | undefined;
+  mpn?: string | null | undefined;
   is_new: boolean;
   is_bestseller: boolean;
   is_active: boolean;

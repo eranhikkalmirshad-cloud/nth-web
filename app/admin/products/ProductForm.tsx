@@ -39,7 +39,7 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
     const specs = Array.isArray(product?.specifications) ? [...product.specifications] : [];
     const hasDimensions = specs.some(s => s.label?.toLowerCase() === "dimensions");
     const hasWeight = specs.some(s => s.label?.toLowerCase() === "weight");
-    
+
     if (!hasDimensions) {
       specs.unshift({ label: "Dimensions", value: "" });
     }
@@ -234,6 +234,18 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                   <option value="Study & Office">Study & Office</option>
                 </select>
               </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 pl-1 flex items-center justify-between">
+                  <span>MPN (Part Number)</span>
+                </label>
+                <input
+                  name="mpn"
+                  defaultValue={product?.mpn || ""}
+                  placeholder="CT102"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-600 focus:bg-white transition-all font-mono uppercase"
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -265,12 +277,12 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                 <p className="text-[9px] text-[#999] uppercase tracking-widest pl-1 font-medium">Define dimensions and weight for catalog display</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 pb-10 border-b border-[#f5f5f5]">
               {/* Specialized Dimensions Field */}
               <div className="space-y-2">
                 <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#111] flex items-center gap-2">
-                   Dimensions <span className="text-[#999] font-normal">(W × D × H)</span>
+                  Dimensions <span className="text-[#999] font-normal">(W × D × H)</span>
                 </label>
                 <input
                   value={specifications.find(s => s.label === "Dimensions")?.value || ""}
@@ -292,7 +304,7 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
               {/* Specialized Weight Field */}
               <div className="space-y-2">
                 <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#111] flex items-center gap-2">
-                   Product Weight <span className="text-[#999] font-normal">(Approx)</span>
+                  Product Weight <span className="text-[#999] font-normal">(Approx)</span>
                 </label>
                 <input
                   value={specifications.find(s => s.label === "Weight")?.value || ""}
@@ -315,14 +327,14 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
             {/* Other Specs */}
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                 <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#999]">Additional Details</h4>
-                 <button
-                    type="button"
-                    onClick={() => setSpecifications([...specifications, { label: "", value: "" }])}
-                    className="text-[0.6rem] font-bold uppercase tracking-widest text-[#C0001A] flex items-center gap-1.5"
-                  >
-                    <Plus size={12} /> Add More
-                  </button>
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#999]">Additional Details</h4>
+                <button
+                  type="button"
+                  onClick={() => setSpecifications([...specifications, { label: "", value: "" }])}
+                  className="text-[0.6rem] font-bold uppercase tracking-widest text-[#C0001A] flex items-center gap-1.5"
+                >
+                  <Plus size={12} /> Add More
+                </button>
               </div>
 
               {specifications.filter(s => s.label !== "Dimensions" && s.label !== "Weight").map((spec, idx) => (
@@ -348,10 +360,10 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                         <input
                           value={spec.value}
                           onChange={(e) => {
-                             const realIdx = specifications.indexOf(spec);
-                             const newSpecs = [...specifications];
-                             newSpecs[realIdx].value = e.target.value;
-                             setSpecifications(newSpecs);
+                            const realIdx = specifications.indexOf(spec);
+                            const newSpecs = [...specifications];
+                            newSpecs[realIdx].value = e.target.value;
+                            setSpecifications(newSpecs);
                           }}
                           placeholder="Enter detail..."
                           className="flex-1 bg-[#F9F9F9] border border-[#eeeeee] rounded-none px-4 py-3 text-sm focus:outline-none focus:border-[#C0001A] transition-all"
@@ -369,12 +381,12 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-10 pt-6 border-t border-[#f5f5f5] bg-[#fcfcfc] -mx-8 px-8 -mb-8 pb-8">
-               <p className="text-[9px] text-[#999] uppercase tracking-[0.2em] font-medium leading-relaxed">
-                  These metrics generate the premium technical grid on the product page. <br/>
-                  <span className="text-[#C0001A]">Dimensions and Weight are prioritized.</span>
-               </p>
+              <p className="text-[9px] text-[#999] uppercase tracking-[0.2em] font-medium leading-relaxed">
+                These metrics generate the premium technical grid on the product page. <br />
+                <span className="text-[#C0001A]">Dimensions and Weight are prioritized.</span>
+              </p>
             </div>
           </section>
 

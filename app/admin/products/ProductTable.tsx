@@ -41,6 +41,7 @@ export default function ProductTable({ products }: ProductTableProps) {
       searchQuery === "" ||
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.mpn && product.mpn.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (product.categories?.name &&
         product.categories.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -195,9 +196,16 @@ export default function ProductTable({ products }: ProductTableProps) {
                           <h4 className="text-xs sm:text-sm font-bold text-[#1C130D] truncate max-w-[220px]">
                             {product.name}
                           </h4>
-                          <p className="text-[11px] text-[#7A6E65] truncate max-w-[180px] font-mono mt-0.5">
-                            /{product.slug}
-                          </p>
+                          <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
+                            <p className="text-[11px] text-[#7A6E65] truncate max-w-[180px] font-mono">
+                              /{product.slug}
+                            </p>
+                            {product.mpn && (
+                              <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-[#8A572A] bg-amber-50 border border-amber-200/80 px-1.5 py-0.5 rounded">
+                                MPN: {product.mpn}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </td>

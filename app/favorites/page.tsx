@@ -49,7 +49,13 @@ export default function FavoritesPage() {
   }, [favorites]);
 
   const waInquiryMsg = encodeURIComponent(
-    `Hello ${SITE_CONFIG.name}, I have saved the following pieces from your catalog:\n${favoriteProducts.map((p) => `- ${p.name}`).join("\n")}\n\nPlease share custom quotation and delivery timelines.`
+    `Hello ${SITE_CONFIG.name}, I have saved the following Nilambur teak pieces and would like get quotation & delivery timeline:\n` +
+      favoriteProducts
+        .map((p) => {
+          const mpnTag = p.mpn ? ` (MPN: ${p.mpn})` : "";
+          return `- ${p.name}${mpnTag} (${p.categories?.name || p.room || "Teak Furniture"})`;
+        })
+        .join("\n")
   );
 
   return (
