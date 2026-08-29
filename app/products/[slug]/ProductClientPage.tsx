@@ -18,6 +18,8 @@ import {
   Sparkles,
   Ruler,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 import { Product } from "@/lib/types";
@@ -94,6 +96,16 @@ export default function ProductClientPage({
           "Naturally termite-proof, borer-proof, and moisture resistant",
         ];
 
+  const handleNextImage = () => {
+    if (images.length <= 1) return;
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const handlePrevImage = () => {
+    if (images.length <= 1) return;
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   return (
     <div className="bg-white min-h-screen pb-24 font-sans selection:bg-[#8A572A] selection:text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-10">
@@ -116,33 +128,86 @@ export default function ProductClientPage({
         {/* ── Main Product Two-Column Layout ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start mb-20">
           
-          {/* ══════ LEFT: Magnat Style Large Gallery Card ══════ */}
+          {/* ══════ LEFT: Magnat Style Large Gallery Card with Mobile Drag / Swipe ══════ */}
           <div className="lg:col-span-6 space-y-4">
-            <div className="relative aspect-[4/3] sm:aspect-[4/3.2] w-full bg-[#FAF9F7] rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs flex items-center justify-center">
-              <AnimatePresence mode="wait">
+            <div className="relative aspect-[4/3] sm:aspect-[4/3.2] w-full bg-[#FAF9F7] rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs flex items-center justify-center group select-none">
+              
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={currentImageIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="relative w-full h-full p-4 sm:p-6 flex items-center justify-center"
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(_e, { offset, velocity }) => {
+                    const swipeThreshold = 50;
+                    if (offset.x < -swipeThreshold || velocity.x < -400) {
+                      handleNextImage();
+                    } else if (offset.x > swipeThreshold || velocity.x > 400) {
+                      handlePrevImage();
+                    }
+                  }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.22 }}
+                  className="relative w-full h-full p-4 sm:p-6 flex items-center justify-center cursor-grab active:cursor-grabbing touch-pan-y"
                 >
                   <Image
                     src={images[currentImageIndex]}
                     alt={product.name}
                     fill
                     priority
+                    draggable={false}
                     sizes="(min-width: 1024px) 50vw, 100vw"
-                    className="object-contain object-center"
+                    className="object-contain object-center pointer-events-none"
                   />
                 </motion.div>
               </AnimatePresence>
 
+              {/* Prev Image Arrow Button */}
+              {images.length > 1 && (
+                <button
+                  type="button"
+                  onClick={handlePrevImage}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:text-slate-950 hover:bg-white active:scale-95 transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+              )}
+
+              {/* Next Image Arrow Button */}
+              {images.length > 1 && (
+                <button
+                  type="button"
+                  onClick={handleNextImage}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:text-slate-950 hover:bg-white active:scale-95 transition-all opacity-80 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              )}
+
               {/* Magnat Floating Pill Counter Badge (Bottom Right) */}
-              <div className="absolute bottom-4 right-4 bg-[#141414]/90 backdrop-blur-md text-white text-[11px] font-bold px-3.5 py-1 rounded-full shadow-md">
+              <div className="absolute bottom-4 right-4 bg-[#141414]/90 backdrop-blur-md text-white text-[11px] font-bold px-3.5 py-1 rounded-full shadow-md z-20 pointer-events-none">
                 {currentImageIndex + 1} / {images.length}
               </div>
+
+              {/* Mobile Slide Indicator Dots (Bottom Center) */}
+              {images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 pointer-events-none">
+                  {images.map((_: string, idx: number) => (
+                    <span
+                      key={idx}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        currentImageIndex === idx
+                          ? "w-5 bg-[#8A572A]"
+                          : "w-1.5 bg-slate-300/80"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Thumbnails Strip */}
@@ -155,7 +220,7 @@ export default function ProductClientPage({
                   <button
                     key={i}
                     onClick={() => setCurrentImageIndex(i)}
-                    className={`relative w-20 aspect-square rounded-2xl overflow-hidden border-2 transition-all shrink-0 bg-[#FAF9F7] ${
+                    className={`relative w-20 aspect-square rounded-2xl overflow-hidden border-2 transition-all shrink-0 bg-[#FAF9F7] cursor-pointer ${
                       currentImageIndex === i
                         ? "border-[#8A572A] ring-2 ring-[#8A572A]/20"
                         : "border-slate-200 opacity-60 hover:opacity-100"
