@@ -204,6 +204,13 @@ export const ROOM_COLLECTIONS: RoomItem[] = [
     image: "https://res.cloudinary.com/xwpjhogd/image/upload/v1786798773/nilambur-teak-heritage/rcaaxki3jaogj1kappm4.png",
     description: "Executive desks, library bookcases, and ergonomic leather study chairs.",
   },
+  {
+    name: "Kitchen Cabinets",
+    slug: "kitchen-cabinets",
+    href: "/products?category=kitchen-cabinets",
+    image: "https://res.cloudinary.com/xwpjhogd/image/upload/v1786802157/nilambur-teak-heritage/cuegyj8scgvahcotlv02.png",
+    description: "Solid teak modular kitchen cabinets, pantry units, crockery cupboards, and architectural teak joinery.",
+  },
 ];
 
 export const ROOM_CATEGORIES = ROOM_COLLECTIONS;

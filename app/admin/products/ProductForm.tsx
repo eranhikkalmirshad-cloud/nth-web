@@ -232,6 +232,7 @@ export default function ProductForm({ product, categories }: ProductFormProps) {
                   <option value="Bedroom">Bedroom</option>
                   <option value="Sitout">Sitout</option>
                   <option value="Study & Office">Study & Office</option>
+                  <option value="Kitchen Cabinets">Kitchen Cabinets</option>
                 </select>
               </div>
 
