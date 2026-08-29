@@ -41,8 +41,12 @@ export default function Navbar() {
         .order("sort_order", { ascending: true })
         .then(({ data }) => {
           if (data && data.length > 0) {
+            // Filter main / primary categories so sub-categories don't clutter top-level explore
+            const mainCategories = data.filter(
+              (c) => !c.base_category || c.base_category === "main" || c.base_category === "none" || c.base_category === c.slug
+            );
             setCategories(
-              data.map((c) => ({
+              mainCategories.map((c) => ({
                 name: c.name,
                 slug: c.slug,
                 href: `/products?category=${c.slug}`,
@@ -343,7 +347,7 @@ export default function Navbar() {
                     onClick={() => setMobileOpen(false)}
                     className="text-xs font-bold tracking-[0.15em] uppercase text-[#111111] py-2.5 border-b border-[#F9F9F8] flex items-center justify-between"
                   >
-                    <span>All Products ({PRODUCT_CATEGORIES.length} Categories)</span>
+                    <span>All Products ({categories.length} Categories)</span>
                     <ArrowRight size={13} className="text-[#AAAAAA]" />
                   </Link>
 
@@ -360,7 +364,7 @@ export default function Navbar() {
                     {mobileExploreOpen && (
                       <div className="pt-3 space-y-3 pl-1">
                         <div className="grid grid-cols-2 gap-1.5 max-h-56 overflow-y-auto pr-1">
-                          {PRODUCT_CATEGORIES.map((cat) => (
+                          {categories.map((cat) => (
                             <Link
                               key={cat.slug}
                               href={cat.href}
