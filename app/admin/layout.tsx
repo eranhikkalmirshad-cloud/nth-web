@@ -208,7 +208,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="text-slate-900 sm:text-slate-700 font-bold sm:font-semibold capitalize truncate">
               {pathname === "/admin"
                 ? "Dashboard"
-                : pathname.replace("/admin/", "").replace("-", " ")}
+                : (adminNavItems.find((item) => item.href === pathname)?.label ||
+                   pathname.replace("/admin/", "").replace("inquiries", "Enquiries").replace("-", " "))}
             </span>
           </div>
 

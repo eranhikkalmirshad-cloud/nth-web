@@ -26,7 +26,7 @@ export async function submitInquiry(formData: FormData) {
 
   if (error) {
     console.error("Error inserting inquiry:", error);
-    return { error: "Failed to submit inquiry. Please try again." };
+    return { error: "Failed to submit enquiry. Please try again." };
   }
 
   return { success: true };

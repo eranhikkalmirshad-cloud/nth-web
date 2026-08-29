@@ -109,7 +109,9 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     const p = searchParams.get("category") || searchParams.get("room");
     return resolveCategoryFromParam(p);
   });
-  const [activeSubCategory, setActiveSubCategory] = useState<string>("all");
+  const [activeSubCategory, setActiveSubCategory] = useState<string>(() => {
+    return searchParams.get("subcategory") || "all";
+  });
   const [sortBy, setSortBy] = useState("Featured");
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -117,8 +119,12 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
   // Sync with searchParams
   useEffect(() => {
     const p = searchParams.get("category") || searchParams.get("room");
-    setActiveCategory(resolveCategoryFromParam(p));
-    setActiveSubCategory("all");
+    const sub = searchParams.get("subcategory");
+    const resolvedCat = resolveCategoryFromParam(p);
+    setActiveCategory(resolvedCat);
+    if (sub) {
+      setActiveSubCategory(sub);
+    }
   }, [searchParams, resolveCategoryFromParam]);
 
   // Tab switch handler with URL update
@@ -131,11 +137,30 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
       const url = new URL(window.location.href);
       if (cat === "All Products") {
         url.searchParams.delete("category");
+        url.searchParams.delete("subcategory");
         url.searchParams.delete("room");
       } else {
         const slug = cat.toLowerCase().replace(/\s+/g, "-");
         url.searchParams.set("category", slug);
+        url.searchParams.delete("subcategory");
         url.searchParams.delete("room");
+      }
+      window.history.pushState({}, "", url.toString());
+    }
+  };
+
+  // Subcategory switch handler with URL update
+  const handleSelectSubCategory = (subValue: string) => {
+    setActiveSubCategory(subValue);
+    setSearchTerm("");
+
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      if (subValue === "all") {
+        url.searchParams.delete("subcategory");
+      } else {
+        const slug = subValue.toLowerCase().replace(/\s+/g, "-");
+        url.searchParams.set("subcategory", slug);
       }
       window.history.pushState({}, "", url.toString());
     }
@@ -149,22 +174,23 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
   );
 
   // Sub-Categories belonging to the active category
-  const currentSubCategories = activeCategory === "All Products"
-    ? []
-    : dbSubCategories.filter((sub) => {
-        const parentClean = clean(sub.base_category);
-        const activeClean = clean(activeCategory);
-        const slugClean = clean(activeDbCategory?.slug);
-        const idClean = clean(activeDbCategory?.id);
+  const currentSubCategories = useMemo(() => {
+    if (activeCategory === "All Products") return [];
+    return dbSubCategories.filter((sub) => {
+      const parentClean = clean(sub.base_category);
+      const activeClean = clean(activeCategory);
+      const slugClean = clean(activeDbCategory?.slug);
+      const idClean = clean(activeDbCategory?.id);
 
-        return (
-          parentClean === activeClean ||
-          parentClean === slugClean ||
-          parentClean === idClean ||
-          activeClean.includes(parentClean) ||
-          parentClean.includes(activeClean)
-        );
-      });
+      return (
+        parentClean === activeClean ||
+        parentClean === slugClean ||
+        parentClean === idClean ||
+        activeClean.includes(parentClean) ||
+        parentClean.includes(activeClean)
+      );
+    });
+  }, [activeCategory, activeDbCategory, dbSubCategories]);
 
   const sortOptions = ["Featured", "Newest First", "Alphabetical (A-Z)"];
 
@@ -175,10 +201,11 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
     const pCatName = clean(p.categories?.name);
     const pCatSlug = clean(p.categories?.slug);
+    const pCatBase = clean(p.categories?.base_category);
     const pRoom = clean(p.room);
 
-    // 1. Direct match on Category Name or Slug
-    if (pCatName === catClean || pCatSlug === catClean) return true;
+    // 1. Direct match on Category Name, Slug, or Base Category
+    if (pCatName === catClean || pCatSlug === catClean || pCatBase === catClean) return true;
 
     // 2. Room category check (e.g. "Dining Room", "Living Room", "Bedroom", "Sitout")
     const isRoomFilter = roomCategories.some((r) => clean(r) === catClean) || catClean.includes("room");
@@ -193,7 +220,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
     // 3. For "Dining" collection tab: includes items in Dining category OR Dining Room
     if (catClean === "dining") {
-      if (pCatName === "dining" || pCatSlug === "dining" || pRoom.includes("dining")) return true;
+      if (pCatName === "dining" || pCatSlug === "dining" || pCatBase === "dining" || pRoom.includes("dining")) return true;
     }
 
     // 4. Doors matching (Carved Teak Doors / doors)
@@ -204,46 +231,83 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     return false;
   }, []);
 
+  // Helper to match subcategories accurately
+  const matchProductSubCategory = useCallback(
+    (p: Product, subNameOrId: string) => {
+      if (!subNameOrId || subNameOrId === "all") return true;
+
+      const subObj = currentSubCategories.find(
+        (s) =>
+          clean(s.name) === clean(subNameOrId) ||
+          clean(s.slug) === clean(subNameOrId) ||
+          s.id === subNameOrId
+      );
+
+      const targetSubName = clean(subObj?.name || subNameOrId);
+      const targetSubSlug = clean(subObj?.slug || subNameOrId);
+      const targetSubId = subObj?.id;
+
+      // 1. Direct Database ID / Slug / Category Name match
+      if (targetSubId && (p.category_id === targetSubId || p.categories?.id === targetSubId)) return true;
+      if (p.categories?.slug && clean(p.categories.slug) === targetSubSlug) return true;
+      if (p.categories?.name && clean(p.categories.name) === targetSubName) return true;
+
+      // 2. Intelligent smart attribute fallback
+      const prodName = (p.name || "").toLowerCase();
+      const prodDesc = (p.short_description || "").toLowerCase();
+      const prodType = (p.type || "").toLowerCase();
+      const prodMat = (p.material || "").toLowerCase();
+      const allText = `${prodName} ${prodDesc} ${prodType} ${prodMat}`;
+
+      if (targetSubName === "upholstered") {
+        const isUnUpholstered =
+          allText.includes("un-upholstered") ||
+          allText.includes("unupholstered") ||
+          allText.includes("without cushion");
+        const isUpholstered =
+          allText.includes("upholstered") ||
+          allText.includes("cushion") ||
+          allText.includes("fabric") ||
+          allText.includes("leather") ||
+          allText.includes("padded");
+        return isUpholstered && !isUnUpholstered;
+      }
+
+      if (targetSubName === "unupholstered") {
+        const isUpholstered =
+          (allText.includes("upholstered") || allText.includes("fabric") || allText.includes("cushion")) &&
+          !allText.includes("un-upholstered") &&
+          !allText.includes("unupholstered");
+        return !isUpholstered;
+      }
+
+      return clean(allText).includes(targetSubName);
+    },
+    [currentSubCategories]
+  );
+
   // Filtered Products Logic
   const filteredProducts = useMemo(() => {
     return initialProducts.filter((p) => {
-      const subClean = clean(activeSubCategory);
+      // 1. Must match main active category first
+      const matchesCategory = matchProductCategory(p, activeCategory);
+      if (!matchesCategory) return false;
 
-      // 1. Sub-Category specific matching
-      if (activeSubCategory !== "all" && subClean) {
-        const productFields = [
-          p.name,
-          p.categories?.name,
-          p.categories?.slug,
-          p.room,
-          p.type,
-          p.material,
-          p.short_description,
-        ].filter(Boolean) as string[];
-
-        const matchSub = productFields.some(
-          (f) => clean(f).includes(subClean) || subClean.includes(clean(f))
-        );
-        const matchesSearch =
-          !searchTerm.trim() ||
-          p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (p.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
-
-        return matchSub && matchesSearch;
+      // 2. Must match selected subcategory (if active)
+      if (activeSubCategory !== "all") {
+        const matchesSub = matchProductSubCategory(p, activeSubCategory);
+        if (!matchesSub) return false;
       }
 
-      // 2. Main Category Strict Matching
-      const matchesCategory = matchProductCategory(p, activeCategory);
-
-      // 3. Search Term matching
+      // 3. Must match search term (if typed)
       const matchesSearch =
         !searchTerm.trim() ||
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (p.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
 
-      return matchesCategory && matchesSearch;
+      return matchesSearch;
     });
-  }, [initialProducts, activeCategory, activeSubCategory, searchTerm, matchProductCategory]);
+  }, [initialProducts, activeCategory, activeSubCategory, searchTerm, matchProductCategory, matchProductSubCategory]);
 
   const sortedProducts = useMemo(() => {
     return [...filteredProducts].sort((a, b) => {
@@ -264,10 +328,18 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     return initialProducts.filter((p) => matchProductCategory(p, catName)).length;
   }, [initialProducts, matchProductCategory]);
 
+  // Helper to count items per subcategory
+  const getSubCategoryCount = useCallback((sub: Categories) => {
+    return initialProducts.filter((p) => {
+      const matchesCat = matchProductCategory(p, activeCategory);
+      return matchesCat && matchProductSubCategory(p, sub.id || sub.name);
+    }).length;
+  }, [initialProducts, activeCategory, matchProductCategory, matchProductSubCategory]);
+
   return (
     <>
       {/* ── Search & Category Filter Bar ── */}
-      <section className="bg-white border-b border-[#EBEBEA] shadow-xs">
+      <section className="bg-white border-b border-[#EBEBEA] shadow-xs font-sans">
         <div className="max-container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-4 border-b border-[#F0F0EE]">
             {/* Search Input */}
@@ -344,19 +416,19 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
             </div>
           </div>
 
-          {/* ── 2. Nested Sub-Category Filter Chips Bar (Animated) ── */}
+          {/* ── 2. Nested Sub-Category Filter Chips Bar ── */}
           {currentSubCategories.length > 0 && (
             <div className="py-2.5 border-t border-[#F0F0EE] flex items-center gap-2 overflow-x-auto hide-scrollbar">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A572A] whitespace-nowrap flex items-center gap-1 pl-1 pr-2">
                 <CornerDownRight size={12} />
-                <span>Sub-Categories:</span>
+                <span>Categories:</span>
               </span>
 
               {/* All Subcategories Option */}
               <button
                 type="button"
-                onClick={() => setActiveSubCategory("all")}
-                className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                onClick={() => handleSelectSubCategory("all")}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   activeSubCategory === "all"
                     ? "bg-[#1C130D] text-white shadow-xs"
                     : "bg-[#FAFAF9] text-[#666666] hover:bg-[#EAE8E2] border border-[#E0E0DE]"
@@ -367,19 +439,31 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
               {/* Individual Sub-Category Chips */}
               {currentSubCategories.map((sub) => {
-                const isSubActive = clean(activeSubCategory) === clean(sub.name);
+                const isSubActive =
+                  clean(activeSubCategory) === clean(sub.name) ||
+                  clean(activeSubCategory) === clean(sub.slug) ||
+                  activeSubCategory === sub.id;
+                const subCount = getSubCategoryCount(sub);
+
                 return (
                   <button
                     key={sub.id}
                     type="button"
-                    onClick={() => setActiveSubCategory(sub.name)}
-                    className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    onClick={() => handleSelectSubCategory(sub.slug || sub.name.trim())}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 ${
                       isSubActive
                         ? "bg-[#8A572A] text-white shadow-xs ring-2 ring-[#8A572A]/20"
                         : "bg-[#FAFAF9] text-[#666666] hover:bg-[#EAE8E2] border border-[#E0E0DE]"
                     }`}
                   >
-                    {sub.name}
+                    <span>{sub.name.trim()}</span>
+                    {subCount > 0 && (
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-semibold ${
+                        isSubActive ? "bg-white/20 text-white" : "bg-slate-200/80 text-slate-600"
+                      }`}>
+                        {subCount}
+                      </span>
+                    )}
                   </button>
                 );
               })}
@@ -389,7 +473,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
       </section>
 
       {/* ── Product Grid ── */}
-      <section className="py-10 sm:py-14 bg-[#FAFAF9]">
+      <section className="py-10 sm:py-14 bg-[#FAFAF9] font-sans">
         <div className="max-container">
           <div className="flex items-center justify-between mb-6">
             <p className="text-xs text-[#777777]">
@@ -423,17 +507,17 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
             <div className="text-center py-20 bg-white rounded-2xl border border-[#EBEBEA] shadow-xs">
               <Sparkles className="mx-auto text-[#8A572A] mb-3" size={28} />
               <h3 className="text-lg font-serif font-bold text-[#141414] mb-2">
-                No &quot;{activeCategory}&quot; Pieces Found
+                No &quot;{activeSubCategory !== "all" ? activeSubCategory : activeCategory}&quot; Pieces Found
               </h3>
               <p className="text-xs text-[#777777] max-w-sm mx-auto mb-6">
-                No products are currently cataloged under {activeCategory}. You can add pieces for this category anytime in the Admin panel.
+                No products are currently cataloged under this sub-category. You can assign pieces to this category anytime in the Admin panel.
               </p>
               <button
                 type="button"
-                onClick={() => handleSelectCategory("All Products")}
+                onClick={() => setActiveSubCategory("all")}
                 className="bg-[#8A572A] text-white px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-md hover:bg-[#1C130D] transition-colors cursor-pointer"
               >
-                View All {initialProducts.length} Pieces
+                View All {activeCategory} Pieces
               </button>
             </div>
           )}

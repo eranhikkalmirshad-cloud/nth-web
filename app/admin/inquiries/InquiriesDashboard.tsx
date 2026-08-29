@@ -10,7 +10,7 @@ interface InquiriesDashboardProps {
 }
 
 const TABS = [
-  { id: "all", label: "All Inquiries", icon: Inbox },
+  { id: "all", label: "All Enquiries", icon: Inbox },
   { id: "new", label: "New Leads", icon: MessageSquare },
   { id: "contacted", label: "Contacted", icon: Clock },
   { id: "resolved", label: "Resolved", icon: CheckCircle },
@@ -90,10 +90,10 @@ export default function InquiriesDashboard({ initialInquiries }: InquiriesDashbo
                 <Inbox size={22} />
               </div>
               <h3 className="text-sm font-bold uppercase tracking-wider text-[#1C130D]">
-                No inquiries in this folder
+                No enquiries in this folder
               </h3>
               <p className="text-xs text-[#7A6E65] max-w-sm mx-auto mt-1">
-                Incoming quote requests and website inquiries will show up here.
+                Incoming quote requests and website enquiries will show up here.
               </p>
             </motion.div>
           )}
