@@ -205,9 +205,9 @@ export const ROOM_COLLECTIONS: RoomItem[] = [
     description: "Executive desks, library bookcases, and ergonomic leather study chairs.",
   },
   {
-    name: "Kitchen Cabinets",
-    slug: "kitchen-cabinets",
-    href: "/products?category=kitchen-cabinets",
+    name: "Kitchen",
+    slug: "kitchen",
+    href: "/products?category=kitchen",
     image: "https://res.cloudinary.com/xwpjhogd/image/upload/v1786802157/nilambur-teak-heritage/cuegyj8scgvahcotlv02.png",
     description: "Solid teak modular kitchen cabinets, pantry units, crockery cupboards, and architectural teak joinery.",
   },
