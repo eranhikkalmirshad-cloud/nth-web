@@ -5,6 +5,7 @@ import { useState } from "react";
 import { MessageCircle, Phone, Mail, MapPin, Send, Instagram, ExternalLink, Navigation, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { SITE_CONFIG } from "@/config/site";
+import { submitInquiry } from "@/app/actions/contact";
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,21 +19,48 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.phone) {
+    if (!formData.name.trim()) {
+      toast.error("Please enter your name");
+      return;
+    }
+    if (!formData.phone.trim()) {
       toast.error("Please provide your phone number");
       return;
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success("Enquiry sent! Opening WhatsApp to connect with our artisan...");
+    try {
+      // 1. Store the enquiry directly in the Supabase DB & Admin CRM
+      const res = await submitInquiry(formData);
+      
+      if (res?.error) {
+        toast.error(res.error);
+        setIsSubmitting(false);
+        return;
+      }
 
+      toast.success("Enquiry saved successfully! Opening WhatsApp to connect with our master craftsmen...");
+
+      // 2. Open WhatsApp with the structured message
       const waMsg = encodeURIComponent(
-        `*New Enquiry — Nilambur Teak Heritage*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Category:* ${formData.category}\n*Email:* ${formData.email || "Not specified"}\n*Requirements:* ${formData.message}`
+        `*New Enquiry — Nilambur Teak Heritage*\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Category:* ${formData.category}\n*Email:* ${formData.email || "Not specified"}\n*Requirements:* ${formData.message || "Bespoke furniture quotation request"}`
       );
       window.open(`https://wa.me/${SITE_CONFIG.contact.whatsappNumber}?text=${waMsg}`, "_blank");
-    }, 500);
+
+      // 3. Reset form
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        category: "Living Room (Sofas, Diwans, Tables)",
+        message: "",
+      });
+    } catch (err) {
+      console.error("Submission error:", err);
+      toast.error("Something went wrong. Please try WhatsApp directly.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
