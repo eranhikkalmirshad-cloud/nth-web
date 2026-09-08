@@ -207,29 +207,42 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     // 1. Direct match on Category Name, Slug, or Base Category
     if (pCatName === catClean || pCatSlug === catClean || pCatBase === catClean) return true;
 
-    // 2. Room category check (e.g. "Dining Room", "Living Room", "Bedroom", "Sitout")
-    const isRoomFilter = roomCategories.some((r) => clean(r) === catClean) || catClean.includes("room");
-    if (isRoomFilter) {
-      if (pRoom === catClean) return true;
-      if (catClean.includes("dining") && pRoom.includes("dining")) return true;
-      if (catClean.includes("living") && pRoom.includes("living")) return true;
-      if (catClean.includes("bedroom") && pRoom.includes("bedroom")) return true;
-      if (catClean.includes("sitout") && pRoom.includes("sitout")) return true;
-      if (catClean.includes("office") && pRoom.includes("office")) return true;
+    // If catName is a specific registered database category and didn't match directly,
+    // do not fall through to loose room matching.
+    const isDbCategory = dbMainCategories.some(
+      (c) => clean(c.name) === catClean || clean(c.slug) === catClean || c.id === catClean
+    );
+    if (isDbCategory) {
+      return false;
     }
 
-    // 3. For "Dining" collection tab: includes items in Dining category OR Dining Room
-    if (catClean === "dining") {
-      if (pCatName === "dining" || pCatSlug === "dining" || pCatBase === "dining" || pRoom.includes("dining")) return true;
+    // 2. Room category check (for room collection tabs: "Bedroom", "Living Room", "Dining Room", "Sitout", "Kitchen", etc.)
+    if (catClean === "bedroom") {
+      return pRoom.includes("bedroom");
+    }
+    if (catClean === "livingroom" || catClean === "living") {
+      return pRoom.includes("living");
+    }
+    if (catClean === "diningroom" || catClean === "dining") {
+      return pRoom.includes("dining") || pCatName.includes("dining") || pCatSlug.includes("dining");
+    }
+    if (catClean === "sitout") {
+      return pRoom.includes("sitout") || pCatName.includes("sitout");
+    }
+    if (catClean === "studyoffice" || catClean === "studyandoffice" || catClean === "office") {
+      return pRoom.includes("office") || pCatName.includes("office") || pCatSlug.includes("office");
+    }
+    if (catClean === "kitchen") {
+      return pRoom.includes("kitchen") || pCatName.includes("kitchen");
     }
 
-    // 4. Doors matching (Carved Teak Doors / doors)
+    // 3. Doors matching (Carved Teak Doors / doors)
     if (catClean.includes("door")) {
       return pCatName.includes("door") || pCatSlug.includes("door");
     }
 
     return false;
-  }, []);
+  }, [dbMainCategories]);
 
   // Helper to match subcategories accurately
   const matchProductSubCategory = useCallback(
