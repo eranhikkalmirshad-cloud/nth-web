@@ -10,7 +10,7 @@ const ROOM_SHOWCASE = [
     room: "Living Room",
     title: "Royal Malabar Teak Sofa",
     description: "Handcrafted 3+1+1 solid Nilambur teak sofa set with brass detailing.",
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200&auto=format&fit=crop",
+    image: "/images/image copy 3.png",
     href: "/rooms/living-room",
   },
   {
