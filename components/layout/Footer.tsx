@@ -62,7 +62,7 @@ export default function Footer() {
         { label: "Teak Sofas & Diwans", href: "/products?category=sofas" },
         { label: "Solid Teak Dining Sets", href: "/products?category=dining" },
         { label: "Heirloom Teak Beds", href: "/products?category=beds" },
-        { label: "Designer Lounge Chairs", href: "/products?category=chairs" },
+        { label: "Designer Lounge Chairs", href: "/products?category=lounge-chairs" },
         { label: "Carved Teak Doors", href: "/products?category=doors" },
         { label: "Living Room Suites", href: "/products?category=living-room" },
         { label: "Teak Wardrobes & Cabinets", href: "/products?category=wardrobes" },
