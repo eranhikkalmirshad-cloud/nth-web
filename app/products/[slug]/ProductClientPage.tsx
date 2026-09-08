@@ -28,9 +28,11 @@ import { SITE_CONFIG } from "@/config/site";
 export default function ProductClientPage({
   product,
   relatedProducts,
+  customRelated,
 }: {
   product: Product | null;
   relatedProducts: Product[];
+  customRelated?: React.ReactNode;
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -443,7 +445,11 @@ export default function ProductClientPage({
         </div>
 
         {/* ── Related Pieces ── */}
-        {relatedProducts && relatedProducts.length > 0 && (
+        {customRelated ? (
+          <div className="pt-16 border-t border-slate-200">
+            {customRelated}
+          </div>
+        ) : relatedProducts && relatedProducts.length > 0 ? (
           <div className="pt-16 border-t border-slate-200">
             <div className="flex items-end justify-between mb-8">
               <div>
@@ -469,7 +475,7 @@ export default function ProductClientPage({
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
       </div>
     </div>
