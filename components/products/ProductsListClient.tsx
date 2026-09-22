@@ -51,7 +51,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     "Beds",
     "Carved Teak Doors",
     "Diwan Beds",
-    "Sitout",
+    "Sitout Furniture",
     "TV Units",
     "Coffee Tables",
     "Study and Office",
@@ -68,11 +68,19 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     "Bedroom",
   ];
 
-  // Combine and sort tabs by priority
+  // Combine and sort tabs by priority (with trimming and deduplication)
   const tabNames = useMemo(() => {
+    const normalizedDbNames = dbMainCategories.map((c) => {
+      const trimmed = c.name.trim();
+      if (clean(trimmed) === "sitout" || clean(trimmed) === "sitoutfurniture") {
+        return "Sitout Furniture";
+      }
+      return trimmed;
+    });
+
     const allSet = new Set([
       ...priorityOrder,
-      ...dbMainCategories.map((c) => c.name),
+      ...normalizedDbNames,
     ]);
     const list = Array.from(allSet);
     return list.sort((a, b) => {
@@ -95,6 +103,32 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
       const exact = tabNames.find((t) => clean(t) === cleanParam);
       if (exact) return exact;
 
+      // Special aliases
+      if (cleanParam === "wardrobe" || cleanParam === "wardrobes") {
+        const found = tabNames.find((t) => clean(t) === "wardrobes");
+        if (found) return found;
+      }
+      if (cleanParam === "cabinet" || cleanParam === "cabinets") {
+        const found = tabNames.find((t) => clean(t) === "cabinet");
+        if (found) return found;
+      }
+      if (cleanParam === "door" || cleanParam === "doors") {
+        const found = tabNames.find((t) => clean(t).includes("door"));
+        if (found) return found;
+      }
+      if (cleanParam === "sitout" || cleanParam === "sitoutfurniture") {
+        const found = tabNames.find((t) => clean(t) === "sitout" || clean(t) === "sitoutfurniture");
+        if (found) return found;
+      }
+      if (cleanParam === "diwan" || cleanParam === "diwans" || cleanParam === "diwanbeds") {
+        const found = tabNames.find((t) => clean(t) === "diwanbeds");
+        if (found) return found;
+      }
+      if (cleanParam === "outdoor" || cleanParam === "outdoorfurniture") {
+        const found = tabNames.find((t) => clean(t) === "outdoorfurniture");
+        if (found) return found;
+      }
+
       const fuzzy = tabNames.find(
         (t) => clean(t).includes(cleanParam) || cleanParam.includes(clean(t))
       );
@@ -116,13 +150,46 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
+  // Check if active category is a Room collection / Shop by Room
+  const isRoomCategory = useMemo(() => {
+    if (searchParams.get("room")) return true;
+    const activeClean = clean(activeCategory);
+    return [
+      "livingroom",
+      "diningroom",
+      "bedroom",
+      "sitout",
+      "sitoutfurniture",
+      "studyoffice",
+      "studyandoffice",
+      "kitchen",
+      "office",
+    ].includes(activeClean);
+  }, [searchParams, activeCategory]);
+
   // Sync with searchParams
   useEffect(() => {
     const p = searchParams.get("category") || searchParams.get("room");
     const sub = searchParams.get("subcategory");
     const resolvedCat = resolveCategoryFromParam(p);
     setActiveCategory(resolvedCat);
-    if (sub) {
+
+    const activeClean = clean(resolvedCat);
+    const isRoom = Boolean(searchParams.get("room")) || [
+      "livingroom",
+      "diningroom",
+      "bedroom",
+      "sitout",
+      "sitoutfurniture",
+      "studyoffice",
+      "studyandoffice",
+      "kitchen",
+      "office",
+    ].includes(activeClean);
+
+    if (isRoom) {
+      setActiveSubCategory("all");
+    } else if (sub) {
       setActiveSubCategory(sub);
     }
   }, [searchParams, resolveCategoryFromParam]);
@@ -173,9 +240,9 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
       clean(c.slug) === clean(activeCategory)
   );
 
-  // Sub-Categories belonging to the active category
+  // Sub-Categories belonging to the active category (never shown for room categories)
   const currentSubCategories = useMemo(() => {
-    if (activeCategory === "All Products") return [];
+    if (activeCategory === "All Products" || isRoomCategory) return [];
     return dbSubCategories.filter((sub) => {
       const parentClean = clean(sub.base_category);
       const activeClean = clean(activeCategory);
@@ -190,7 +257,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
         parentClean.includes(activeClean)
       );
     });
-  }, [activeCategory, activeDbCategory, dbSubCategories]);
+  }, [activeCategory, activeDbCategory, dbSubCategories, isRoomCategory]);
 
   const sortOptions = ["Featured", "Newest First", "Alphabetical (A-Z)"];
 
@@ -206,6 +273,37 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
     // 1. Direct match on Category Name, Slug, or Base Category
     if (pCatName === catClean || pCatSlug === catClean || pCatBase === catClean) return true;
+
+    // Special category handlers to support aliases, sub-variations, and comprehensive coverage
+    if (catClean === "wardrobes" || catClean === "wardrobe") {
+      if (pCatName.includes("wardrobe") || pCatSlug.includes("wardrobe") || pCatBase.includes("wardrobe")) {
+        return true;
+      }
+    }
+    if (catClean === "cabinet" || catClean === "cabinets") {
+      if (pCatName.includes("cabinet") || pCatSlug.includes("cabinet") || pCatBase.includes("cabinet")) {
+        return true;
+      }
+    }
+    if (catClean === "sitout" || catClean === "sitoutfurniture") {
+      return (
+        pRoom.includes("sitout") ||
+        pCatName.includes("sitout") ||
+        pCatSlug.includes("sitout") ||
+        pCatBase.includes("sitout")
+      );
+    }
+    if (catClean === "outdoorfurniture" || catClean === "outdoor") {
+      return (
+        pRoom.includes("outdoor") ||
+        pCatName.includes("outdoor") ||
+        pCatSlug.includes("outdoor") ||
+        pCatBase.includes("outdoor")
+      );
+    }
+    if (catClean.includes("door")) {
+      return pCatName.includes("door") || pCatSlug.includes("door");
+    }
 
     // If catName is a specific registered database category and didn't match directly,
     // do not fall through to loose room matching.
@@ -226,19 +324,11 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     if (catClean === "diningroom" || catClean === "dining") {
       return pRoom.includes("dining") || pCatName.includes("dining") || pCatSlug.includes("dining");
     }
-    if (catClean === "sitout") {
-      return pRoom.includes("sitout") || pCatName.includes("sitout");
-    }
     if (catClean === "studyoffice" || catClean === "studyandoffice" || catClean === "office") {
       return pRoom.includes("office") || pCatName.includes("office") || pCatSlug.includes("office");
     }
     if (catClean === "kitchen") {
       return pRoom.includes("kitchen") || pCatName.includes("kitchen");
-    }
-
-    // 3. Doors matching (Carved Teak Doors / doors)
-    if (catClean.includes("door")) {
-      return pCatName.includes("door") || pCatSlug.includes("door");
     }
 
     return false;
@@ -429,8 +519,8 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
             </div>
           </div>
 
-          {/* ── 2. Nested Sub-Category Filter Chips Bar ── */}
-          {currentSubCategories.length > 0 && (
+          {/* ── 2. Nested Sub-Category Filter Chips Bar (Hidden for Shop by Room) ── */}
+          {currentSubCategories.length > 0 && !isRoomCategory && (
             <div className="py-2.5 border-t border-[#F0F0EE] flex items-center gap-2 overflow-x-auto hide-scrollbar">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A572A] whitespace-nowrap flex items-center gap-1 pl-1 pr-2">
                 <CornerDownRight size={12} />

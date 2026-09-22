@@ -63,6 +63,23 @@ export default function ProductClientPage({
     ? `${product.name} (MPN: ${product.mpn})`
     : product.name;
 
+  // Determine category slug & URL for Breadcrumb and "View All" links
+  const categorySlug =
+    (product.categories?.base_category &&
+    product.categories.base_category !== "main" &&
+    product.categories.base_category !== "none" &&
+    product.categories.base_category !== product.categories.slug
+      ? product.categories.base_category
+      : product.categories?.slug) ||
+    product.category_id ||
+    null;
+
+  const categoryUrl = categorySlug
+    ? `/products?category=${categorySlug}`
+    : product.room
+    ? `/products?room=${product.room.toLowerCase().replace(/\s+/g, "-")}`
+    : "/products";
+
   const whatsappMessage = encodeURIComponent(
     `Hello ${SITE_CONFIG.name}, I am enquiring about the ${productIdentifier} (100% Genuine Nilambur Teak). Please share pricing and delivery timeline.`
   );
@@ -118,7 +135,7 @@ export default function ProductClientPage({
             Home
           </Link>
           <span>/</span>
-          <Link href="/products" className="hover:text-slate-900 transition-colors">
+          <Link href={categoryUrl} className="hover:text-slate-900 transition-colors">
             {product.categories?.name || "Collections"}
           </Link>
           <span>/</span>
@@ -461,7 +478,7 @@ export default function ProductClientPage({
                 </h2>
               </div>
               <Link
-                href="/products"
+                href={categoryUrl}
                 className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-slate-900 hover:text-[#8A572A] transition-colors"
               >
                 <span>View All</span>
