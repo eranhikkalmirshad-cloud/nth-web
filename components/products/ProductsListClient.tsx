@@ -181,12 +181,13 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
       const slugClean = clean(activeDbCategory?.slug);
       const idClean = clean(activeDbCategory?.id);
 
+      const nameClean = clean(activeDbCategory?.name);
+
       return (
         parentClean === activeClean ||
         parentClean === slugClean ||
         parentClean === idClean ||
-        activeClean.includes(parentClean) ||
-        parentClean.includes(activeClean)
+        parentClean === nameClean
       );
     });
   }, [activeCategory, activeDbCategory, dbSubCategories, isRoomParam]);
