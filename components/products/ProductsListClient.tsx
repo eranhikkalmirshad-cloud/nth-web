@@ -72,7 +72,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
         if (found) return found;
       }
       if (cleanParam === "door" || cleanParam === "doors") {
-        const found = tabNames.find((t) => clean(t).includes("door"));
+        const found = tabNames.find((t) => clean(t).includes("door") && !clean(t).includes("outdoor"));
         if (found) return found;
       }
       if (cleanParam === "sitout" || cleanParam === "sitoutfurniture") {
@@ -231,8 +231,15 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
         pCatBase.includes("outdoor")
       );
     }
-    if (catClean.includes("door")) {
-      return pCatName.includes("door") || pCatSlug.includes("door");
+    if (catClean.includes("door") && !catClean.includes("outdoor")) {
+      if (pCatName.includes("outdoor") || pCatSlug.includes("outdoor") || pCatBase.includes("outdoor")) {
+        return false;
+      }
+      return (
+        pCatName.includes("door") ||
+        pCatSlug.includes("door") ||
+        pCatBase.includes("door")
+      );
     }
 
     // If catName is a specific registered database category and didn't match directly,

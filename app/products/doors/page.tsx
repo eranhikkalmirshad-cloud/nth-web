@@ -17,14 +17,20 @@ export const metadata: Metadata = {
 export default async function DoorsPage() {
   const allProducts = await getProducts();
   const doorProducts = allProducts.filter((p) => {
-    const baseCat = p.categories?.base_category?.toLowerCase();
-    const slug = p.categories?.slug?.toLowerCase();
-    const name = p.name?.toLowerCase();
+    const baseCat = p.categories?.base_category?.toLowerCase() || "";
+    const slug = p.categories?.slug?.toLowerCase() || "";
+    const name = p.name?.toLowerCase() || "";
+
+    if (slug.includes("outdoor") || name.includes("outdoor") || baseCat.includes("outdoor")) {
+      return false;
+    }
+
     return (
       baseCat === "doors" ||
-      slug?.includes("door") ||
-      name?.includes("door") ||
-      name?.includes("frame")
+      baseCat === "carved-teak-doors" ||
+      slug.includes("door") ||
+      name.includes("door") ||
+      name.includes("frame")
     );
   });
 
