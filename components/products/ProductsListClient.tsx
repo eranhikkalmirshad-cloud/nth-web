@@ -288,41 +288,19 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
       const targetSubSlug = clean(subObj?.slug || subNameOrId);
       const targetSubId = subObj?.id;
 
+      const targetSubBase = clean(subObj?.base_category);
+
       // 1. Direct Database ID / Slug / Category Name match
       if (targetSubId && (p.category_id === targetSubId || p.categories?.id === targetSubId)) return true;
       if (p.categories?.slug && clean(p.categories.slug) === targetSubSlug) return true;
-      if (p.categories?.name && clean(p.categories.name) === targetSubName) return true;
-
-      // 2. Intelligent smart attribute fallback
-      const prodName = (p.name || "").toLowerCase();
-      const prodDesc = (p.short_description || "").toLowerCase();
-      const prodType = (p.type || "").toLowerCase();
-      const prodMat = (p.material || "").toLowerCase();
-      const allText = `${prodName} ${prodDesc} ${prodType} ${prodMat}`;
-
-      if (targetSubName === "upholstered") {
-        const isUnUpholstered =
-          allText.includes("un-upholstered") ||
-          allText.includes("unupholstered") ||
-          allText.includes("without cushion");
-        const isUpholstered =
-          allText.includes("upholstered") ||
-          allText.includes("cushion") ||
-          allText.includes("fabric") ||
-          allText.includes("leather") ||
-          allText.includes("padded");
-        return isUpholstered && !isUnUpholstered;
+      if (p.categories?.name && clean(p.categories.name) === targetSubName) {
+        if (targetSubBase && p.categories?.base_category) {
+          return clean(p.categories.base_category) === targetSubBase;
+        }
+        return true;
       }
 
-      if (targetSubName === "unupholstered") {
-        const isUpholstered =
-          (allText.includes("upholstered") || allText.includes("fabric") || allText.includes("cushion")) &&
-          !allText.includes("un-upholstered") &&
-          !allText.includes("unupholstered");
-        return !isUpholstered;
-      }
-
-      return clean(allText).includes(targetSubName);
+      return false;
     },
     [currentSubCategories]
   );
