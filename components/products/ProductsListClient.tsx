@@ -219,7 +219,6 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     }
     if (catClean === "sitout" || catClean === "sitoutfurniture") {
       return (
-        pRoom.includes("sitout") ||
         pCatName.includes("sitout") ||
         pCatSlug.includes("sitout") ||
         pCatBase.includes("sitout")
@@ -227,7 +226,6 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     }
     if (catClean === "outdoorfurniture" || catClean === "outdoor") {
       return (
-        pRoom.includes("outdoor") ||
         pCatName.includes("outdoor") ||
         pCatSlug.includes("outdoor") ||
         pCatBase.includes("outdoor")
