@@ -51,7 +51,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     "Beds",
     "Carved Teak Doors",
     "Diwan Beds",
-    "Sitout Furniture",
+    "Sitout",
     "TV Units",
     "Coffee Tables",
     "Study and Office",
@@ -73,7 +73,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     const normalizedDbNames = dbMainCategories.map((c) => {
       const trimmed = c.name.trim();
       if (clean(trimmed) === "sitout" || clean(trimmed) === "sitoutfurniture") {
-        return "Sitout Furniture";
+        return "Sitout";
       }
       return trimmed;
     });
@@ -150,22 +150,8 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
-  // Check if active category is a Room collection / Shop by Room
-  const isRoomCategory = useMemo(() => {
-    if (searchParams.get("room")) return true;
-    const activeClean = clean(activeCategory);
-    return [
-      "livingroom",
-      "diningroom",
-      "bedroom",
-      "sitout",
-      "sitoutfurniture",
-      "studyoffice",
-      "studyandoffice",
-      "kitchen",
-      "office",
-    ].includes(activeClean);
-  }, [searchParams, activeCategory]);
+  // Check if active category is explicitly requested as a Room param
+  const isRoomParam = Boolean(searchParams.get("room"));
 
   // Sync with searchParams
   useEffect(() => {
@@ -174,20 +160,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
     const resolvedCat = resolveCategoryFromParam(p);
     setActiveCategory(resolvedCat);
 
-    const activeClean = clean(resolvedCat);
-    const isRoom = Boolean(searchParams.get("room")) || [
-      "livingroom",
-      "diningroom",
-      "bedroom",
-      "sitout",
-      "sitoutfurniture",
-      "studyoffice",
-      "studyandoffice",
-      "kitchen",
-      "office",
-    ].includes(activeClean);
-
-    if (isRoom) {
+    if (searchParams.get("room")) {
       setActiveSubCategory("all");
     } else if (sub) {
       setActiveSubCategory(sub);
@@ -240,9 +213,9 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
       clean(c.slug) === clean(activeCategory)
   );
 
-  // Sub-Categories belonging to the active category (never shown for room categories)
+  // Sub-Categories belonging to the active category
   const currentSubCategories = useMemo(() => {
-    if (activeCategory === "All Products" || isRoomCategory) return [];
+    if (activeCategory === "All Products" || isRoomParam) return [];
     return dbSubCategories.filter((sub) => {
       const parentClean = clean(sub.base_category);
       const activeClean = clean(activeCategory);
@@ -257,7 +230,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
         parentClean.includes(activeClean)
       );
     });
-  }, [activeCategory, activeDbCategory, dbSubCategories, isRoomCategory]);
+  }, [activeCategory, activeDbCategory, dbSubCategories, isRoomParam]);
 
   const sortOptions = ["Featured", "Newest First", "Alphabetical (A-Z)"];
 
@@ -519,8 +492,8 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
             </div>
           </div>
 
-          {/* ── 2. Nested Sub-Category Filter Chips Bar (Hidden for Shop by Room) ── */}
-          {currentSubCategories.length > 0 && !isRoomCategory && (
+          {/* ── 2. Nested Sub-Category Filter Chips Bar ── */}
+          {currentSubCategories.length > 0 && !isRoomParam && (
             <div className="py-2.5 border-t border-[#F0F0EE] flex items-center gap-2 overflow-x-auto hide-scrollbar">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#8A572A] whitespace-nowrap flex items-center gap-1 pl-1 pr-2">
                 <CornerDownRight size={12} />
