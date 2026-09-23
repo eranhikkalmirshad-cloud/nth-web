@@ -20,7 +20,7 @@ export default async function ProductsPage() {
   const { data: categories } = await supabase
     .from("categories")
     .select("*")
-    .order("name", { ascending: true });
+    .order("sort_order", { ascending: true });
 
   const trustPillars = [
     {

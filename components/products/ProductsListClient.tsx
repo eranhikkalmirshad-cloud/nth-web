@@ -40,57 +40,16 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
   const dbMainCategories = categories.filter((c) => !isSubcategory(c));
   const dbSubCategories = categories.filter((c) => isSubcategory(c));
 
-  // Curated category order
-  const priorityOrder = [
-    "All Products",
-    "Sofas",
-    "Chairs",
-    "Dining",
-    "Tables",
-    "Lounge Chairs",
-    "Beds",
-    "Carved Teak Doors",
-    "Diwan Beds",
-    "Sitout",
-    "TV Units",
-    "Coffee Tables",
-    "Study and Office",
-    "Wardrobes",
-    "Cabinet",
-    "Bookshelves",
-    "Benches",
-    "Outdoor Furniture",
-    "Bedside Table",
-    "Wall Decors",
-    "Other Furniture",
-    "Living Room",
-    "Dining Room",
-    "Bedroom",
-  ];
-
-  // Combine and sort tabs by priority (with trimming and deduplication)
+  // List strictly "All Products" followed by the main categories added in Admin
   const tabNames = useMemo(() => {
-    const normalizedDbNames = dbMainCategories.map((c) => {
-      const trimmed = c.name.trim();
-      if (clean(trimmed) === "sitout" || clean(trimmed) === "sitoutfurniture") {
-        return "Sitout";
-      }
-      return trimmed;
+    const sortedMain = [...dbMainCategories].sort((a, b) => {
+      const orderA = a.sort_order ?? 999;
+      const orderB = b.sort_order ?? 999;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.name.localeCompare(b.name);
     });
 
-    const allSet = new Set([
-      ...priorityOrder,
-      ...normalizedDbNames,
-    ]);
-    const list = Array.from(allSet);
-    return list.sort((a, b) => {
-      const idxA = priorityOrder.indexOf(a);
-      const idxB = priorityOrder.indexOf(b);
-      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-      if (idxA !== -1) return -1;
-      if (idxB !== -1) return 1;
-      return a.localeCompare(b);
-    });
+    return ["All Products", ...sortedMain.map((c) => c.name.trim())];
   }, [dbMainCategories]);
 
   // Resolver for URL params
@@ -105,11 +64,11 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
       // Special aliases
       if (cleanParam === "wardrobe" || cleanParam === "wardrobes") {
-        const found = tabNames.find((t) => clean(t) === "wardrobes");
+        const found = tabNames.find((t) => clean(t).includes("wardrobe"));
         if (found) return found;
       }
       if (cleanParam === "cabinet" || cleanParam === "cabinets") {
-        const found = tabNames.find((t) => clean(t) === "cabinet");
+        const found = tabNames.find((t) => clean(t).includes("cabinet"));
         if (found) return found;
       }
       if (cleanParam === "door" || cleanParam === "doors") {
@@ -117,15 +76,15 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
         if (found) return found;
       }
       if (cleanParam === "sitout" || cleanParam === "sitoutfurniture") {
-        const found = tabNames.find((t) => clean(t) === "sitout" || clean(t) === "sitoutfurniture");
+        const found = tabNames.find((t) => clean(t).includes("sitout"));
         if (found) return found;
       }
       if (cleanParam === "diwan" || cleanParam === "diwans" || cleanParam === "diwanbeds") {
-        const found = tabNames.find((t) => clean(t) === "diwanbeds");
+        const found = tabNames.find((t) => clean(t).includes("diwan"));
         if (found) return found;
       }
       if (cleanParam === "outdoor" || cleanParam === "outdoorfurniture") {
-        const found = tabNames.find((t) => clean(t) === "outdoorfurniture");
+        const found = tabNames.find((t) => clean(t).includes("outdoor"));
         if (found) return found;
       }
 
