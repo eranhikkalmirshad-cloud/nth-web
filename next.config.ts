@@ -32,8 +32,8 @@ const nextConfig: NextConfig = {
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 
-    // In production always optimize; skip in dev for faster builds
-    unoptimized: process.env.NODE_ENV === "development",
+    // Bypass Vercel image optimization to avoid 5K monthly limit; serve directly from Cloudinary CDN
+    unoptimized: true,
   },
 
   // ═══════════════════════════════════════════════════════════
