@@ -64,7 +64,7 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
       // Special aliases
       if (cleanParam === "wardrobe" || cleanParam === "wardrobes") {
-        const found = tabNames.find((t) => clean(t).includes("wardrobe"));
+        const found = tabNames.find((t) => clean(t).includes("wardrobe") && !clean(t).includes("vanity"));
         if (found) return found;
       }
       if (cleanParam === "cabinet" || cleanParam === "cabinets") {
@@ -209,6 +209,9 @@ export default function ProductsListClient({ initialProducts, categories }: Prod
 
     // Special category handlers to support aliases, sub-variations, and comprehensive coverage
     if (catClean === "wardrobes" || catClean === "wardrobe") {
+      if (pCatName.includes("vanity") || pCatSlug.includes("vanity") || pCatBase.includes("vanity")) {
+        return false;
+      }
       if (pCatName.includes("wardrobe") || pCatSlug.includes("wardrobe") || pCatBase.includes("wardrobe")) {
         return true;
       }
